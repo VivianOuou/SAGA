@@ -1,0 +1,50 @@
+# Shared configuration for BOTH arms of the numeric-task A/B pilot (fixed before running).
+# Model names must exist in llm_configs/models.yaml; credentials come from llm_configs/credentials.yaml
+# (whose values may name environment variables, e.g. `api_key: OPENAI_API_KEY`).
+
+models_file: llm_configs/models.yaml
+credentials_file: llm_configs/credentials.yaml
+models:
+  planner: openai/gpt-5-mini-2025-08-07
+  analyzer: openai/gpt-5-mini-2025-08-07
+  scorer_matching: openai/gpt-5-mini-2025-08-07
+  refusal_detection: openai/gpt-4.1-nano-2025-04-14
+  judge: openai/gpt-5-mini-2025-08-07
+
+tasks: [robust_design, constrained_yield, spectral_signal]
+seeds: [0, 1]
+timeout_s: 5400          # hard per-run timeout (both arms)
+
+loop:
+  max_iterations: 6
+  random_candidate_ratio: 0.0
+  max_objective_planning_retries: 3
+
+# Identical caps for A and B. Arm B pays for Judge calls, candidate/baseline trials and validation
+# out of the same caps; the orchestrator stops before an iteration once any cap is reached.
+budget:
+  max_llm_calls: 50
+  max_total_tokens: 600000
+  max_oracle_evals: 8000
+  max_wall_time_s: 3600
+
+optimizer:              # numeric_ga_optimizer; evaluation quota per iteration = pop_size * (generations + 1)
+  pop_size: 32
+  generations: 10
+
+planner:                # general_planner
+  requires_objective_weights: true
+  support_filter: true
+  support_population_wise: false
+  max_objectives: 3
+  do_high_level_planning: false
+  use_context_information: all_iterations
+  max_llm_retries: 3
+
+meta_controller:        # arm B only
+  max_parse_retries: 1
+  validation:
+    n_seeds: 2                               # same seeds for baseline and candidate
+    min_improvement: 0.01                    # absolute, on the validator's validation split (fixed in advance)
+    trial_optimizer_overrides: {}            # trial = one full next iteration (same generations as the main loop), equal for both sides
+  estimates: {judge_tokens: 8000, planner_call_tokens: 8000}

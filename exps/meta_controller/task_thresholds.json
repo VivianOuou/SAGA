@@ -1,0 +1,20 @@
+{
+  "robust_design": {
+    "oracle_q_star_calibration_split": 0.5039,
+    "random_initial_population_metric": 0.0684,
+    "success_threshold": 0.454,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "constrained_yield": {
+    "oracle_q_star_calibration_split": 0.6583,
+    "random_initial_population_metric": 0.2139,
+    "success_threshold": 0.592,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "spectral_signal": {
+    "oracle_q_star_calibration_split": 0.9481,
+    "random_initial_population_metric": 0.0173,
+    "success_threshold": 0.853,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  }
+}

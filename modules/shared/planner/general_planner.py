@@ -308,6 +308,21 @@ class GeneralPlanner(PlannerModule):
 
         self.attached_scorers = dict()
 
+        # Optional strategy guidance (set by the Meta-Controller after validation). None = original prompts.
+        self.strategy_guidance: Optional[str] = None
+
+    def set_strategy_guidance(self, guidance: Optional[str]) -> None:
+        """Set (or clear with None) guidance appended to the objective prompts of later iterations."""
+        self.strategy_guidance = guidance.strip() if guidance else None
+
+    def _strategy_guidance_section(self) -> str:
+        if not self.strategy_guidance:
+            return ""
+        return (
+            "\n\n**Additional planning guidance (validated by the run's meta-controller):**\n"
+            f"{self.strategy_guidance}"
+        )
+
     def get_status(self) -> Dict[str, Any]:
         """Get the current status of the module with additional logging."""
         status = super().get_status()
@@ -477,7 +492,7 @@ class GeneralPlanner(PlannerModule):
                 analysis_report=analysis_report,
                 number_limit=number_limit,
                 context_information_section="" if (context_information is None or self.use_context_information != "all_iterations") else f"\n**Context Information:**\n{context_information}\n"
-            )
+            ) + self._strategy_guidance_section()
             self.message_history.append({"role": "user", "content": prompt})
 
         objectives, response_dict, response_text = await self._get_objectives_and_response_dict()

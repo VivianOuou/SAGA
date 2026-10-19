@@ -1,0 +1,200 @@
+{
+  "mode": "offline_mock",
+  "note": "MOCK planner/analyzer/judge: pipeline check only, not evidence",
+  "rows": [
+    {
+      "task": "constrained_yield",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.0,
+      "threshold": 0.592,
+      "llm_calls": 12,
+      "total_tokens": 3000,
+      "tokens_observed": 3000,
+      "cost_usd": 0.0,
+      "oracle_evals": 1772,
+      "wall_time_s": 28.4,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "constrained_yield",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.5789682540427235,
+      "threshold": 0.592,
+      "llm_calls": 19,
+      "total_tokens": 3650,
+      "tokens_observed": 3650,
+      "cost_usd": 0.0,
+      "oracle_evals": 3156,
+      "wall_time_s": 36.4,
+      "outcomes": {
+        "accepted": 1,
+        "no_change": 4,
+        "skipped": 1
+      },
+      "by_target": {
+        "planning": {
+          "accepted": 1
+        },
+        "no_change": {
+          "no_change": 4
+        }
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "robust_design",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.28916985956138114,
+      "threshold": 0.454,
+      "llm_calls": 12,
+      "total_tokens": 3000,
+      "tokens_observed": 3000,
+      "cost_usd": 0.0,
+      "oracle_evals": 1772,
+      "wall_time_s": 27.2,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "robust_design",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.3691540906608934,
+      "threshold": 0.454,
+      "llm_calls": 17,
+      "total_tokens": 3250,
+      "tokens_observed": 3250,
+      "cost_usd": 0.0,
+      "oracle_evals": 3156,
+      "wall_time_s": 34.3,
+      "outcomes": {
+        "accepted": 1,
+        "no_change": 4,
+        "skipped": 1
+      },
+      "by_target": {
+        "objective": {
+          "accepted": 1
+        },
+        "no_change": {
+          "no_change": 4
+        }
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 1.0084602854575095e-05,
+      "threshold": 0.853,
+      "llm_calls": 12,
+      "total_tokens": 3000,
+      "tokens_observed": 3000,
+      "cost_usd": 0.0,
+      "oracle_evals": 1772,
+      "wall_time_s": 28.4,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.7785303156537757,
+      "threshold": 0.853,
+      "llm_calls": 17,
+      "total_tokens": 3250,
+      "tokens_observed": 3250,
+      "cost_usd": 0.0,
+      "oracle_evals": 3060,
+      "wall_time_s": 36.0,
+      "outcomes": {
+        "accepted": 1,
+        "no_change": 4,
+        "skipped": 1
+      },
+      "by_target": {
+        "implementation": {
+          "accepted": 1
+        },
+        "no_change": {
+          "no_change": 4
+        }
+      },
+      "acceptance_rate": 1.0
+    }
+  ],
+  "paired_differences": [
+    {
+      "task": "constrained_yield",
+      "seed": 0,
+      "test_metric_B_minus_A": 0.5789682540427235,
+      "success_A": false,
+      "success_B": false
+    },
+    {
+      "task": "robust_design",
+      "seed": 0,
+      "test_metric_B_minus_A": 0.07998423109951225,
+      "success_A": false,
+      "success_B": false
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 0,
+      "test_metric_B_minus_A": 0.7785202310509212,
+      "success_A": false,
+      "success_B": false
+    }
+  ],
+  "success_counts": {
+    "A": 0,
+    "B": 0,
+    "pairs": 3
+  },
+  "mean_test_metric_diff_B_minus_A": 0.47915757206438564,
+  "controller_outcomes": {
+    "accepted": 3,
+    "no_change": 12,
+    "skipped": 3
+  },
+  "controller_target_outcomes": {
+    "planning:accepted": 1,
+    "no_change:no_change": 12,
+    "objective:accepted": 1,
+    "implementation:accepted": 1
+  },
+  "controller_reject_or_failure_reasons": {}
+}

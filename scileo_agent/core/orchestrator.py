@@ -115,6 +115,14 @@ class OptimizationOrchestrator:
         scorer_manager = ScorerManager(run_in_docker=run_scorers_in_docker)
         scorer_manager.set_run_in_docker(run_scorers_in_docker)
 
+        # Opt-in budget guard and Meta-Controller. Both stay None unless configured in loop_config
+        # ("budget" caps / "meta_controller.enabled"), in which case the original loop is unchanged.
+        self.budget_guard = None
+        self.meta_controller = None
+        if config.loop_config.get("budget") or (config.loop_config.get("meta_controller") or {}).get("enabled", False):
+            from ..meta_controller import build_meta_components
+            self.budget_guard, self.meta_controller = build_meta_components(self)
+
         # Log module configurations
         self._log_module_configurations()
 
@@ -240,6 +248,16 @@ class OptimizationOrchestrator:
                 self.logger.info("=" * 80)
                 self.current_iteration = iteration
 
+                # Opt-in budget guard (same caps for every arm of an A/B comparison)
+                if self.budget_guard is not None:
+                    budget_exhausted, budget_reason = self.budget_guard.exhausted()
+                    if budget_exhausted:
+                        self.current_iteration = iteration - 1
+                        self.result.termination_reason = "budget_exhausted"
+                        self.logger.info(f"Terminating before iteration {iteration}: budget exhausted ({budget_reason})")
+                        early_stop = True
+                        break
+
                 # Start tracking this iteration
                 self.run_tracker.start_iteration(iteration)
 
@@ -249,6 +267,9 @@ class OptimizationOrchestrator:
 
                 # Step 2: Scorer Creation - create/collect scorers
                 objectives_with_scorers = await self._scorer_creation_phase(planning_result, serializer_name=serializer_name)
+                if self.meta_controller is not None:
+                    # Re-apply accepted objective/implementation patches (no-op until one is accepted)
+                    objectives_with_scorers = self.meta_controller.apply_accepted_state(objectives_with_scorers)
                 self._save_intermediate_results()  # Save after scorer creation
 
                 # Step 3: Optimization - run optimization until convergence
@@ -266,6 +287,19 @@ class OptimizationOrchestrator:
                 )
                 analysis_report = analysis_result["analysis_report"]
                 self._save_intermediate_results()  # Save after analysis
+
+                # Meta-Controller: at most one validated intervention for the following iterations.
+                # It never changes analysis_result["should_stop"] or the stop logic below.
+                if self.meta_controller is not None:
+                    await self.meta_controller.step(
+                        iteration=iteration,
+                        max_iterations=max_iters,
+                        analysis_result=analysis_result,
+                        objectives=objectives_with_scorers,
+                        high_level_goal=high_level_goal,
+                        context_information=context_information,
+                    )
+                    self._save_intermediate_results()
 
                 # End tracking this iteration
                 self.run_tracker.end_iteration(iteration)
@@ -782,7 +816,8 @@ class OptimizationOrchestrator:
 
             candidates_lines = [f"Top {top_n} candidate(s):"]
             for i, candidate in enumerate(optimized_population.candidates[:top_n], 1):
-                scores_str = ", ".join([f"{name}: {score:.4f}" for name, score in candidate.scores.items()])
+                # (None = failed evaluation; formatting it with :.4f used to crash the run here)
+                scores_str = ", ".join([f"{name}: {'None' if score is None else f'{score:.4f}'}" for name, score in candidate.scores.items()])
 
                 serialized_repr = serializer.serialize(candidate)
                 candidates_lines.append(f"  {i}. {serialized_repr}")
@@ -997,6 +1032,9 @@ class OptimizationOrchestrator:
             "analyzer": self.analyzer,
             "knowledge_manager": self.knowledge_manager
         }
+        if self.meta_controller is not None:
+            # Judge and controller-created trial modules (planning-trial calls reuse the planner client)
+            modules["meta_controller"] = self.meta_controller.usage_module()
 
         statistics = {}
         total_stats = {
@@ -1086,6 +1124,9 @@ class OptimizationOrchestrator:
             "analyzer": self.analyzer,
             "knowledge_manager": self.knowledge_manager
         }
+        if self.meta_controller is not None:
+            # Judge and controller-created trial modules (planning-trial calls reuse the planner client)
+            modules["meta_controller"] = self.meta_controller.usage_module()
 
         responses = {}
         for module_name, module in modules.items():
@@ -1137,6 +1178,12 @@ class OptimizationOrchestrator:
         )
         self.run_tracker.finalize(self.result.status)
         self.run_tracker.save()
+
+        if self.meta_controller is not None:
+            self.meta_controller.finalize()
+        if self.budget_guard is not None:
+            with open(self.output_dir / "budget_usage.json", 'w', encoding='utf-8') as f:
+                json.dump(self.budget_guard.report(), f, indent=2, default=str)
 
         # Save results if configured
         self._save_results()

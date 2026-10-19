@@ -1,0 +1,10 @@
+# Copy to llm_configs/models.yaml (git-ignored). Model names used by exps/meta_controller/ab_config.yaml.
+openai/gpt-5-mini-2025-08-07:
+  provider: openai
+  model: gpt-5-mini-2025-08-07
+  credentials: openai
+
+openai/gpt-4.1-nano-2025-04-14:
+  provider: openai
+  model: gpt-4.1-nano-2025-04-14
+  credentials: openai
