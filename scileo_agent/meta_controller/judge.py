@@ -82,6 +82,34 @@ Important context for prompt version 2:
 Output keys for version 2: failure_location, root_cause_hypothesis, intervention_target, rationale, proposed_change, expected_benefit, validation_plan, confidence, target_assessment."""
 
 
+_V2_HEADER = "\n\nImportant context for prompt version 2:\n"
+_V2_ANALYZER = ("- The Analyzer is instructed by design to recommend objective-level changes only (it may not suggest optimizer "
+                "or implementation changes). Its recommendations are therefore NOT evidence that the problem lies in the objectives.\n")
+_DIAG = ('- A "Run diagnostics" section is computed directly from the run state, independently of the Analyzer: objective score '
+         "statistics (including values outside the declared range), best score per iteration, population diversity, "
+         "tunable-parameter status (current value, default, at bounds) and optimizer-reported statistics. Use it as primary evidence.\n")
+_V2_ASSESS = ('- Before choosing, assess every target in one sentence each, in a "target_assessment" object with the keys objective, '
+              "planning, implementation, optimization_workflow, no_change. Then choose the single target most likely to fix the observed problem.\n"
+              "\nOutput keys for version 2: failure_location, root_cause_hypothesis, intervention_target, rationale, proposed_change, "
+              "expected_benefit, validation_plan, confidence, target_assessment.")
+
+
+def build_system_prompt(prompt_version: str = "v1", diagnostics: bool = False, max_ops: Optional[int] = None) -> str:
+    """Compose the judge system prompt. v1 without diagnostics/max_ops is the original text byte for byte;
+    v2 with diagnostics and no max_ops is the v2b (arm D) text byte for byte."""
+    base = JUDGE_SYSTEM_PROMPT
+    if max_ops is not None:
+        ops = "exactly 1 op" if max_ops == 1 else f"1-{max_ops} ops"
+        params = "exactly 1" if max_ops == 1 else f"1-{max_ops}"
+        base = base.replace("  (1-3 ops)", f"  ({ops}; more are rejected as invalid)")
+        base = base.replace("change 1-3 of the listed tunable parameters", f"change {params} of the listed tunable parameters")
+    if prompt_version == "v2":
+        return base + _V2_HEADER + _V2_ANALYZER + (_DIAG if diagnostics else "") + _V2_ASSESS
+    if diagnostics:
+        return base + "\n\nAdditional context:\n" + _DIAG.rstrip("\n")
+    return base
+
+
 def _fmt_objectives(objectives: List[Dict[str, Any]]) -> str:
     lines = []
     for o in objectives:
@@ -92,7 +120,9 @@ def _fmt_objectives(objectives: List[Dict[str, Any]]) -> str:
     return "\n".join(lines) or "(none)"
 
 
-def render_judge_prompt(ctx: Dict[str, Any], prompt_version: str = "v1") -> str:
+def render_judge_prompt(ctx: Dict[str, Any], prompt_version: str = "v1", diagnostics: Optional[bool] = None) -> str:
+    if diagnostics is None:
+        diagnostics = prompt_version == "v2"
     sections = [
         f"# Goal\n{ctx['high_level_goal']}",
         f"# Iteration\nIteration {ctx['iteration']} of at most {ctx['max_iterations']} just finished. "
@@ -113,7 +143,7 @@ def render_judge_prompt(ctx: Dict[str, Any], prompt_version: str = "v1") -> str:
         + ("\n".join(f"- {h}" for h in ctx["recent_decisions"]) or "(none yet)"),
         "# Remaining budget\n" + json.dumps(ctx["remaining_budget"]),
     ]
-    if prompt_version == "v2":
+    if diagnostics:
         sections.insert(4, "# Run diagnostics (computed by the meta-controller, independent of the Analyzer)\n"
                         + json.dumps(ctx.get("diagnostics", {}), indent=1))
     return "\n\n".join(sections)
@@ -151,10 +181,14 @@ class LLMJudge(BaseJudge):
         call_args: Optional[Dict[str, Any]] = None,
         client=None,
         prompt_version: str = "v1",
+        diagnostics: Optional[bool] = None,
+        max_ops_in_prompt: Optional[int] = None,
     ):
         if prompt_version not in ("v1", "v2"):
             raise ValueError(f"unknown judge prompt_version '{prompt_version}'")
         self.prompt_version = prompt_version
+        self.diagnostics = (prompt_version == "v2") if diagnostics is None else bool(diagnostics)
+        self.max_ops_in_prompt = max_ops_in_prompt
         self.model_name = model_name
         self.max_parse_retries = max_parse_retries
         self.call_args = dict(call_args or {})
@@ -180,13 +214,15 @@ class LLMJudge(BaseJudge):
             "call_args": {k: v for k, v in self.call_args.items() if k in SAFE_CALL_ARGS},
             "max_parse_retries": self.max_parse_retries,
             "prompt_version": self.prompt_version,
+            "diagnostics": self.diagnostics,
+            "max_ops_in_prompt": self.max_ops_in_prompt,
         }
 
     async def decide(self, context: Dict[str, Any]) -> JudgeOutput:
-        system = JUDGE_SYSTEM_PROMPT + (JUDGE_SYSTEM_PROMPT_V2_ADDENDUM if self.prompt_version == "v2" else "")
+        system = build_system_prompt(self.prompt_version, self.diagnostics, self.max_ops_in_prompt)
         messages = [
             {"role": "system", "content": system},
-            {"role": "user", "content": render_judge_prompt(context, self.prompt_version)},
+            {"role": "user", "content": render_judge_prompt(context, self.prompt_version, self.diagnostics)},
         ]
         last_error = None
         text = None

@@ -118,6 +118,27 @@ TASKS.update({
         best_target="implementation",
         design_note="HELD-OUT. design_cost underflows (huge negative values) when any parameter < 0.05; no alternative scorer.",
     ),
+    "frozen_mutation": NumericTask(
+        task_id="frozen_mutation", dim=8, suite="v3_holdout",
+        goal="Design 8-dimensional parameter vectors (each parameter in [0, 1]) that maximize device performance.",
+        context=_V2_CONTEXT,
+        mcp_module="modules/numeric_tasks/scorer_mcp/frozen_mutation_scorers_mcp",
+        initial_objectives={"performance": "maximize"},
+        validator="frozen_mutation_truth",
+        optimizer_overrides={"mutation_prob": 0.0},
+        best_target="optimization_workflow",
+        design_note="HELD-OUT (v3). Optimizer starts with mutation_prob=0 (crossover only) on a non-separable bump.",
+    ),
+    "offset_scorer": NumericTask(
+        task_id="offset_scorer", dim=8, suite="v3_holdout",
+        goal="Design 8-dimensional parameter vectors (each parameter in [0, 1]) that maximize the design quality.",
+        context=_V2_CONTEXT,
+        mcp_module="modules/numeric_tasks/scorer_mcp/offset_scorer_scorers_mcp",
+        initial_objectives={"quality_score": "maximize"},
+        validator="offset_scorer_truth",
+        best_target="implementation",
+        design_note="HELD-OUT (v3). quality_score returns 1 + 0.9*x3 (moderately > 1) when x3 > 0.85; no alternative scorer.",
+    ),
 })
 
 THRESHOLDS_FILE = Path(__file__).resolve().parents[2] / "exps" / "meta_controller" / "task_thresholds.json"

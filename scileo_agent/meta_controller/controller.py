@@ -867,6 +867,8 @@ def _build_judge(cfg: Dict[str, Any], orch) -> Optional[BaseJudge]:
         models_file=judge_cfg.get("models_file") or (planner_llm.models_file if planner_llm else "llm_configs/models.yaml"),
         credentials_file=judge_cfg.get("credentials_file") or (planner_llm.credentials_file if planner_llm else "llm_configs/credentials.yaml"),
         prompt_version=judge_cfg.get("prompt_version", "v1"),
+        diagnostics=judge_cfg.get("diagnostics"),
+        max_ops_in_prompt=(cfg.get("max_ops_per_change") if judge_cfg.get("max_ops_in_prompt") else None),
         max_retries=judge_cfg.get("max_retries", 2),
         max_parse_retries=judge_cfg.get("max_parse_retries", 1),
         call_args=judge_cfg.get("call_args") or {},

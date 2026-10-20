@@ -190,9 +190,33 @@ class UnderflowCostValidator(_BumpValidator):
     seed_offset = 14
 
 
+class FrozenMutationValidator(NumericTaskValidator):
+    """Held-out v3 task: anisotropic rotated bump under small actuation noise (std 0.02)."""
+
+    name = "frozen_mutation_truth"
+    dim = 8
+    center = np.array([0.38, 0.66, 0.52, 0.29, 0.61, 0.45, 0.70, 0.34])
+    _q, _ = np.linalg.qr(np.random.default_rng(42).normal(size=(8, 8)))
+    precision = _q @ np.diag(1.0 / np.array([0.06, 0.08, 0.10, 0.14, 0.2, 0.3, 0.4, 0.5]) ** 2) @ _q.T
+
+    def quality(self, X, split):
+        rng = np.random.default_rng(SPLIT_SEEDS[split] + 15)
+        S = np.clip(X[None, :, :] + rng.normal(0.0, 0.02, size=(SPLIT_DRAWS[split], 1, self.dim)), 0.0, 1.0) - self.center
+        return np.exp(-0.5 * np.einsum("dni,ij,dnj->dn", S, self.precision, S)).mean(axis=0)
+
+
+class OffsetScorerValidator(_BumpValidator):
+    """Held-out v3 task: true quality is the bump only (the scorer's offset branch is a bug)."""
+
+    name = "offset_scorer_truth"
+    center = np.array([0.52, 0.41, 0.63, 0.40, 0.35, 0.58, 0.47, 0.55])
+    width = 0.22
+    seed_offset = 16
+
+
 VALIDATOR_CLASSES = {cls.name: cls for cls in (RobustDesignValidator, ConstrainedYieldValidator, SpectralSignalValidator,
                                                StagnantSearchValidator, OverflowScorerValidator, NoisySearchValidator,
-                                               UnderflowCostValidator)}
+                                               UnderflowCostValidator, FrozenMutationValidator, OffsetScorerValidator)}
 
 
 def register_numeric_validators() -> None:

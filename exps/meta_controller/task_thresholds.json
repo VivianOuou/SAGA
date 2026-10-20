@@ -40,5 +40,17 @@
     "random_initial_population_metric": 0.0174,
     "success_threshold": 0.867,
     "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "frozen_mutation": {
+    "oracle_q_star_calibration_split": 0.8859,
+    "random_initial_population_metric": 0.0003,
+    "success_threshold": 0.797,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "offset_scorer": {
+    "oracle_q_star_calibration_split": 0.9696,
+    "random_initial_population_metric": 0.0997,
+    "success_threshold": 0.873,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
   }
 }

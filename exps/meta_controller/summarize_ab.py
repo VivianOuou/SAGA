@@ -31,7 +31,7 @@ def main():
     args = parser.parse_args()
     results_dir = Path(args.results_dir)
     rows = {}
-    for f in sorted(results_dir.glob(f"{args.mode}__*__s*__[ABCD].json")):
+    for f in sorted(results_dir.glob(f"{args.mode}__*__s*__[ABCDEF].json")):
         r = json.loads(f.read_text())
         rows[(r["task"], r["seed"], r["arm"])] = r
     arms = sorted({a for _, _, a in rows})
@@ -81,7 +81,8 @@ def main():
                 "wall_time_s": r["wall_time_s"], "best_target": best, "first_proposal_target": first,
                 "outcomes": mc.get("outcomes"), "acceptance_rate": mc.get("acceptance_rate"),
             })
-        for x, y in (("B", "A"), ("C", "A"), ("B", "C"), ("D", "A"), ("D", "B"), ("D", "C")):
+        for x, y in (("B", "A"), ("C", "A"), ("B", "C"), ("D", "A"), ("D", "B"), ("D", "C"),
+                     ("E", "A"), ("F", "A"), ("E", "B"), ("F", "B"), ("D", "E"), ("D", "F")):
             rx, ry = rows.get((task, seed, x)), rows.get((task, seed, y))
             if rx and ry and rx["test_metric"] is not None and ry["test_metric"] is not None:
                 diffs[f"{x}-{y}"].append({"task": task, "seed": seed, "suite": rx.get("suite"),

@@ -9,7 +9,7 @@ from pathlib import Path
 
 MODULES = ["robust_design_scorers_mcp", "constrained_yield_scorers_mcp", "spectral_signal_scorers_mcp",
            "stagnant_search_scorers_mcp", "overflow_scorer_scorers_mcp", "noisy_search_scorers_mcp",
-           "underflow_cost_scorers_mcp"]
+           "underflow_cost_scorers_mcp", "frozen_mutation_scorers_mcp", "offset_scorer_scorers_mcp"]
 FILTERS = {"within_cost_budget"}
 
 

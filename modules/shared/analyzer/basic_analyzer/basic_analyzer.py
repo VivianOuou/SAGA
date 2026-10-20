@@ -182,6 +182,9 @@ class BasicAnalyzer(AnalyzerModule):
         # Refusal detection configuration
         self.enable_refusal_detection = self.config.get("enable_refusal_detection", True)
         self.refusal_detection_model = self.config.get("refusal_detection_model_name", "openai/gpt-4.1-nano-2025-04-14")
+        # Optional: only run refusal detection on short reports (None = always, the original behaviour).
+        # Genuine refusals are short; long, well-formed reports were misclassified by the small detector model.
+        self.refusal_detection_max_report_chars = self.config.get("refusal_detection_max_report_chars", None)
 
         # Initialize candidate analyzer
         self.enable_candidate_analysis = self.config.get("enable_candidate_analysis", True)
@@ -613,7 +616,9 @@ The following context information is provided by human scientists to help inform
                     raise ValueError("Reasoning content is empty")
                 
                 # Check for refusal using a small LLM (if enabled)
-                if self.enable_refusal_detection and self._detect_refusal(response_text):
+                check_refusal = self.enable_refusal_detection and (
+                    self.refusal_detection_max_report_chars is None or len(report_text) <= self.refusal_detection_max_report_chars)
+                if check_refusal and self._detect_refusal(response_text):
                     raise ValueError("LLM refused to provide a proper response due to safety/compliance constraints (likely overrefusal)")
 
                 # Successfully parsed valid response
