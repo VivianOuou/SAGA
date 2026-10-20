@@ -161,11 +161,14 @@ class MockRulePlanner(PlannerModule):
         for name in re.findall(r"REMOVE:(\w+)", guidance):
             spec.pop(name, None)
         objectives = []
-        for name, direction in spec.items():
+        for name, value in spec.items():
+            # value: "maximize" | "minimize" | "filter", or {"direction": ..., "weight": ...}
+            direction = value["direction"] if isinstance(value, dict) else value
+            weight = value.get("weight") if isinstance(value, dict) else None
             is_filter = direction == "filter"
             objectives.append(Objective(name=name, description=f"mock objective {name}",
                                         type="filter" if is_filter else "candidate-wise",
-                                        optimization_direction=None if is_filter else direction))
+                                        optimization_direction=None if is_filter else direction, weight=weight))
         self.objective_planning_response_dicts[iteration_number] = {"mock": True}
         return {"objectives": objectives, "objective_planning_response_dict": {"mock": True}}
 
