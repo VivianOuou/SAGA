@@ -216,3 +216,30 @@ def test_judge_prompt_v1_unchanged_and_v2_adds_diagnostics():
         assert err is None and d.target_assessment["optimization_workflow"] == "sigma at lower bound"
     d, _, err = parse_decision(dict(decision("no_change", None), target_assessment={"architecture": "x"}))
     assert d is None and "unknown targets" in err
+
+
+def test_judge_prompt_composition_reproduces_previous_texts():
+    from scileo_agent.meta_controller.judge import JUDGE_SYSTEM_PROMPT, JUDGE_SYSTEM_PROMPT_V2_ADDENDUM, build_system_prompt
+
+    assert build_system_prompt() == JUDGE_SYSTEM_PROMPT                                      # v1 / arm B (v1, v2)
+    assert build_system_prompt("v2", True) == JUDGE_SYSTEM_PROMPT + JUDGE_SYSTEM_PROMPT_V2_ADDENDUM  # arm D (v2b)
+    p = build_system_prompt("v2", True, max_ops=1)
+    assert "exactly 1 op" in p and "change exactly 1 of the listed tunable parameters" in p and "1-3" not in p
+    e, f = build_system_prompt("v2", False, 1), build_system_prompt("v1", True, 1)
+    assert "NOT evidence" in e and "Run diagnostics" not in e and "target_assessment" in e
+    assert "NOT evidence" not in f and "Run diagnostics" in f and "target_assessment" not in f
+
+
+def test_refusal_detection_guard_skips_long_reports():
+    from modules.shared.analyzer.basic_analyzer.basic_analyzer import BasicAnalyzer
+
+    long_report = "<report>" + "The optimizer cannot escape the region. " * 40 + "</report>\n<should_stop>false</should_stop>\n<reasoning>go</reasoning>"
+    for limit, expect_call in ((None, True), (800, False)):
+        analyzer = BasicAnalyzer.__new__(BasicAnalyzer)
+        analyzer.max_llm_retries, analyzer.enable_refusal_detection = 0, True
+        analyzer.refusal_detection_max_report_chars = limit
+        calls = []
+        analyzer._detect_refusal = lambda text: (calls.append(1), False)[1]
+        analyzer.call_llm_with_prompt = lambda *a, **k: {"content": long_report}
+        asyncio.run(analyzer._get_llm_analysis("goal", None, "status", "objectives", "results", ""))
+        assert bool(calls) is expect_call

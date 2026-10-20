@@ -1,0 +1,262 @@
+{
+  "mode": "offline_mock",
+  "updated": "2026-10-20T17:11:31.285050",
+  "config": "exps/meta_controller/ab_v3_config.yaml",
+  "done": 36,
+  "failed": 0,
+  "total": 36,
+  "cells": {
+    "frozen_mutation__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 94.0,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s0__A.json"
+    },
+    "frozen_mutation__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 72.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s0__B.json"
+    },
+    "frozen_mutation__s0__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 55.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s0__C.json"
+    },
+    "frozen_mutation__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 73.2,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s0__D.json"
+    },
+    "frozen_mutation__s0__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.2,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s0__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s0__E.json"
+    },
+    "frozen_mutation__s0__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s0__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s0__F.json"
+    },
+    "frozen_mutation__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 90.2,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s1__A.json"
+    },
+    "frozen_mutation__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s1__B.json"
+    },
+    "frozen_mutation__s1__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 50.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s1__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s1__C.json"
+    },
+    "frozen_mutation__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.3,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s1__D.json"
+    },
+    "frozen_mutation__s1__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.2,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s1__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s1__E.json"
+    },
+    "frozen_mutation__s1__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s1__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s1__F.json"
+    },
+    "frozen_mutation__s2__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 88.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s2__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s2__A.json"
+    },
+    "frozen_mutation__s2__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 66.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s2__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s2__B.json"
+    },
+    "frozen_mutation__s2__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 49.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s2__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s2__C.json"
+    },
+    "frozen_mutation__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s2__D.json"
+    },
+    "frozen_mutation__s2__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s2__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s2__E.json"
+    },
+    "frozen_mutation__s2__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/frozen_mutation__s2__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__frozen_mutation__s2__F.json"
+    },
+    "offset_scorer__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 90.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s0__A.json"
+    },
+    "offset_scorer__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 66.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s0__B.json"
+    },
+    "offset_scorer__s0__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 49.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s0__C.json"
+    },
+    "offset_scorer__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 66.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s0__D.json"
+    },
+    "offset_scorer__s0__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 66.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s0__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s0__E.json"
+    },
+    "offset_scorer__s0__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s0__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s0__F.json"
+    },
+    "offset_scorer__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 89.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s1__A.json"
+    },
+    "offset_scorer__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s1__B.json"
+    },
+    "offset_scorer__s1__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 50.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s1__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s1__C.json"
+    },
+    "offset_scorer__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s1__D.json"
+    },
+    "offset_scorer__s1__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s1__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s1__E.json"
+    },
+    "offset_scorer__s1__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 67.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s1__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s1__F.json"
+    },
+    "offset_scorer__s2__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 92.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s2__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s2__A.json"
+    },
+    "offset_scorer__s2__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 70.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s2__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s2__B.json"
+    },
+    "offset_scorer__s2__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 54.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s2__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s2__C.json"
+    },
+    "offset_scorer__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 72.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s2__D.json"
+    },
+    "offset_scorer__s2__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 68.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s2__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s2__E.json"
+    },
+    "offset_scorer__s2__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 66.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/logs/offset_scorer__s2__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/offline_mock/offline_mock__offset_scorer__s2__F.json"
+    }
+  }
+}

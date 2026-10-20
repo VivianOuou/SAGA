@@ -1,0 +1,194 @@
+{
+  "mode": "offline_mock",
+  "evidence_note": "MOCK planner/analyzer/judge: pipeline check only, not evidence",
+  "task": "frozen_mutation",
+  "seed": 0,
+  "arm": "E",
+  "arm_definition": "E: controller enabled (LLM judge, v2 framing, no diagnostics)",
+  "suite": "v3_holdout",
+  "best_target": "optimization_workflow",
+  "run_id": "ab-offline_mock-frozen_mutation-s0-E-20261020170147",
+  "run_dir": "runs/ab-offline_mock-frozen_mutation-s0-E-20261020170147",
+  "status": "completed",
+  "error": null,
+  "termination_reason": "budget_exhausted",
+  "iterations_completed": 13,
+  "models": "mock",
+  "success_threshold": 0.797,
+  "success": true,
+  "test_metric": 0.8525188504672757,
+  "test_details": {
+    "split": "test",
+    "top_k": 5,
+    "top_k_by_true_quality": 0.8525188504672757,
+    "population_mean": 0.545037450912587,
+    "best": 0.8570395531889589,
+    "n_invalid": 0
+  },
+  "final_validation_metric_reference_only": 0.8536173003293099,
+  "llm_calls": 32,
+  "total_tokens": 6800,
+  "total_tokens_observed": 6800,
+  "cost_usd": 0.0,
+  "oracle_evals": 5090,
+  "wall_time_s": 62.2,
+  "budget": {
+    "caps": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "used": {
+      "llm_calls": 32,
+      "total_tokens": 6800,
+      "total_tokens_observed": 6800,
+      "calls_missing_usage": 0,
+      "cost_usd": 0.0,
+      "oracle_evals": 5090,
+      "wall_time_s": 62.217
+    },
+    "remaining": {
+      "max_llm_calls": 18,
+      "max_total_tokens": 493200,
+      "max_oracle_evals": -90,
+      "max_wall_time_s": 2937.783
+    }
+  },
+  "api_usage_total": {
+    "call_count": 32,
+    "total_tokens": 6800,
+    "input_tokens": 3400,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 3400,
+    "cost": 0.0,
+    "by_model_name": {
+      "mock/planner": {
+        "call_count": 13,
+        "total_tokens": 2600,
+        "input_tokens": 1300,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1300,
+        "cost": 0.0
+      },
+      "mock/analyzer": {
+        "call_count": 13,
+        "total_tokens": 3900,
+        "input_tokens": 1950,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1950,
+        "cost": 0.0
+      },
+      "mock/judge": {
+        "call_count": 6,
+        "total_tokens": 300,
+        "input_tokens": 150,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 150,
+        "cost": 0.0
+      }
+    }
+  },
+  "meta_controller": {
+    "task_id": "frozen_mutation",
+    "seed": 0,
+    "decisions": 13,
+    "outcomes": {
+      "accepted": 1,
+      "no_change": 5,
+      "skipped": 7
+    },
+    "by_target": {
+      "optimization_workflow": {
+        "accepted": 1
+      },
+      "no_change": {
+        "no_change": 5
+      }
+    },
+    "validated_candidates": 1,
+    "acceptance_rate": 1.0,
+    "accepted_state": {
+      "version": 1,
+      "planner_guidance": null,
+      "objective_ops": [],
+      "implementation_patches": {},
+      "workflow_params": {
+        "mutation_prob": 0.3
+      }
+    },
+    "controller_oracle_evals": {
+      "trials": 1160,
+      "validation": 128
+    },
+    "budget": {
+      "caps": {
+        "max_llm_calls": 50,
+        "max_total_tokens": 500000,
+        "max_oracle_evals": 5000,
+        "max_wall_time_s": 3000
+      },
+      "used": {
+        "llm_calls": 32,
+        "total_tokens": 6800,
+        "total_tokens_observed": 6800,
+        "calls_missing_usage": 0,
+        "cost_usd": 0.0,
+        "oracle_evals": 5090,
+        "wall_time_s": 62.217
+      },
+      "remaining": {
+        "max_llm_calls": 18,
+        "max_total_tokens": 493200,
+        "max_oracle_evals": -90,
+        "max_wall_time_s": 2937.783
+      }
+    }
+  },
+  "config": {
+    "loop": {
+      "max_iterations": 30,
+      "random_candidate_ratio": 0.0,
+      "max_objective_planning_retries": 3,
+      "stop_on_analyzer_decision": false
+    },
+    "budget": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "optimizer": {
+      "pop_size": 32,
+      "generations": 10
+    },
+    "meta_controller": {
+      "max_parse_retries": 1,
+      "max_ops_per_change": 1,
+      "max_ops_in_prompt": true,
+      "validation": {
+        "n_seeds": 2,
+        "min_improvement": 0.02,
+        "trial_optimizer_overrides": {}
+      },
+      "estimates": {
+        "judge_tokens": 8000,
+        "planner_call_tokens": 8000
+      }
+    },
+    "timeout_s": 5400,
+    "analyzer_options": {
+      "refusal_detection_max_report_chars": 800
+    }
+  },
+  "task_overrides": {
+    "optimizer": {
+      "mutation_prob": 0.0
+    },
+    "loop": {}
+  }
+}
