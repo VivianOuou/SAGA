@@ -1,0 +1,262 @@
+{
+  "mode": "real_llm",
+  "updated": "2026-10-20T18:26:37.512565",
+  "config": "exps/meta_controller/ab_v3_config.yaml",
+  "done": 36,
+  "failed": 0,
+  "total": 36,
+  "cells": {
+    "frozen_mutation__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 665.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s0__A.json"
+    },
+    "frozen_mutation__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 326.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s0__B.json"
+    },
+    "frozen_mutation__s0__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 377.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s0__C.json"
+    },
+    "frozen_mutation__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 395.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s0__D.json"
+    },
+    "frozen_mutation__s0__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 363.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s0__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s0__E.json"
+    },
+    "frozen_mutation__s0__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 318.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s0__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s0__F.json"
+    },
+    "frozen_mutation__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 635.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s1__A.json"
+    },
+    "frozen_mutation__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 329.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s1__B.json"
+    },
+    "frozen_mutation__s1__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 451.0,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s1__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s1__C.json"
+    },
+    "frozen_mutation__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 364.0,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s1__D.json"
+    },
+    "frozen_mutation__s1__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 393.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s1__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s1__E.json"
+    },
+    "frozen_mutation__s1__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 318.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s1__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s1__F.json"
+    },
+    "frozen_mutation__s2__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 815.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s2__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s2__A.json"
+    },
+    "frozen_mutation__s2__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 336.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s2__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s2__B.json"
+    },
+    "frozen_mutation__s2__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 421.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s2__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s2__C.json"
+    },
+    "frozen_mutation__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 317.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s2__D.json"
+    },
+    "frozen_mutation__s2__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 380.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s2__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s2__E.json"
+    },
+    "frozen_mutation__s2__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 385.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/frozen_mutation__s2__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__frozen_mutation__s2__F.json"
+    },
+    "offset_scorer__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 744.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s0__A.json"
+    },
+    "offset_scorer__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 323.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s0__B.json"
+    },
+    "offset_scorer__s0__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 400.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s0__C.json"
+    },
+    "offset_scorer__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 411.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s0__D.json"
+    },
+    "offset_scorer__s0__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 481.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s0__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s0__E.json"
+    },
+    "offset_scorer__s0__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 503.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s0__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s0__F.json"
+    },
+    "offset_scorer__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 744.2,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s1__A.json"
+    },
+    "offset_scorer__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 445.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s1__B.json"
+    },
+    "offset_scorer__s1__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 416.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s1__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s1__C.json"
+    },
+    "offset_scorer__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 416.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s1__D.json"
+    },
+    "offset_scorer__s1__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 482.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s1__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s1__E.json"
+    },
+    "offset_scorer__s1__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 505.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s1__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s1__F.json"
+    },
+    "offset_scorer__s2__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 773.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s2__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s2__A.json"
+    },
+    "offset_scorer__s2__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 577.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s2__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s2__B.json"
+    },
+    "offset_scorer__s2__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 450.0,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s2__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s2__C.json"
+    },
+    "offset_scorer__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 423.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s2__D.json"
+    },
+    "offset_scorer__s2__E": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 519.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s2__E.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s2__E.json"
+    },
+    "offset_scorer__s2__F": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 486.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/logs/offset_scorer__s2__F.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v3/real_llm__offset_scorer__s2__F.json"
+    }
+  }
+}

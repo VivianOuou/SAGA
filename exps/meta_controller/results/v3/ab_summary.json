@@ -1,0 +1,1587 @@
+{
+  "mode": "real_llm",
+  "note": "REAL LLM calls on SYNTHETIC numeric tasks; small pilot, no significance testing",
+  "arms": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "rows": [
+    {
+      "task": "frozen_mutation",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 17,
+      "success": false,
+      "test_metric": 0.0421529912219747,
+      "threshold": 0.797,
+      "llm_calls": 35,
+      "total_tokens": 373803,
+      "tokens_observed": 373803,
+      "cost_usd": 0.134504,
+      "oracle_evals": 5026,
+      "wall_time_s": 656.8,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.018356989445232452,
+      "threshold": 0.797,
+      "llm_calls": 18,
+      "total_tokens": 98371,
+      "tokens_observed": 98371,
+      "cost_usd": 0.063423,
+      "oracle_evals": 5068,
+      "wall_time_s": 318.2,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 0,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.018356989445232452,
+      "threshold": 0.797,
+      "llm_calls": 20,
+      "total_tokens": 140904,
+      "tokens_observed": 140904,
+      "cost_usd": 0.072767,
+      "oracle_evals": 5282,
+      "wall_time_s": 368.9,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "rejected": 2,
+        "no_change": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 0,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.7371901929465159,
+      "threshold": 0.797,
+      "llm_calls": 20,
+      "total_tokens": 128962,
+      "tokens_observed": 128962,
+      "cost_usd": 0.078016,
+      "oracle_evals": 5250,
+      "wall_time_s": 386.5,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 0,
+      "arm": "E",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.7738986452490407,
+      "threshold": 0.797,
+      "llm_calls": 20,
+      "total_tokens": 113814,
+      "tokens_observed": 113814,
+      "cost_usd": 0.070835,
+      "oracle_evals": 5282,
+      "wall_time_s": 359.0,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 1,
+        "rejected": 1,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 0,
+      "arm": "F",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.7021308575653443,
+      "threshold": 0.797,
+      "llm_calls": 18,
+      "total_tokens": 93253,
+      "tokens_observed": 93253,
+      "cost_usd": 0.059457,
+      "oracle_evals": 5024,
+      "wall_time_s": 314.5,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 1,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 17,
+      "success": false,
+      "test_metric": 0.0009999281705388146,
+      "threshold": 0.797,
+      "llm_calls": 37,
+      "total_tokens": 393780,
+      "tokens_observed": 393780,
+      "cost_usd": 0.130439,
+      "oracle_evals": 5058,
+      "wall_time_s": 631.2,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 1,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": true,
+      "test_metric": 0.8139610018317173,
+      "threshold": 0.797,
+      "llm_calls": 19,
+      "total_tokens": 100242,
+      "tokens_observed": 100242,
+      "cost_usd": 0.064714,
+      "oracle_evals": 5036,
+      "wall_time_s": 325.5,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "rejected": 1,
+        "invalid_decision": 1,
+        "accepted": 1,
+        "skipped": 5
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 1,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.014071647313431246,
+      "threshold": 0.797,
+      "llm_calls": 24,
+      "total_tokens": 173789,
+      "tokens_observed": 173789,
+      "cost_usd": 0.092697,
+      "oracle_evals": 5250,
+      "wall_time_s": 446.3,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "planning",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 1,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.7909486439024583,
+      "threshold": 0.797,
+      "llm_calls": 20,
+      "total_tokens": 127213,
+      "tokens_observed": 127213,
+      "cost_usd": 0.074439,
+      "oracle_evals": 5218,
+      "wall_time_s": 360.0,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 1,
+        "accepted": 1,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 1,
+      "arm": "E",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.8128106652252691,
+      "threshold": 0.797,
+      "llm_calls": 21,
+      "total_tokens": 136745,
+      "tokens_observed": 136745,
+      "cost_usd": 0.078364,
+      "oracle_evals": 5250,
+      "wall_time_s": 388.9,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 1,
+      "arm": "F",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.7951551103720605,
+      "threshold": 0.797,
+      "llm_calls": 18,
+      "total_tokens": 93282,
+      "tokens_observed": 93282,
+      "cost_usd": 0.059367,
+      "oracle_evals": 5088,
+      "wall_time_s": 314.4,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 1,
+        "rejected": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 2,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 18,
+      "success": false,
+      "test_metric": 0.010385023098898204,
+      "threshold": 0.797,
+      "llm_calls": 37,
+      "total_tokens": 441378,
+      "tokens_observed": 441378,
+      "cost_usd": 0.165504,
+      "oracle_evals": 5284,
+      "wall_time_s": 811.5,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 2,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.3380316186856129,
+      "threshold": 0.797,
+      "llm_calls": 18,
+      "total_tokens": 96286,
+      "tokens_observed": 96286,
+      "cost_usd": 0.0629,
+      "oracle_evals": 5024,
+      "wall_time_s": 332.1,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 1,
+        "accepted": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 2,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.07454737197474595,
+      "threshold": 0.797,
+      "llm_calls": 21,
+      "total_tokens": 147061,
+      "tokens_observed": 147061,
+      "cost_usd": 0.081484,
+      "oracle_evals": 5024,
+      "wall_time_s": 417.4,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 2,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 9.987464651215528e-05,
+      "threshold": 0.797,
+      "llm_calls": 18,
+      "total_tokens": 90100,
+      "tokens_observed": 90100,
+      "cost_usd": 0.056244,
+      "oracle_evals": 5020,
+      "wall_time_s": 313.4,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 2,
+      "arm": "E",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.6549870850593755,
+      "threshold": 0.797,
+      "llm_calls": 21,
+      "total_tokens": 138913,
+      "tokens_observed": 138913,
+      "cost_usd": 0.075357,
+      "oracle_evals": 5250,
+      "wall_time_s": 376.0,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 1,
+        "accepted": 1,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "frozen_mutation",
+      "seed": 2,
+      "arm": "F",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.7288344886178006,
+      "threshold": 0.797,
+      "llm_calls": 20,
+      "total_tokens": 128051,
+      "tokens_observed": 128051,
+      "cost_usd": 0.079275,
+      "oracle_evals": 5250,
+      "wall_time_s": 381.7,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 18,
+      "success": false,
+      "test_metric": 8.28114436925639e-11,
+      "threshold": 0.873,
+      "llm_calls": 36,
+      "total_tokens": 430603,
+      "tokens_observed": 430603,
+      "cost_usd": 0.164621,
+      "oracle_evals": 5252,
+      "wall_time_s": 740.0,
+      "best_target": "implementation",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.9602554525424426e-05,
+      "threshold": 0.873,
+      "llm_calls": 22,
+      "total_tokens": 129062,
+      "tokens_observed": 129062,
+      "cost_usd": 0.073069,
+      "oracle_evals": 5282,
+      "wall_time_s": 319.6,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "rejected": 2,
+        "invalid_decision": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 0,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 2.1562104432156223e-09,
+      "threshold": 0.873,
+      "llm_calls": 20,
+      "total_tokens": 148360,
+      "tokens_observed": 148360,
+      "cost_usd": 0.082963,
+      "oracle_evals": 5218,
+      "wall_time_s": 396.3,
+      "best_target": "implementation",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "rejected": 2,
+        "no_change": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 0,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.9553686853812533,
+      "threshold": 0.873,
+      "llm_calls": 25,
+      "total_tokens": 133003,
+      "tokens_observed": 133003,
+      "cost_usd": 0.08277,
+      "oracle_evals": 5249,
+      "wall_time_s": 407.6,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "accepted": 1,
+        "rejected": 1,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 0,
+      "arm": "E",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 3.0964629281429393e-09,
+      "threshold": 0.873,
+      "llm_calls": 25,
+      "total_tokens": 155705,
+      "tokens_observed": 155705,
+      "cost_usd": 0.095524,
+      "oracle_evals": 5218,
+      "wall_time_s": 477.5,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 0,
+      "arm": "F",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 4.701130725219416e-08,
+      "threshold": 0.873,
+      "llm_calls": 31,
+      "total_tokens": 176439,
+      "tokens_observed": 176439,
+      "cost_usd": 0.106577,
+      "oracle_evals": 5282,
+      "wall_time_s": 499.7,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 1,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 17,
+      "success": false,
+      "test_metric": 3.434178145421746e-10,
+      "threshold": 0.873,
+      "llm_calls": 35,
+      "total_tokens": 378551,
+      "tokens_observed": 378551,
+      "cost_usd": 0.144643,
+      "oracle_evals": 5026,
+      "wall_time_s": 740.0,
+      "best_target": "implementation",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 1,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.1701476166489852e-10,
+      "threshold": 0.873,
+      "llm_calls": 25,
+      "total_tokens": 149009,
+      "tokens_observed": 149009,
+      "cost_usd": 0.08392,
+      "oracle_evals": 5250,
+      "wall_time_s": 440.9,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 1,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.4921620132007015e-06,
+      "threshold": 0.873,
+      "llm_calls": 21,
+      "total_tokens": 127296,
+      "tokens_observed": 127296,
+      "cost_usd": 0.076619,
+      "oracle_evals": 5282,
+      "wall_time_s": 412.0,
+      "best_target": "implementation",
+      "first_proposal_target": "planning",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 1,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 7.670833009689592e-06,
+      "threshold": 0.873,
+      "llm_calls": 21,
+      "total_tokens": 125220,
+      "tokens_observed": 125220,
+      "cost_usd": 0.077015,
+      "oracle_evals": 5218,
+      "wall_time_s": 412.0,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 1,
+      "arm": "E",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 8.354405650342318e-10,
+      "threshold": 0.873,
+      "llm_calls": 23,
+      "total_tokens": 161707,
+      "tokens_observed": 161707,
+      "cost_usd": 0.095114,
+      "oracle_evals": 5218,
+      "wall_time_s": 478.3,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "rejected": 2,
+        "invalid_decision": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 1,
+      "arm": "F",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 6.930672553229398e-11,
+      "threshold": 0.873,
+      "llm_calls": 27,
+      "total_tokens": 187828,
+      "tokens_observed": 187828,
+      "cost_usd": 0.103906,
+      "oracle_evals": 5282,
+      "wall_time_s": 500.2,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "invalid_decision": 1,
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 2,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 18,
+      "success": false,
+      "test_metric": 1.9125852821317602e-10,
+      "threshold": 0.873,
+      "llm_calls": 36,
+      "total_tokens": 411665,
+      "tokens_observed": 411665,
+      "cost_usd": 0.152915,
+      "oracle_evals": 5252,
+      "wall_time_s": 769.6,
+      "best_target": "implementation",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 2,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 2.8327026657484335e-06,
+      "threshold": 0.873,
+      "llm_calls": 33,
+      "total_tokens": 175226,
+      "tokens_observed": 175226,
+      "cost_usd": 0.11667,
+      "oracle_evals": 5250,
+      "wall_time_s": 571.7,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 2,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 4.207242755130168e-10,
+      "threshold": 0.873,
+      "llm_calls": 22,
+      "total_tokens": 156265,
+      "tokens_observed": 156265,
+      "cost_usd": 0.08203,
+      "oracle_evals": 5250,
+      "wall_time_s": 445.6,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 2,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.9630513225412576,
+      "threshold": 0.873,
+      "llm_calls": 21,
+      "total_tokens": 125535,
+      "tokens_observed": 125535,
+      "cost_usd": 0.069818,
+      "oracle_evals": 5250,
+      "wall_time_s": 417.4,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 2,
+      "arm": "E",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.0699492497905782e-07,
+      "threshold": 0.873,
+      "llm_calls": 22,
+      "total_tokens": 164011,
+      "tokens_observed": 164011,
+      "cost_usd": 0.099611,
+      "oracle_evals": 5250,
+      "wall_time_s": 511.0,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "invalid_decision": 1,
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "offset_scorer",
+      "seed": 2,
+      "arm": "F",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.2350947294335871e-05,
+      "threshold": 0.873,
+      "llm_calls": 32,
+      "total_tokens": 172878,
+      "tokens_observed": 172878,
+      "cost_usd": 0.101912,
+      "oracle_evals": 5250,
+      "wall_time_s": 482.6,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    }
+  ],
+  "per_arm_totals": {
+    "A": {
+      "llm_calls": 216,
+      "total_tokens_observed": 2429780,
+      "cost_usd": 0.892626,
+      "oracle_evals": 30898,
+      "wall_time_s": 4349.1,
+      "runs": 6,
+      "success": 0
+    },
+    "B": {
+      "llm_calls": 135,
+      "total_tokens_observed": 748196,
+      "cost_usd": 0.464696,
+      "oracle_evals": 30910,
+      "wall_time_s": 2308.0,
+      "runs": 6,
+      "success": 1
+    },
+    "C": {
+      "llm_calls": 128,
+      "total_tokens_observed": 893675,
+      "cost_usd": 0.48856,
+      "oracle_evals": 31306,
+      "wall_time_s": 2486.5,
+      "runs": 6,
+      "success": 0
+    },
+    "D": {
+      "llm_calls": 125,
+      "total_tokens_observed": 730033,
+      "cost_usd": 0.438302,
+      "oracle_evals": 31205,
+      "wall_time_s": 2296.9,
+      "runs": 6,
+      "success": 2
+    },
+    "E": {
+      "llm_calls": 132,
+      "total_tokens_observed": 870895,
+      "cost_usd": 0.514805,
+      "oracle_evals": 31468,
+      "wall_time_s": 2590.7000000000003,
+      "runs": 6,
+      "success": 1
+    },
+    "F": {
+      "llm_calls": 146,
+      "total_tokens_observed": 851731,
+      "cost_usd": 0.510494,
+      "oracle_evals": 31176,
+      "wall_time_s": 2493.1,
+      "runs": 6,
+      "success": 0
+    }
+  },
+  "paired_differences": {
+    "B-A": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": -0.02379600177674225
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.8129610736611784
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.32764659558671466
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 1.9602471713980732e-05
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -2.2640305287727606e-10
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 2.8325114072202205e-06
+      }
+    ],
+    "C-A": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": -0.02379600177674225
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.013071719142892431
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.06416234887584775
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 2.0733989995230584e-09
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 1.4918185953861594e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 2.2946574729984076e-10
+      }
+    ],
+    "B-C": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.0
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.799889354518286
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.2634842467108669
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 1.960039831498121e-05
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -1.4920449984390367e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 2.8322819414729205e-06
+      }
+    ],
+    "D-A": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.6950372017245412
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.7899487157319195
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": -0.010285148452386048
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.9553686852984419
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 7.67048959187505e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.963051322349999
+      }
+    ],
+    "D-B": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.7188332035012834
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -0.02301235792925893
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": -0.3379317440391007
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.9553490828267279
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 7.670715994927927e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.9630484898385918
+      }
+    ],
+    "D-C": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.7188332035012834
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.7768769965890271
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": -0.0744474973282338
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.9553686832250429
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 6.1786709964888905e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.9630513221205333
+      }
+    ],
+    "E-A": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.731745654027066
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.8118107370547303
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.6446020619604773
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 3.0136514844503754e-09
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 4.920227504920572e-10
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 1.0680366645084464e-07
+      }
+    ],
+    "F-A": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.6599778663433696
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 0.7941551822015217
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.7184494655189024
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 4.6928495808501595e-08
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -2.741110890098806e-10
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 1.2350756035807657e-05
+      }
+    ],
+    "E-B": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.7555416558038083
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -0.0011503366064481435
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.31695546637376265
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": -1.9599458062496282e-05
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 7.184258033693334e-10
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": -2.725707740769376e-06
+      }
+    ],
+    "F-B": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.6837738681201119
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -0.01880589145965672
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.39080286993218777
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": -1.955554321817223e-05
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -4.770803613260455e-11
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 9.518244628587438e-06
+      }
+    ],
+    "D-E": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": -0.03670845230252484
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -0.021862021322810787
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": -0.6548872104128634
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.9553686822847903
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 7.669997569124559e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.9630512155463326
+      }
+    ],
+    "D-F": [
+      {
+        "task": "frozen_mutation",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.035059335381171564
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": -0.00420646646960221
+      },
+      {
+        "task": "frozen_mutation",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": -0.7287346139712885
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 0,
+        "suite": "v3_holdout",
+        "diff": 0.955368638369946
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 1,
+        "suite": "v3_holdout",
+        "diff": 7.670763702964061e-06
+      },
+      {
+        "task": "offset_scorer",
+        "seed": 2,
+        "suite": "v3_holdout",
+        "diff": 0.9630389715939632
+      }
+    ]
+  },
+  "mean_paired_difference": {
+    "B-A": 0.18613901703797817,
+    "C-A": 0.008906593393909677,
+    "B-C": 0.17723242364406852,
+    "D-A": 0.5655214078570179,
+    "D-B": 0.37938239081903974,
+    "D-C": 0.5566148144631082,
+    "E-A": 0.3646930938919357,
+    "F-A": 0.362099151912369,
+    "E-B": 0.17855407685395752,
+    "F-B": 0.1759601348743909,
+    "D-E": 0.20082831396508216,
+    "D-F": 0.20342225594464883
+  },
+  "wins": {
+    "B-A": {
+      "x_better": 4,
+      "y_better": 2,
+      "n": 6
+    },
+    "C-A": {
+      "x_better": 5,
+      "y_better": 1,
+      "n": 6
+    },
+    "B-C": {
+      "x_better": 4,
+      "y_better": 1,
+      "n": 6
+    },
+    "D-A": {
+      "x_better": 5,
+      "y_better": 1,
+      "n": 6
+    },
+    "D-B": {
+      "x_better": 4,
+      "y_better": 2,
+      "n": 6
+    },
+    "D-C": {
+      "x_better": 5,
+      "y_better": 1,
+      "n": 6
+    },
+    "E-A": {
+      "x_better": 6,
+      "y_better": 0,
+      "n": 6
+    },
+    "F-A": {
+      "x_better": 5,
+      "y_better": 1,
+      "n": 6
+    },
+    "E-B": {
+      "x_better": 3,
+      "y_better": 3,
+      "n": 6
+    },
+    "F-B": {
+      "x_better": 3,
+      "y_better": 3,
+      "n": 6
+    },
+    "D-E": {
+      "x_better": 3,
+      "y_better": 3,
+      "n": 6
+    },
+    "D-F": {
+      "x_better": 4,
+      "y_better": 2,
+      "n": 6
+    }
+  },
+  "mean_paired_difference_by_suite": {
+    "B-A": {
+      "v3_holdout": 0.18613901703797817
+    },
+    "C-A": {
+      "v3_holdout": 0.008906593393909677
+    },
+    "B-C": {
+      "v3_holdout": 0.17723242364406852
+    },
+    "D-A": {
+      "v3_holdout": 0.5655214078570179
+    },
+    "D-B": {
+      "v3_holdout": 0.37938239081903974
+    },
+    "D-C": {
+      "v3_holdout": 0.5566148144631082
+    },
+    "E-A": {
+      "v3_holdout": 0.3646930938919357
+    },
+    "F-A": {
+      "v3_holdout": 0.362099151912369
+    },
+    "E-B": {
+      "v3_holdout": 0.17855407685395752
+    },
+    "F-B": {
+      "v3_holdout": 0.1759601348743909
+    },
+    "D-E": {
+      "v3_holdout": 0.20082831396508216
+    },
+    "D-F": {
+      "v3_holdout": 0.20342225594464883
+    }
+  },
+  "target_stats": {
+    "B": {
+      "proposals": 14,
+      "target:objective": 4,
+      "outcome:rejected": 10,
+      "target:optimization_workflow": 4,
+      "proposals_on_best_target": 9,
+      "outcome:skipped": 37,
+      "runs_first_proposal_on_best_target": 4,
+      "runs_with_proposals": 6,
+      "target:implementation": 6,
+      "outcome:invalid_decision": 2,
+      "accepted": 2,
+      "accepted_on_best_target": 2,
+      "outcome:accepted": 2
+    },
+    "C": {
+      "proposals": 14,
+      "target:optimization_workflow": 4,
+      "proposals_on_best_target": 3,
+      "outcome:rejected": 12,
+      "target:no_change": 2,
+      "outcome:no_change": 2,
+      "outcome:skipped": 39,
+      "runs_first_proposal_on_best_target": 1,
+      "runs_with_proposals": 6,
+      "target:planning": 4,
+      "target:implementation": 2,
+      "target:objective": 2
+    },
+    "D": {
+      "proposals": 12,
+      "target:optimization_workflow": 4,
+      "proposals_on_best_target": 6,
+      "accepted": 6,
+      "accepted_on_best_target": 4,
+      "outcome:accepted": 6,
+      "target:objective": 6,
+      "outcome:skipped": 41,
+      "runs_first_proposal_on_best_target": 4,
+      "runs_with_proposals": 6,
+      "outcome:rejected": 6,
+      "target:implementation": 2
+    },
+    "E": {
+      "proposals": 14,
+      "target:optimization_workflow": 3,
+      "proposals_on_best_target": 9,
+      "accepted": 4,
+      "accepted_on_best_target": 3,
+      "outcome:accepted": 4,
+      "target:objective": 5,
+      "outcome:rejected": 8,
+      "outcome:skipped": 40,
+      "runs_first_proposal_on_best_target": 5,
+      "runs_with_proposals": 6,
+      "target:implementation": 6,
+      "outcome:invalid_decision": 2
+    },
+    "F": {
+      "proposals": 13,
+      "target:optimization_workflow": 3,
+      "proposals_on_best_target": 8,
+      "accepted": 5,
+      "accepted_on_best_target": 3,
+      "outcome:accepted": 5,
+      "target:objective": 5,
+      "outcome:skipped": 39,
+      "runs_first_proposal_on_best_target": 4,
+      "runs_with_proposals": 6,
+      "outcome:rejected": 7,
+      "target:implementation": 5,
+      "outcome:invalid_decision": 1
+    }
+  },
+  "reject_or_failure_reasons": {
+    "B|rejected|no_improvement": 10,
+    "C|rejected|no_improvement": 12,
+    "E|rejected|no_improvement": 8,
+    "B|invalid_decision|objective is already bound to this scorer": 2,
+    "D|rejected|no_improvement": 6,
+    "F|rejected|no_improvement": 7,
+    "E|invalid_decision|objective is already bound to this scorer": 2,
+    "F|invalid_decision|objective is already bound to this scorer": 1
+  }
+}
