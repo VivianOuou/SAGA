@@ -1,0 +1,377 @@
+{
+  "mode": "real_llm",
+  "note": "REAL LLM calls on SYNTHETIC numeric tasks; small pilot, no significance testing",
+  "rows": [
+    {
+      "task": "constrained_yield",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": true,
+      "test_metric": 0.6472248823011281,
+      "threshold": 0.592,
+      "llm_calls": 18,
+      "total_tokens": 73668,
+      "tokens_observed": 73668,
+      "cost_usd": 0.048994,
+      "oracle_evals": 1836,
+      "wall_time_s": 355.1,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "constrained_yield",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": true,
+      "test_metric": 0.6501906953058333,
+      "threshold": 0.592,
+      "llm_calls": 22,
+      "total_tokens": 95765,
+      "tokens_observed": 95765,
+      "cost_usd": 0.072836,
+      "oracle_evals": 7180,
+      "wall_time_s": 498.1,
+      "outcomes": {
+        "rejected": 4,
+        "skipped": 2
+      },
+      "by_target": {
+        "objective": {
+          "rejected": 4
+        }
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "constrained_yield",
+      "seed": 1,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": true,
+      "test_metric": 0.6032273257301244,
+      "threshold": 0.592,
+      "llm_calls": 18,
+      "total_tokens": 71340,
+      "tokens_observed": 71340,
+      "cost_usd": 0.049843,
+      "oracle_evals": 1836,
+      "wall_time_s": 256.1,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "constrained_yield",
+      "seed": 1,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": true,
+      "test_metric": 0.6477738130792674,
+      "threshold": 0.592,
+      "llm_calls": 23,
+      "total_tokens": 98721,
+      "tokens_observed": 98721,
+      "cost_usd": 0.070088,
+      "oracle_evals": 5860,
+      "wall_time_s": 521.9,
+      "outcomes": {
+        "accepted": 1,
+        "rejected": 2,
+        "invalid_decision": 2,
+        "skipped": 1
+      },
+      "by_target": {
+        "objective": {
+          "accepted": 1,
+          "rejected": 2,
+          "invalid_decision": 1
+        },
+        "implementation": {
+          "invalid_decision": 1
+        }
+      },
+      "acceptance_rate": 0.3333333333333333
+    },
+    {
+      "task": "robust_design",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.4415948600076893,
+      "threshold": 0.454,
+      "llm_calls": 19,
+      "total_tokens": 91918,
+      "tokens_observed": 91918,
+      "cost_usd": 0.060111,
+      "oracle_evals": 1772,
+      "wall_time_s": 297.3,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "robust_design",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.4507528556598796,
+      "threshold": 0.454,
+      "llm_calls": 24,
+      "total_tokens": 111900,
+      "tokens_observed": 111900,
+      "cost_usd": 0.078839,
+      "oracle_evals": 5892,
+      "wall_time_s": 407.2,
+      "outcomes": {
+        "invalid_decision": 2,
+        "rejected": 2,
+        "accepted": 1,
+        "skipped": 1
+      },
+      "by_target": {
+        "objective": {
+          "invalid_decision": 1,
+          "rejected": 2,
+          "accepted": 1
+        }
+      },
+      "acceptance_rate": 0.3333333333333333
+    },
+    {
+      "task": "robust_design",
+      "seed": 1,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.430759805305133,
+      "threshold": 0.454,
+      "llm_calls": 19,
+      "total_tokens": 92164,
+      "tokens_observed": 92164,
+      "cost_usd": 0.058262,
+      "oracle_evals": 1900,
+      "wall_time_s": 291.3,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "robust_design",
+      "seed": 1,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.44972370087749125,
+      "threshold": 0.454,
+      "llm_calls": 23,
+      "total_tokens": 102701,
+      "tokens_observed": 102701,
+      "cost_usd": 0.071017,
+      "oracle_evals": 7180,
+      "wall_time_s": 525.4,
+      "outcomes": {
+        "accepted": 1,
+        "rejected": 3,
+        "skipped": 2
+      },
+      "by_target": {
+        "objective": {
+          "accepted": 1,
+          "rejected": 3
+        }
+      },
+      "acceptance_rate": 0.25
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 0,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.8240790258525861,
+      "threshold": 0.853,
+      "llm_calls": 21,
+      "total_tokens": 113471,
+      "tokens_observed": 113471,
+      "cost_usd": 0.060638,
+      "oracle_evals": 1804,
+      "wall_time_s": 363.5,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.8164831738886804,
+      "threshold": 0.853,
+      "llm_calls": 22,
+      "total_tokens": 92618,
+      "tokens_observed": 92618,
+      "cost_usd": 0.062915,
+      "oracle_evals": 7052,
+      "wall_time_s": 351.4,
+      "outcomes": {
+        "accepted": 2,
+        "rejected": 2,
+        "skipped": 2
+      },
+      "by_target": {
+        "objective": {
+          "accepted": 2,
+          "rejected": 2
+        }
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 1,
+      "arm": "A",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.8008700541822057,
+      "threshold": 0.853,
+      "llm_calls": 18,
+      "total_tokens": 77036,
+      "tokens_observed": 77036,
+      "cost_usd": 0.049275,
+      "oracle_evals": 1804,
+      "wall_time_s": 264.1,
+      "outcomes": null,
+      "by_target": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 1,
+      "arm": "B",
+      "status": "completed",
+      "termination": "max_iterations",
+      "iterations": 6,
+      "success": false,
+      "test_metric": 0.8473957363298904,
+      "threshold": 0.853,
+      "llm_calls": 22,
+      "total_tokens": 87841,
+      "tokens_observed": 87841,
+      "cost_usd": 0.058977,
+      "oracle_evals": 7020,
+      "wall_time_s": 333.4,
+      "outcomes": {
+        "accepted": 2,
+        "rejected": 2,
+        "skipped": 2
+      },
+      "by_target": {
+        "implementation": {
+          "accepted": 2
+        },
+        "objective": {
+          "rejected": 2
+        }
+      },
+      "acceptance_rate": 0.5
+    }
+  ],
+  "paired_differences": [
+    {
+      "task": "constrained_yield",
+      "seed": 0,
+      "test_metric_B_minus_A": 0.00296581300470522,
+      "success_A": true,
+      "success_B": true
+    },
+    {
+      "task": "constrained_yield",
+      "seed": 1,
+      "test_metric_B_minus_A": 0.044546487349143016,
+      "success_A": true,
+      "success_B": true
+    },
+    {
+      "task": "robust_design",
+      "seed": 0,
+      "test_metric_B_minus_A": 0.009157995652190276,
+      "success_A": false,
+      "success_B": false
+    },
+    {
+      "task": "robust_design",
+      "seed": 1,
+      "test_metric_B_minus_A": 0.018963895572358225,
+      "success_A": false,
+      "success_B": false
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 0,
+      "test_metric_B_minus_A": -0.007595851963905664,
+      "success_A": false,
+      "success_B": false
+    },
+    {
+      "task": "spectral_signal",
+      "seed": 1,
+      "test_metric_B_minus_A": 0.04652568214768471,
+      "success_A": false,
+      "success_B": false
+    }
+  ],
+  "success_counts": {
+    "A": 2,
+    "B": 2,
+    "pairs": 6
+  },
+  "mean_test_metric_diff_B_minus_A": 0.0190940036270293,
+  "controller_outcomes": {
+    "rejected": 15,
+    "skipped": 10,
+    "accepted": 7,
+    "invalid_decision": 4
+  },
+  "controller_target_outcomes": {
+    "objective:rejected": 15,
+    "objective:accepted": 5,
+    "objective:invalid_decision": 2,
+    "implementation:invalid_decision": 1,
+    "implementation:accepted": 2
+  },
+  "controller_reject_or_failure_reasons": {
+    "no_improvement": 15,
+    "'within_cost_budget' is already an objective": 1,
+    "objective is already bound to this scorer": 1,
+    "proposed_change for 'objective'": 1,
+    "'robust_performance_mc' is already an objective": 1
+  }
+}

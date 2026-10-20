@@ -1,0 +1,94 @@
+{
+  "mode": "real_llm",
+  "updated": "2026-10-20T13:15:37.957420",
+  "config": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/ab_config.yaml",
+  "done": 12,
+  "failed": 0,
+  "total": 12,
+  "cells": {
+    "robust_design__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 302.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/robust_design__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__robust_design__s0__A.json"
+    },
+    "robust_design__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 412.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/robust_design__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__robust_design__s0__B.json"
+    },
+    "robust_design__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 296.0,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/robust_design__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__robust_design__s1__A.json"
+    },
+    "robust_design__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 529.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/robust_design__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__robust_design__s1__B.json"
+    },
+    "constrained_yield__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 359.3,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/constrained_yield__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__constrained_yield__s0__A.json"
+    },
+    "constrained_yield__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 529.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/constrained_yield__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__constrained_yield__s0__B.json"
+    },
+    "constrained_yield__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 260.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/constrained_yield__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__constrained_yield__s1__A.json"
+    },
+    "constrained_yield__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 526.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/constrained_yield__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__constrained_yield__s1__B.json"
+    },
+    "spectral_signal__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 368.3,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/spectral_signal__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__spectral_signal__s0__A.json"
+    },
+    "spectral_signal__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 355.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/spectral_signal__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__spectral_signal__s0__B.json"
+    },
+    "spectral_signal__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 268.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/spectral_signal__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__spectral_signal__s1__A.json"
+    },
+    "spectral_signal__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 337.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/spectral_signal__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__spectral_signal__s1__B.json"
+    }
+  }
+}
