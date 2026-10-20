@@ -4,6 +4,7 @@ Run ONE arm of the numeric-task A/B pilot for the Meta-Controller.
     A = Meta-Controller disabled (original SAGA loop)                + budget caps
     B = Meta-Controller enabled with the plain LLM Judge              + the same budget caps
     C = Meta-Controller enabled with the random-target control judge + the same budget caps (v2)
+    D = Meta-Controller enabled with the LLM Judge, prompt v2 + analyzer-independent run diagnostics (v2b)
 
 Both arms share task, seed, initial population/objectives, modules, models, budget caps, trial
 quota and timeout. The Judge, candidate trials and independent validation of arm B are charged to
@@ -56,7 +57,7 @@ from modules.numeric_tasks.validators import get_numeric_validator, register_num
 DEFAULT_CONFIG = ROOT / "exps" / "meta_controller" / "ab_config.yaml"
 GRID_INDEX = {(t, s, a): i for i, (t, s, a) in enumerate(
     (t, s, a) for t in ("robust_design", "constrained_yield", "spectral_signal", "stagnant_search", "overflow_scorer",
-                        "noisy_search") for s in range(10) for a in ("A", "B", "C"))}
+                        "noisy_search", "underflow_cost") for s in range(10) for a in ("A", "B", "C", "D"))}
 
 # MOCK decisions used only with --offline-mock (one plausible proposal per task, then no_change).
 MOCK_DECISIONS = {
@@ -73,6 +74,8 @@ MOCK_DECISIONS = {
                                                           "valid_range": [0, 1]}, failure_location="implementation")],
     "noisy_search": [mocks.decision("optimization_workflow", {"params": {"mutation_sigma": 0.05}},
                                     failure_location="optimization_workflow")],
+    "underflow_cost": [mocks.decision("implementation", {"objective_name": "design_cost", "action": "sanitize_outputs",
+                                                         "valid_range": [0, 1]}, failure_location="implementation")],
 }
 
 
@@ -126,7 +129,7 @@ def build_config(cfg, task, seed, arm, run_id, offline_mock):
         "stop_on_analyzer_decision": cfg["loop"].get("stop_on_analyzer_decision", True),
     }
     loop.update(task.loop_overrides)
-    if arm in ("B", "C"):
+    if arm in ("B", "C", "D"):
         mc = cfg["meta_controller"]
         loop["meta_controller"] = {
             "enabled": True,
@@ -134,7 +137,8 @@ def build_config(cfg, task, seed, arm, run_id, offline_mock):
             "seed": seed,
             "judge": ({"type": "random", "seed": seed} if arm == "C" else {"type": "none"} if offline_mock else {
                 "type": "llm", "model_name": cfg["models"]["judge"], "models_file": cfg["models_file"],
-                "credentials_file": cfg["credentials_file"], "max_parse_retries": mc.get("max_parse_retries", 1)}),
+                "credentials_file": cfg["credentials_file"], "max_parse_retries": mc.get("max_parse_retries", 1),
+                "prompt_version": "v2" if arm == "D" else "v1"}),
             "max_ops_per_change": mc.get("max_ops_per_change"),
             "validator": task.validator,
             "validation": {
@@ -176,7 +180,7 @@ async def run_arm(args, cfg):
 
     config = build_config(cfg, task, args.seed, args.arm, run_id, args.offline_mock)
     orch = OptimizationOrchestrator(config, run_name=run_id, run_id=run_id)
-    if args.arm == "B" and args.offline_mock:
+    if args.arm in ("B", "D") and args.offline_mock:
         orch.meta_controller.set_judge(mocks.ScriptedJudge(list(MOCK_DECISIONS[args.task])))
 
     started = time.monotonic()
@@ -219,7 +223,8 @@ async def run_arm(args, cfg):
                           else "MOCK planner/analyzer/judge: pipeline check only, not evidence"),
         "task": args.task, "seed": args.seed, "arm": args.arm,
         "arm_definition": {"A": "A: controller disabled", "B": "B: controller enabled (plain LLM judge)",
-                           "C": "C: controller enabled (random-target control judge, no LLM)"}[args.arm],
+                           "C": "C: controller enabled (random-target control judge, no LLM)",
+                           "D": "D: controller enabled (LLM judge, prompt v2 + run diagnostics)"}[args.arm],
         "suite": task.suite, "best_target": task.best_target,
         "run_id": run_id, "run_dir": str(orch.run_dir),
         "status": status, "error": error,
@@ -260,7 +265,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--task", required=True, choices=sorted(TASKS))
     parser.add_argument("--seed", type=int, required=True)
-    parser.add_argument("--arm", required=True, choices=["A", "B", "C"])
+    parser.add_argument("--arm", required=True, choices=["A", "B", "C", "D"])
     parser.add_argument("--config", default=str(DEFAULT_CONFIG))
     parser.add_argument("--offline-mock", action="store_true", help="MOCK planner/analyzer/judge (no API key); pipeline check only")
     parser.add_argument("--results-dir", default=None, help="default: exps/meta_controller/results[/<config results_subdir>]")

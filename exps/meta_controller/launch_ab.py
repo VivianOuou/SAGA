@@ -44,7 +44,10 @@ def main():
     log_dir = results_dir / "logs"
     log_dir.mkdir(exist_ok=True)
 
-    cells = [(t, s, a) for t in cfg["tasks"] for s in cfg["seeds"] for a in cfg.get("arms", ["A", "B"])]
+    if cfg.get("grid"):  # explicit blocks: [{tasks: [...], seeds: [...], arms: [...]}, ...]
+        cells = [(t, s, a) for block in cfg["grid"] for t in block["tasks"] for s in block["seeds"] for a in block["arms"]]
+    else:
+        cells = [(t, s, a) for t in cfg["tasks"] for s in cfg["seeds"] for a in cfg.get("arms", ["A", "B"])]
     status_path = results_dir / "grid_status.json"
     status = {f"{t}__s{s}__{a}": {"state": "pending"} for t, s, a in cells}
 

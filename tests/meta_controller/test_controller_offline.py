@@ -378,3 +378,21 @@ def test_stop_on_analyzer_decision_flag_applies_to_all_arms(in_tmp, fresh_regist
     orch_b.meta_controller.set_judge(judge)
     asyncio.run(run(orch_b))
     assert judge.calls == 2 and [r["outcome"] for r in _records(orch_b)][:2] == ["no_change", "no_change"]
+
+
+def test_judge_context_has_analyzer_independent_diagnostics(in_tmp, fresh_registry):
+    register_inprocess_scorers("overflow_scorer")
+    orch = make_orchestrator("diag", task_id="overflow_scorer", meta=meta_config("overflow_scorer"), max_iterations=2,
+                             ga={"mutation_sigma": 0.005, "crossover_rate": 0.0})
+    judge = ScriptedJudge([no_change()])
+    orch.meta_controller.set_judge(judge)
+    asyncio.run(run(orch, "overflow_scorer"))
+    diag = judge.contexts[0]["diagnostics"]
+    q = diag["objective_scores_current_population"]["quality_score"]
+    assert q["declared_range"] == [0.0, 1.0] and q["n_outside_declared_range"] > 0 and q["max"] > 1.0
+    status = diag["tunable_parameter_status"]
+    assert status["mutation_sigma"]["at_lower_bound"] is True and status["mutation_sigma"]["default"] == 0.08
+    assert status["crossover_rate"]["at_lower_bound"] is True
+    assert diag["optimizer_reported_last_run"]["mean_child_parent_distance"] is not None
+    assert {"per_dimension_std_mean", "mean_pairwise_distance"} <= set(diag["population_diversity"])
+    assert diag["best_score_by_iteration_last6"]["quality_score"]

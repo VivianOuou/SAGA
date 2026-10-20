@@ -181,8 +181,18 @@ class NoisySearchValidator(_BumpValidator):
     seed_offset = 13
 
 
+class UnderflowCostValidator(_BumpValidator):
+    """Held-out v2b task: true quality is the bump only (the cost scorer's underflow branch is a bug)."""
+
+    name = "underflow_cost_truth"
+    center = np.array([0.55, 0.35, 0.60, 0.42, 0.68, 0.50, 0.30, 0.58])
+    width = 0.22
+    seed_offset = 14
+
+
 VALIDATOR_CLASSES = {cls.name: cls for cls in (RobustDesignValidator, ConstrainedYieldValidator, SpectralSignalValidator,
-                                               StagnantSearchValidator, OverflowScorerValidator, NoisySearchValidator)}
+                                               StagnantSearchValidator, OverflowScorerValidator, NoisySearchValidator,
+                                               UnderflowCostValidator)}
 
 
 def register_numeric_validators() -> None:

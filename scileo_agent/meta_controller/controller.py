@@ -18,6 +18,7 @@ runtime exceptions raised before the Analyzer runs (those still terminate the ru
 import copy
 import json
 import random
+import re
 import shutil
 import traceback
 from datetime import datetime
@@ -308,6 +309,7 @@ class MetaController:
             "expected_benefit_hypothesis": decision.expected_benefit,
             "validation_plan_suggested_by_judge": decision.validation_plan,
             "self_reported_confidence_uncalibrated": decision.confidence,
+            "target_assessment": decision.target_assessment,
         }
         target = decision.intervention_target
         if target == "no_change":
@@ -723,7 +725,12 @@ class MetaController:
             meta = get_scorer_metadata(name) or {}
             registered.append({"name": name, "type": meta.get("type"), "description": _truncate(meta.get("description"), 300)})
         remaining = self.budget.remaining() if self.budget.caps else "no caps configured"
+        try:
+            diagnostics = self._diagnostics(objectives, specs)
+        except Exception as e:  # diagnostics are advisory; never block the step
+            diagnostics = {"error": f"{type(e).__name__}: {e}"}
         return {
+            "diagnostics": diagnostics,
             "high_level_goal": high_level_goal,
             "iteration": iteration,
             "max_iterations": max_iterations,
@@ -742,6 +749,76 @@ class MetaController:
             "recent_decisions": recent,
             "remaining_budget": remaining,
         }
+
+    _RANGE = re.compile(r"in \[\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\]")
+
+    def _declared_range(self, obj: Objective):
+        meta = get_scorer_metadata(self._binding_name(obj)) or {}
+        for text in (meta.get("description"), obj.description):
+            m = self._RANGE.search(text or "")
+            if m:
+                return [float(m.group(1)), float(m.group(2))]
+        return None
+
+    def _diagnostics(self, objectives: List[Objective], specs: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+        """Run diagnostics computed directly from the run state (independent of the Analyzer's report)."""
+        population = self.orch.current_population
+        out: Dict[str, Any] = {}
+        if population is None or population.size == 0:
+            return out
+        score_stats = {}
+        for obj in objectives:
+            if obj.type == "population-wise":
+                continue
+            values = [c.scores.get(obj.name) for c in population.candidates]
+            nums = [float(v) for v in values if v is not None and not isinstance(v, bool) and np.isfinite(float(v))]
+            declared = self._declared_range(obj)
+            entry = {"n": len(values), "failed_or_missing": len(values) - len(nums), "declared_range": declared}
+            if nums:
+                entry.update({"min": round(min(nums), 6), "max": round(max(nums), 6), "mean": round(float(np.mean(nums)), 6),
+                              "std": round(float(np.std(nums)), 6)})
+                if declared:
+                    entry["n_outside_declared_range"] = sum(1 for v in nums if not declared[0] <= v <= declared[1])
+            score_stats[obj.name] = entry
+        out["objective_scores_current_population"] = score_stats
+
+        history = {}
+        km = self.orch.knowledge_manager
+        for obj in objectives:
+            if obj.type != "candidate-wise":
+                continue
+            best = []
+            for it in sorted(getattr(km, "populations_by_iteration", {}))[-6:]:
+                pop = km.get_population(it)
+                vals = [c.scores.get(obj.name) for c in (pop.candidates if pop else [])]
+                nums = [float(v) for v in vals if v is not None and not isinstance(v, bool)]
+                if nums:
+                    best.append([it, round(max(nums) if obj.optimization_direction == "maximize" else min(nums), 6)])
+            history[obj.name] = best
+        out["best_score_by_iteration_last6"] = history
+
+        reps = [c.representation for c in population.candidates]
+        if reps and all(isinstance(r, (list, tuple)) and r and all(isinstance(v, (int, float)) for v in r) for r in reps) \
+                and len({len(r) for r in reps}) == 1:
+            X = np.asarray(reps, dtype=float)
+            dist = np.sqrt(((X[:, None, :] - X[None, :, :]) ** 2).sum(-1))
+            out["population_diversity"] = {
+                "per_dimension_std_mean": round(float(X.std(axis=0).mean()), 6),
+                "per_dimension_std_min": round(float(X.std(axis=0).min()), 6),
+                "mean_pairwise_distance": round(float(dist.sum() / max(1, len(X) * (len(X) - 1))), 6),
+                "fraction_unique": round(len({tuple(np.round(r, 6)) for r in X}) / len(X), 3),
+            }
+        flags = {}
+        for name, spec in specs.items():
+            cur = spec.get("current")
+            if isinstance(cur, (int, float)):
+                flags[name] = {"current": cur, "default": spec.get("default"),
+                               "at_lower_bound": cur <= spec["min"], "at_upper_bound": cur >= spec["max"]}
+        out["tunable_parameter_status"] = flags
+        stats = getattr(self.orch.optimizer, "last_run_stats", None)
+        if stats:
+            out["optimizer_reported_last_run"] = stats
+        return out
 
     # ------------------------------------------------------------------ summary
     def summary(self) -> Dict[str, Any]:
@@ -789,6 +866,7 @@ def _build_judge(cfg: Dict[str, Any], orch) -> Optional[BaseJudge]:
         model_name=model_name,
         models_file=judge_cfg.get("models_file") or (planner_llm.models_file if planner_llm else "llm_configs/models.yaml"),
         credentials_file=judge_cfg.get("credentials_file") or (planner_llm.credentials_file if planner_llm else "llm_configs/credentials.yaml"),
+        prompt_version=judge_cfg.get("prompt_version", "v1"),
         max_retries=judge_cfg.get("max_retries", 2),
         max_parse_retries=judge_cfg.get("max_parse_retries", 1),
         call_args=judge_cfg.get("call_args") or {},

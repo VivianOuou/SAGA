@@ -108,6 +108,18 @@ class Decision(_Strict):
     validation_plan: str = Field(min_length=1, max_length=MAX_TEXT_CHARS)
     # Model self-report; NOT calibrated and NOT a probability of measured benefit.
     confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    # Optional one-sentence assessment per target (requested by judge prompt v2); recorded, not used for acceptance.
+    target_assessment: Optional[Dict[str, str]] = None
+
+    @model_validator(mode="after")
+    def _check_assessment(self):
+        if self.target_assessment is not None:
+            unknown = set(self.target_assessment) - set(TARGETS)
+            if unknown:
+                raise ValueError(f"target_assessment has unknown targets: {sorted(unknown)}")
+            if any(len(str(v)) > 600 for v in self.target_assessment.values()):
+                raise ValueError("target_assessment entries must be at most 600 characters")
+        return self
 
 
 def _format_validation_error(error: ValidationError) -> str:
