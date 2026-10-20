@@ -1,0 +1,157 @@
+{
+  "mode": "real_llm",
+  "updated": "2026-10-20T16:11:21.145718",
+  "config": "exps/meta_controller/ab_v2b_config.yaml",
+  "done": 20,
+  "failed": 1,
+  "total": 21,
+  "cells": {
+    "stagnant_search__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 417.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/stagnant_search__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__stagnant_search__s0__D.json"
+    },
+    "stagnant_search__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 430.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/stagnant_search__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__stagnant_search__s1__D.json"
+    },
+    "stagnant_search__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 372.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/stagnant_search__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__stagnant_search__s2__D.json"
+    },
+    "overflow_scorer__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 479.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/overflow_scorer__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__overflow_scorer__s0__D.json"
+    },
+    "overflow_scorer__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 468.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/overflow_scorer__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__overflow_scorer__s1__D.json"
+    },
+    "overflow_scorer__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 555.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/overflow_scorer__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__overflow_scorer__s2__D.json"
+    },
+    "noisy_search__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 382.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/noisy_search__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__noisy_search__s0__D.json"
+    },
+    "noisy_search__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 349.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/noisy_search__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__noisy_search__s1__D.json"
+    },
+    "noisy_search__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 538.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/noisy_search__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__noisy_search__s2__D.json"
+    },
+    "underflow_cost__s0__A": {
+      "state": "failed",
+      "returncode": 0,
+      "seconds": 444.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s0__A.json"
+    },
+    "underflow_cost__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 393.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s0__B.json"
+    },
+    "underflow_cost__s0__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 498.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s0__C.json"
+    },
+    "underflow_cost__s0__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 450.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s0__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s0__D.json"
+    },
+    "underflow_cost__s1__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 712.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s1__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s1__A.json"
+    },
+    "underflow_cost__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 468.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s1__B.json"
+    },
+    "underflow_cost__s1__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 458.8,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s1__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s1__C.json"
+    },
+    "underflow_cost__s1__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 726.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s1__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s1__D.json"
+    },
+    "underflow_cost__s2__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 710.4,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s2__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s2__A.json"
+    },
+    "underflow_cost__s2__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 442.1,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s2__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s2__B.json"
+    },
+    "underflow_cost__s2__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 457.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s2__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s2__C.json"
+    },
+    "underflow_cost__s2__D": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 505.7,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/underflow_cost__s2__D.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__underflow_cost__s2__D.json"
+    }
+  }
+}

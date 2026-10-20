@@ -1,0 +1,130 @@
+{
+  "mode": "real_llm",
+  "evidence_note": "REAL LLM calls on SYNTHETIC numeric tasks",
+  "task": "underflow_cost",
+  "seed": 0,
+  "arm": "A",
+  "arm_definition": "A: controller disabled",
+  "suite": "v2b_holdout",
+  "best_target": "implementation",
+  "run_id": "ab-real_llm-underflow_cost-s0-A-20261020153719",
+  "run_dir": "runs/ab-real_llm-underflow_cost-s0-A-20261020153719",
+  "status": "failed",
+  "error": "ValueError: Failed to get valid LLM analysis after 3 retries. Last error: LLM refused to provide a proper response due to safety/compliance constraints (likely overrefusal)",
+  "termination_reason": "error",
+  "iterations_completed": 8,
+  "models": {
+    "planner": "openai/gpt-5-mini-2025-08-07",
+    "analyzer": "openai/gpt-5-mini-2025-08-07",
+    "scorer_matching": "openai/gpt-5-mini-2025-08-07",
+    "refusal_detection": "openai/gpt-4.1-nano-2025-04-14",
+    "judge": "openai/gpt-5-mini-2025-08-07"
+  },
+  "success_threshold": 0.867,
+  "success": false,
+  "test_metric": 1.2253538563866532e-06,
+  "test_details": {
+    "split": "test",
+    "top_k": 5,
+    "top_k_by_true_quality": 5.733090238365024e-06,
+    "population_mean": 1.2906601222276644e-06,
+    "best": 9.216755239075075e-06,
+    "n_invalid": 0
+  },
+  "final_validation_metric_reference_only": 1.2694378059229789e-06,
+  "llm_calls": 35,
+  "total_tokens": 135385,
+  "total_tokens_observed": 135385,
+  "cost_usd": 0.085525,
+  "oracle_evals": 2416,
+  "wall_time_s": 436.6,
+  "budget": {
+    "caps": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "used": {
+      "llm_calls": 35,
+      "total_tokens": 135385,
+      "total_tokens_observed": 135385,
+      "calls_missing_usage": 0,
+      "cost_usd": 0.085525,
+      "oracle_evals": 2416,
+      "wall_time_s": 436.569
+    },
+    "remaining": {
+      "max_llm_calls": 15,
+      "max_total_tokens": 364615,
+      "max_oracle_evals": 2584,
+      "max_wall_time_s": 2563.431
+    }
+  },
+  "api_usage_total": {
+    "call_count": 35,
+    "total_tokens": 135385,
+    "input_tokens": 52766,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 45312,
+    "output_tokens": 37307,
+    "cost": 0.08552479999999998,
+    "by_model_name": {
+      "openai/gpt-5-mini-2025-08-07": {
+        "call_count": 22,
+        "total_tokens": 121686,
+        "input_tokens": 40004,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 45312,
+        "output_tokens": 36370,
+        "cost": 0.08387379999999998
+      },
+      "openai/gpt-4.1-nano-2025-04-14": {
+        "call_count": 13,
+        "total_tokens": 13699,
+        "input_tokens": 12762,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 937,
+        "cost": 0.0016509999999999995
+      }
+    }
+  },
+  "meta_controller": null,
+  "config": {
+    "loop": {
+      "max_iterations": 30,
+      "random_candidate_ratio": 0.0,
+      "max_objective_planning_retries": 3,
+      "stop_on_analyzer_decision": false
+    },
+    "budget": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "optimizer": {
+      "pop_size": 32,
+      "generations": 10
+    },
+    "meta_controller": {
+      "max_parse_retries": 1,
+      "max_ops_per_change": 1,
+      "validation": {
+        "n_seeds": 2,
+        "min_improvement": 0.02,
+        "trial_optimizer_overrides": {}
+      },
+      "estimates": {
+        "judge_tokens": 8000,
+        "planner_call_tokens": 8000
+      }
+    },
+    "timeout_s": 5400
+  },
+  "task_overrides": {
+    "optimizer": {},
+    "loop": {}
+  }
+}

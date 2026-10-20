@@ -4,7 +4,8 @@
   "arms": [
     "A",
     "B",
-    "C"
+    "C",
+    "D"
   ],
   "rows": [
     {
@@ -81,6 +82,31 @@
     },
     {
       "task": "noisy_search",
+      "seed": 0,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.0038585478481074514,
+      "threshold": 0.839,
+      "llm_calls": 28,
+      "total_tokens": 116054,
+      "tokens_observed": 116054,
+      "cost_usd": 0.074596,
+      "oracle_evals": 5008,
+      "wall_time_s": 377.1,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "invalid_decision": 2,
+        "rejected": 2,
+        "skipped": 4
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "noisy_search",
       "seed": 1,
       "arm": "A",
       "status": "completed",
@@ -150,6 +176,31 @@
     },
     {
       "task": "noisy_search",
+      "seed": 1,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.6790520540848775,
+      "threshold": 0.839,
+      "llm_calls": 26,
+      "total_tokens": 105244,
+      "tokens_observed": 105244,
+      "cost_usd": 0.063543,
+      "oracle_evals": 5087,
+      "wall_time_s": 344.9,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 1,
+        "accepted": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "noisy_search",
       "seed": 2,
       "arm": "A",
       "status": "completed",
@@ -215,6 +266,31 @@
       "outcomes": {
         "rejected": 2,
         "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "noisy_search",
+      "seed": 2,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 0.0002530640806578318,
+      "threshold": 0.839,
+      "llm_calls": 34,
+      "total_tokens": 180726,
+      "tokens_observed": 180726,
+      "cost_usd": 0.099513,
+      "oracle_evals": 5146,
+      "wall_time_s": 532.3,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "invalid_decision": 1,
+        "rejected": 2,
+        "skipped": 5
       },
       "acceptance_rate": 0.0
     },
@@ -291,6 +367,30 @@
     },
     {
       "task": "overflow_scorer",
+      "seed": 0,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 4.770829077351329e-08,
+      "threshold": 0.878,
+      "llm_calls": 31,
+      "total_tokens": 164656,
+      "tokens_observed": 164656,
+      "cost_usd": 0.091652,
+      "oracle_evals": 5250,
+      "wall_time_s": 472.1,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "overflow_scorer",
       "seed": 1,
       "arm": "A",
       "status": "completed",
@@ -360,6 +460,31 @@
     },
     {
       "task": "overflow_scorer",
+      "seed": 1,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.960444069991431,
+      "threshold": 0.878,
+      "llm_calls": 35,
+      "total_tokens": 169447,
+      "tokens_observed": 169447,
+      "cost_usd": 0.089924,
+      "oracle_evals": 5250,
+      "wall_time_s": 463.6,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "accepted": 1,
+        "rejected": 1,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "overflow_scorer",
       "seed": 2,
       "arm": "A",
       "status": "completed",
@@ -425,6 +550,31 @@
       "outcomes": {
         "rejected": 2,
         "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "overflow_scorer",
+      "seed": 2,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 3.819544109592281e-08,
+      "threshold": 0.878,
+      "llm_calls": 34,
+      "total_tokens": 212658,
+      "tokens_observed": 212658,
+      "cost_usd": 0.10662,
+      "oracle_evals": 5250,
+      "wall_time_s": 550.8,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "invalid_decision": 1,
+        "rejected": 2,
+        "skipped": 6
       },
       "acceptance_rate": 0.0
     },
@@ -501,6 +651,31 @@
     },
     {
       "task": "stagnant_search",
+      "seed": 0,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.966853274514609,
+      "threshold": 0.874,
+      "llm_calls": 32,
+      "total_tokens": 145816,
+      "tokens_observed": 145816,
+      "cost_usd": 0.082074,
+      "oracle_evals": 5282,
+      "wall_time_s": 410.4,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "invalid_decision": 2,
+        "accepted": 2,
+        "skipped": 5
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "stagnant_search",
       "seed": 1,
       "arm": "A",
       "status": "completed",
@@ -565,6 +740,31 @@
       "outcomes": {
         "rejected": 2,
         "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "stagnant_search",
+      "seed": 1,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 0.043312852861429545,
+      "threshold": 0.874,
+      "llm_calls": 32,
+      "total_tokens": 154320,
+      "tokens_observed": 154320,
+      "cost_usd": 0.084803,
+      "oracle_evals": 5218,
+      "wall_time_s": 423.3,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "invalid_decision": 2,
+        "rejected": 2,
+        "skipped": 5
       },
       "acceptance_rate": 0.0
     },
@@ -636,35 +836,351 @@
         "skipped": 7
       },
       "acceptance_rate": 0.0
+    },
+    {
+      "task": "stagnant_search",
+      "seed": 2,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": true,
+      "test_metric": 0.9599695706453277,
+      "threshold": 0.874,
+      "llm_calls": 27,
+      "total_tokens": 120744,
+      "tokens_observed": 120744,
+      "cost_usd": 0.071237,
+      "oracle_evals": 5024,
+      "wall_time_s": 365.4,
+      "best_target": "optimization_workflow",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 0,
+      "arm": "A",
+      "status": "failed",
+      "termination": "error",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 1.2253538563866532e-06,
+      "threshold": 0.867,
+      "llm_calls": 35,
+      "total_tokens": 135385,
+      "tokens_observed": 135385,
+      "cost_usd": 0.085525,
+      "oracle_evals": 2416,
+      "wall_time_s": 436.6,
+      "best_target": "implementation",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 0,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": true,
+      "test_metric": 0.9034091157965293,
+      "threshold": 0.867,
+      "llm_calls": 31,
+      "total_tokens": 124906,
+      "tokens_observed": 124906,
+      "cost_usd": 0.073024,
+      "oracle_evals": 5024,
+      "wall_time_s": 385.1,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "accepted": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 1.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 0,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.911373133925649e-08,
+      "threshold": 0.867,
+      "llm_calls": 35,
+      "total_tokens": 197166,
+      "tokens_observed": 197166,
+      "cost_usd": 0.096989,
+      "oracle_evals": 5250,
+      "wall_time_s": 481.7,
+      "best_target": "implementation",
+      "first_proposal_target": "optimization_workflow",
+      "outcomes": {
+        "rejected": 2,
+        "no_change": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 0,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 5.781859773620581e-06,
+      "threshold": 0.867,
+      "llm_calls": 32,
+      "total_tokens": 157140,
+      "tokens_observed": 157140,
+      "cost_usd": 0.083924,
+      "oracle_evals": 5250,
+      "wall_time_s": 431.3,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 1,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 14,
+      "success": false,
+      "test_metric": 7.188107650229726e-07,
+      "threshold": 0.867,
+      "llm_calls": 51,
+      "total_tokens": 387089,
+      "tokens_observed": 387089,
+      "cost_usd": 0.139224,
+      "oracle_evals": 4124,
+      "wall_time_s": 708.7,
+      "best_target": "implementation",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 1,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 1.1026221209559268e-08,
+      "threshold": 0.867,
+      "llm_calls": 35,
+      "total_tokens": 161248,
+      "tokens_observed": 161248,
+      "cost_usd": 0.09023,
+      "oracle_evals": 5218,
+      "wall_time_s": 464.4,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 1,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 3.077542961599508e-09,
+      "threshold": 0.867,
+      "llm_calls": 31,
+      "total_tokens": 139480,
+      "tokens_observed": 139480,
+      "cost_usd": 0.0895,
+      "oracle_evals": 5056,
+      "wall_time_s": 454.4,
+      "best_target": "implementation",
+      "first_proposal_target": "planning",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 1,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": false,
+      "test_metric": 5.053865779219224e-10,
+      "threshold": 0.867,
+      "llm_calls": 45,
+      "total_tokens": 283530,
+      "tokens_observed": 283530,
+      "cost_usd": 0.151955,
+      "oracle_evals": 5250,
+      "wall_time_s": 722.4,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 2,
+      "arm": "A",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 16,
+      "success": false,
+      "test_metric": 4.102377347203434e-07,
+      "threshold": 0.867,
+      "llm_calls": 50,
+      "total_tokens": 395068,
+      "tokens_observed": 395068,
+      "cost_usd": 0.140226,
+      "oracle_evals": 4672,
+      "wall_time_s": 705.7,
+      "best_target": "implementation",
+      "first_proposal_target": null,
+      "outcomes": null,
+      "acceptance_rate": null
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 2,
+      "arm": "B",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.9532961004869478,
+      "threshold": 0.867,
+      "llm_calls": 30,
+      "total_tokens": 153232,
+      "tokens_observed": 153232,
+      "cost_usd": 0.082674,
+      "oracle_evals": 5218,
+      "wall_time_s": 437.8,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 1,
+        "accepted": 1,
+        "skipped": 7
+      },
+      "acceptance_rate": 0.5
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 2,
+      "arm": "C",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 8,
+      "success": false,
+      "test_metric": 6.949770882490645e-08,
+      "threshold": 0.867,
+      "llm_calls": 30,
+      "total_tokens": 149021,
+      "tokens_observed": 149021,
+      "cost_usd": 0.087467,
+      "oracle_evals": 5056,
+      "wall_time_s": 453.3,
+      "best_target": "implementation",
+      "first_proposal_target": "objective",
+      "outcomes": {
+        "rejected": 2,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.0
+    },
+    {
+      "task": "underflow_cost",
+      "seed": 2,
+      "arm": "D",
+      "status": "completed",
+      "termination": "budget_exhausted",
+      "iterations": 9,
+      "success": true,
+      "test_metric": 0.9406590234619345,
+      "threshold": 0.867,
+      "llm_calls": 40,
+      "total_tokens": 168494,
+      "tokens_observed": 168494,
+      "cost_usd": 0.100656,
+      "oracle_evals": 5288,
+      "wall_time_s": 501.4,
+      "best_target": "implementation",
+      "first_proposal_target": "implementation",
+      "outcomes": {
+        "accepted": 1,
+        "invalid_decision": 1,
+        "rejected": 1,
+        "skipped": 6
+      },
+      "acceptance_rate": 0.5
     }
   ],
   "per_arm_totals": {
     "A": {
-      "llm_calls": 461,
-      "total_tokens_observed": 3168503,
-      "cost_usd": 1.1602459999999999,
-      "oracle_evals": 43160,
-      "wall_time_s": 6148.1,
-      "runs": 9,
+      "llm_calls": 597,
+      "total_tokens_observed": 4086045,
+      "cost_usd": 1.525221,
+      "oracle_evals": 54372,
+      "wall_time_s": 7999.1,
+      "runs": 12,
       "success": 0
     },
     "B": {
-      "llm_calls": 302,
-      "total_tokens_observed": 1361549,
-      "cost_usd": 0.773078,
-      "oracle_evals": 45306,
-      "wall_time_s": 4189.0,
-      "runs": 9,
-      "success": 1
+      "llm_calls": 398,
+      "total_tokens_observed": 1800935,
+      "cost_usd": 1.019006,
+      "oracle_evals": 60766,
+      "wall_time_s": 5476.3,
+      "runs": 12,
+      "success": 3
     },
     "C": {
-      "llm_calls": 298,
-      "total_tokens_observed": 1403718,
-      "cost_usd": 0.8002119999999999,
-      "oracle_evals": 46668,
-      "wall_time_s": 4157.699999999999,
-      "runs": 9,
+      "llm_calls": 394,
+      "total_tokens_observed": 1889385,
+      "cost_usd": 1.074168,
+      "oracle_evals": 62030,
+      "wall_time_s": 5547.0999999999985,
+      "runs": 12,
       "success": 1
+    },
+    "D": {
+      "llm_calls": 396,
+      "total_tokens_observed": 1978829,
+      "cost_usd": 1.100497,
+      "oracle_evals": 62303,
+      "wall_time_s": 5595.0,
+      "runs": 12,
+      "success": 4
     }
   },
   "paired_differences": {
@@ -672,204 +1188,570 @@
       {
         "task": "noisy_search",
         "seed": 0,
+        "suite": "v2",
         "diff": -4.9850580418871256e-05
       },
       {
         "task": "noisy_search",
         "seed": 1,
+        "suite": "v2",
         "diff": 0.0009565754384304473
       },
       {
         "task": "noisy_search",
         "seed": 2,
+        "suite": "v2",
         "diff": -0.0007317755324026311
       },
       {
         "task": "overflow_scorer",
         "seed": 0,
+        "suite": "v2",
         "diff": -8.494619809817999e-05
       },
       {
         "task": "overflow_scorer",
         "seed": 1,
+        "suite": "v2",
         "diff": -6.357204582276308e-06
       },
       {
         "task": "overflow_scorer",
         "seed": 2,
+        "suite": "v2",
         "diff": 0.9536611756033798
       },
       {
         "task": "stagnant_search",
         "seed": 0,
+        "suite": "v2",
         "diff": 0.013005519623968231
       },
       {
         "task": "stagnant_search",
         "seed": 1,
+        "suite": "v2",
         "diff": -0.13992617157065307
       },
       {
         "task": "stagnant_search",
         "seed": 2,
+        "suite": "v2",
         "diff": -0.11487736467063062
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 0,
+        "suite": "v2b_holdout",
+        "diff": 0.9034078904426729
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 1,
+        "suite": "v2b_holdout",
+        "diff": -7.077845438134133e-07
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 2,
+        "suite": "v2b_holdout",
+        "diff": 0.9532956902492131
       }
     ],
     "C-A": [
       {
         "task": "noisy_search",
         "seed": 0,
+        "suite": "v2",
         "diff": 0.8978364547706867
       },
       {
         "task": "noisy_search",
         "seed": 1,
+        "suite": "v2",
         "diff": 0.002083400196074558
       },
       {
         "task": "noisy_search",
         "seed": 2,
+        "suite": "v2",
         "diff": 0.003554266568974695
       },
       {
         "task": "overflow_scorer",
         "seed": 0,
+        "suite": "v2",
         "diff": -8.49162908610604e-05
       },
       {
         "task": "overflow_scorer",
         "seed": 1,
+        "suite": "v2",
         "diff": -6.040038480593752e-06
       },
       {
         "task": "overflow_scorer",
         "seed": 2,
+        "suite": "v2",
         "diff": -1.0172100918941768e-08
       },
       {
         "task": "stagnant_search",
         "seed": 0,
+        "suite": "v2",
         "diff": 0.6450458572546635
       },
       {
         "task": "stagnant_search",
         "seed": 1,
+        "suite": "v2",
         "diff": -0.14111501399134174
       },
       {
         "task": "stagnant_search",
         "seed": 2,
+        "suite": "v2",
         "diff": -0.10538267607953639
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 0,
+        "suite": "v2b_holdout",
+        "diff": -1.2062401250473967e-06
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 1,
+        "suite": "v2b_holdout",
+        "diff": -7.15733222061373e-07
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 2,
+        "suite": "v2b_holdout",
+        "diff": -3.407400258954369e-07
       }
     ],
     "B-C": [
       {
         "task": "noisy_search",
         "seed": 0,
+        "suite": "v2",
         "diff": -0.8978863053511056
       },
       {
         "task": "noisy_search",
         "seed": 1,
+        "suite": "v2",
         "diff": -0.0011268247576441107
       },
       {
         "task": "noisy_search",
         "seed": 2,
+        "suite": "v2",
         "diff": -0.004286042101377326
       },
       {
         "task": "overflow_scorer",
         "seed": 0,
+        "suite": "v2",
         "diff": -2.990723711957942e-08
       },
       {
         "task": "overflow_scorer",
         "seed": 1,
+        "suite": "v2",
         "diff": -3.1716610168255605e-07
       },
       {
         "task": "overflow_scorer",
         "seed": 2,
+        "suite": "v2",
         "diff": 0.9536611857754808
       },
       {
         "task": "stagnant_search",
         "seed": 0,
+        "suite": "v2",
         "diff": -0.6320403376306952
       },
       {
         "task": "stagnant_search",
         "seed": 1,
+        "suite": "v2",
         "diff": 0.0011888424206886947
       },
       {
         "task": "stagnant_search",
         "seed": 2,
+        "suite": "v2",
         "diff": -0.009494688591094223
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 0,
+        "suite": "v2b_holdout",
+        "diff": 0.9034090966827979
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 1,
+        "suite": "v2b_holdout",
+        "diff": 7.94867824795976e-09
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 2,
+        "suite": "v2b_holdout",
+        "diff": 0.953296030989239
+      }
+    ],
+    "D-A": [
+      {
+        "task": "noisy_search",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 0.003797816125154392
+      },
+      {
+        "task": "noisy_search",
+        "seed": 1,
+        "suite": "v2",
+        "diff": 0.6790520540848699
+      },
+      {
+        "task": "noisy_search",
+        "seed": 2,
+        "suite": "v2",
+        "diff": -0.0006821055023692396
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 0,
+        "suite": "v2",
+        "diff": -8.49024545748723e-05
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 1,
+        "suite": "v2",
+        "diff": 0.9604375807104466
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 2,
+        "suite": "v2",
+        "diff": -2.280158319262711e-08
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 0.7460992689130886
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 1,
+        "suite": "v2",
+        "diff": -0.15792146477346394
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 2,
+        "suite": "v2",
+        "diff": 0.7928696408595666
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 0,
+        "suite": "v2b_holdout",
+        "diff": 4.556505917233928e-06
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 1,
+        "suite": "v2b_holdout",
+        "diff": -7.183053784450507e-07
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 2,
+        "suite": "v2b_holdout",
+        "diff": 0.9406586132241999
+      }
+    ],
+    "D-B": [
+      {
+        "task": "noisy_search",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 0.0038476667055732635
+      },
+      {
+        "task": "noisy_search",
+        "seed": 1,
+        "suite": "v2",
+        "diff": 0.6780954786464395
+      },
+      {
+        "task": "noisy_search",
+        "seed": 2,
+        "suite": "v2",
+        "diff": 4.9670030033391386e-05
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 4.374352330769282e-08
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 1,
+        "suite": "v2",
+        "diff": 0.9604439379150289
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 2,
+        "suite": "v2",
+        "diff": -0.953661198404963
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 0.7330937492891204
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 1,
+        "suite": "v2",
+        "diff": -0.017995293202810896
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 2,
+        "suite": "v2",
+        "diff": 0.9077470055301972
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 0,
+        "suite": "v2b_holdout",
+        "diff": -0.9034033339367556
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 1,
+        "suite": "v2b_holdout",
+        "diff": -1.0520834631637346e-08
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 2,
+        "suite": "v2b_holdout",
+        "diff": -0.012637077025013266
+      }
+    ],
+    "D-C": [
+      {
+        "task": "noisy_search",
+        "seed": 0,
+        "suite": "v2",
+        "diff": -0.8940386386455323
+      },
+      {
+        "task": "noisy_search",
+        "seed": 1,
+        "suite": "v2",
+        "diff": 0.6769686538887953
+      },
+      {
+        "task": "noisy_search",
+        "seed": 2,
+        "suite": "v2",
+        "diff": -0.004236372071343935
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 1.3836286188113396e-08
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 1,
+        "suite": "v2",
+        "diff": 0.9604436207489272
+      },
+      {
+        "task": "overflow_scorer",
+        "seed": 2,
+        "suite": "v2",
+        "diff": -1.262948227368534e-08
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 0,
+        "suite": "v2",
+        "diff": 0.10105341165842519
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 1,
+        "suite": "v2",
+        "diff": -0.0168064507821222
+      },
+      {
+        "task": "stagnant_search",
+        "seed": 2,
+        "suite": "v2",
+        "diff": 0.898252316939103
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 0,
+        "suite": "v2b_holdout",
+        "diff": 5.762746042281325e-06
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 1,
+        "suite": "v2b_holdout",
+        "diff": -2.572156383677586e-09
+      },
+      {
+        "task": "underflow_cost",
+        "seed": 2,
+        "suite": "v2b_holdout",
+        "diff": 0.9406589539642257
       }
     ]
   },
   "mean_paired_difference": {
-    "B-A": 0.07910520054544365,
-    "C-A": 0.14465903580200876,
-    "B-C": -0.0655538352565651
+    "B-A": 0.21405413981802793,
+    "C-A": 0.10849408829205881,
+    "B-C": 0.1055600515259691,
+    "D-A": 0.3303525263821561,
+    "D-B": 0.11629838656412822,
+    "D-C": 0.2218584380900973
   },
   "wins": {
     "B-A": {
-      "x_better": 3,
-      "y_better": 6,
-      "n": 9
+      "x_better": 5,
+      "y_better": 7,
+      "n": 12
     },
     "C-A": {
       "x_better": 4,
-      "y_better": 5,
-      "n": 9
+      "y_better": 8,
+      "n": 12
     },
     "B-C": {
-      "x_better": 2,
+      "x_better": 5,
       "y_better": 7,
-      "n": 9
+      "n": 12
+    },
+    "D-A": {
+      "x_better": 7,
+      "y_better": 5,
+      "n": 12
+    },
+    "D-B": {
+      "x_better": 7,
+      "y_better": 5,
+      "n": 12
+    },
+    "D-C": {
+      "x_better": 7,
+      "y_better": 5,
+      "n": 12
+    }
+  },
+  "mean_paired_difference_by_suite": {
+    "B-A": {
+      "v2": 0.07910520054544365,
+      "v2b_holdout": 0.6189009576357808
+    },
+    "C-A": {
+      "v2": 0.14465903580200876,
+      "v2b_holdout": -7.542377910014021e-07
+    },
+    "B-C": {
+      "v2": -0.0655538352565651,
+      "v2b_holdout": 0.6189017118735717
+    },
+    "D-A": {
+      "v2": 0.33595198501790385,
+      "v2b_holdout": 0.3135541504749129
+    },
+    "D-B": {
+      "v2": 0.25684678447246023,
+      "v2b_holdout": -0.3053468071608679
+    },
+    "D-C": {
+      "v2": 0.19129294921589513,
+      "v2b_holdout": 0.31355490471270386
     }
   },
   "target_stats": {
     "B": {
-      "proposals": 25,
-      "target:objective": 19,
+      "proposals": 31,
+      "target:objective": 23,
       "outcome:invalid_decision": 8,
-      "outcome:rejected": 16,
-      "outcome:skipped": 51,
-      "runs_first_proposal_on_best_target": 1,
-      "runs_with_proposals": 9,
-      "target:implementation": 4,
-      "proposals_on_best_target": 4,
+      "outcome:rejected": 19,
+      "outcome:skipped": 71,
+      "runs_first_proposal_on_best_target": 2,
+      "runs_with_proposals": 12,
+      "target:implementation": 6,
+      "proposals_on_best_target": 6,
       "target:None": 2,
-      "accepted": 1,
-      "accepted_on_best_target": 1,
-      "outcome:accepted": 1
+      "accepted": 4,
+      "accepted_on_best_target": 3,
+      "outcome:accepted": 4
     },
     "C": {
-      "proposals": 21,
-      "target:optimization_workflow": 6,
+      "proposals": 28,
+      "target:optimization_workflow": 8,
       "proposals_on_best_target": 5,
       "accepted": 3,
       "accepted_on_best_target": 3,
       "outcome:accepted": 3,
-      "target:no_change": 3,
-      "outcome:no_change": 3,
-      "outcome:rejected": 15,
-      "outcome:skipped": 58,
+      "target:no_change": 4,
+      "outcome:no_change": 4,
+      "outcome:rejected": 21,
+      "outcome:skipped": 76,
       "runs_first_proposal_on_best_target": 2,
-      "runs_with_proposals": 9,
-      "target:planning": 6,
+      "runs_with_proposals": 12,
+      "target:planning": 8,
       "target:implementation": 3,
-      "target:objective": 3
+      "target:objective": 5
+    },
+    "D": {
+      "proposals": 33,
+      "target:optimization_workflow": 14,
+      "proposals_on_best_target": 18,
+      "outcome:invalid_decision": 9,
+      "target:objective": 12,
+      "outcome:rejected": 17,
+      "outcome:skipped": 71,
+      "runs_first_proposal_on_best_target": 7,
+      "runs_with_proposals": 12,
+      "accepted": 7,
+      "accepted_on_best_target": 5,
+      "outcome:accepted": 7,
+      "target:planning": 2,
+      "target:implementation": 5
     }
   },
   "reject_or_failure_reasons": {
     "B|invalid_decision|3 ops proposed; at most 1 per change in this configuration": 3,
-    "B|rejected|no_improvement": 16,
-    "C|rejected|no_improvement": 15,
+    "B|rejected|no_improvement": 19,
+    "C|rejected|no_improvement": 21,
+    "D|invalid_decision|2 ops proposed; at most 1 per change in this configuration": 2,
+    "D|rejected|no_improvement": 17,
+    "D|invalid_decision|3 ops proposed; at most 1 per change in this configuration": 7,
     "B|invalid_decision|2 ops proposed; at most 1 per change in this configuration": 2,
     "B|invalid_decision|objective is already bound to this scorer": 1,
     "B|invalid_decision|schema": 1,
