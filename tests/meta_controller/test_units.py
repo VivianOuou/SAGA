@@ -175,3 +175,23 @@ def test_random_target_judge_proposals_are_schema_valid():
             assert specs[name]["min"] <= value <= specs[name]["max"]
     assert set(targets) == {"objective", "planning", "implementation", "optimization_workflow", "no_change"}
     assert min(targets.values()) > 30   # roughly uniform
+
+
+def test_planner_retry_feeds_back_the_error():
+    """Original GeneralPlanner retried with identical messages; gpt-5-mini then repeated weight=0.0 until failure."""
+    from modules.shared.planner.general_planner import GeneralPlanner
+
+    bad = '<answer>{"objectives": [{"name": "a", "description": "d", "optimization_direction": "maximize", "weight": 0.0, "reasoning": "r"}], "reasoning": "r"}</answer>'
+    good = bad.replace('"weight": 0.0', '"weight": 0.5')
+    planner = GeneralPlanner.__new__(GeneralPlanner)
+    planner.requires_objective_weights, planner.support_filter, planner.support_population_wise = True, False, False
+    planner.max_llm_retries, planner.enable_human_feedback = 2, False
+    planner.message_history = [{"role": "system", "content": "s"}, {"role": "user", "content": "plan"}]
+    seen = []
+    replies = [bad, good]
+    planner.call_llm = lambda messages, **k: (seen.append([dict(m) for m in messages]), {"content": replies.pop(0)})[1]
+    result = planner._get_llm_response_dict()
+    assert result["objectives"][0]["weight"] == 0.5
+    assert len(seen[0]) == 2 and len(seen[1]) == 4
+    assert "weight must be positive" in seen[1][-1]["content"]
+    assert len(planner.message_history) == 2      # feedback is not persisted in the planner history

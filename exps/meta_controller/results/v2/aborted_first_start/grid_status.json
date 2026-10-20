@@ -1,0 +1,99 @@
+{
+  "mode": "real_llm",
+  "updated": "2026-10-20T14:15:16.648174",
+  "config": "exps/meta_controller/ab_v2_config.yaml",
+  "done": 0,
+  "failed": 1,
+  "total": 27,
+  "cells": {
+    "stagnant_search__s0__A": {
+      "state": "running",
+      "started": "2026-10-20T14:10:45.388694"
+    },
+    "stagnant_search__s0__B": {
+      "state": "running",
+      "started": "2026-10-20T14:10:45.389031"
+    },
+    "stagnant_search__s0__C": {
+      "state": "failed",
+      "returncode": 0,
+      "seconds": 271.2,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/logs/stagnant_search__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v2/real_llm__stagnant_search__s0__C.json"
+    },
+    "stagnant_search__s1__A": {
+      "state": "running",
+      "started": "2026-10-20T14:10:45.389418"
+    },
+    "stagnant_search__s1__B": {
+      "state": "running",
+      "started": "2026-10-20T14:15:16.648169"
+    },
+    "stagnant_search__s1__C": {
+      "state": "pending"
+    },
+    "stagnant_search__s2__A": {
+      "state": "pending"
+    },
+    "stagnant_search__s2__B": {
+      "state": "pending"
+    },
+    "stagnant_search__s2__C": {
+      "state": "pending"
+    },
+    "overflow_scorer__s0__A": {
+      "state": "pending"
+    },
+    "overflow_scorer__s0__B": {
+      "state": "pending"
+    },
+    "overflow_scorer__s0__C": {
+      "state": "pending"
+    },
+    "overflow_scorer__s1__A": {
+      "state": "pending"
+    },
+    "overflow_scorer__s1__B": {
+      "state": "pending"
+    },
+    "overflow_scorer__s1__C": {
+      "state": "pending"
+    },
+    "overflow_scorer__s2__A": {
+      "state": "pending"
+    },
+    "overflow_scorer__s2__B": {
+      "state": "pending"
+    },
+    "overflow_scorer__s2__C": {
+      "state": "pending"
+    },
+    "noisy_search__s0__A": {
+      "state": "pending"
+    },
+    "noisy_search__s0__B": {
+      "state": "pending"
+    },
+    "noisy_search__s0__C": {
+      "state": "pending"
+    },
+    "noisy_search__s1__A": {
+      "state": "pending"
+    },
+    "noisy_search__s1__B": {
+      "state": "pending"
+    },
+    "noisy_search__s1__C": {
+      "state": "pending"
+    },
+    "noisy_search__s2__A": {
+      "state": "pending"
+    },
+    "noisy_search__s2__B": {
+      "state": "pending"
+    },
+    "noisy_search__s2__C": {
+      "state": "pending"
+    }
+  }
+}

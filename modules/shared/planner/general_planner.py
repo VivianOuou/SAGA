@@ -728,9 +728,12 @@ class GeneralPlanner(PlannerModule):
         It validates both the JSON structure AND that objectives can be created from it.
         """
         count = 0
+        # On a failed attempt, the next attempt sees that response and the error (not stored in message_history);
+        # without this feedback the same invalid answer tends to be repeated until the retries run out.
+        retry_feedback: List[Dict[str, str]] = []
 
         while True:
-            response = self.call_llm(self.message_history)
+            response = self.call_llm(self.message_history + retry_feedback)
             response_text = response['content']
             # logger.debug("LLM response:\n" + response_text.strip())
 
@@ -767,6 +770,7 @@ class GeneralPlanner(PlannerModule):
                     })
                     raise e
                 count += 1
+                retry_feedback = self._retry_feedback(response_text, str(e))
                 continue
             except KeyError as e:
                 logger.error(f"Missing key in LLM response (attempt {count + 1})", {
@@ -780,7 +784,16 @@ class GeneralPlanner(PlannerModule):
                     })
                     raise ValueError(f"Invalid response from LLM: {e}")
                 count += 1
+                retry_feedback = self._retry_feedback(response_text, f"missing key {e}")
                 continue
+
+    @staticmethod
+    def _retry_feedback(response_text: str, error: str) -> List[Dict[str, str]]:
+        return [
+            {"role": "assistant", "content": response_text},
+            {"role": "user", "content": f"Your previous response could not be processed: {error[:500]}\n"
+                                        "Respond again with a corrected, complete answer in the required <answer> JSON format."},
+        ]
 
     async def _get_human_revised_response_dict(self, llm_response_dict: Dict[str, Any]) -> Dict[str, Any]:
         """
