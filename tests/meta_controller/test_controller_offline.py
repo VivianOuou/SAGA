@@ -468,3 +468,40 @@ def test_sequential_validation_respects_budget(in_tmp, fresh_registry):
     assert r["outcome"] == "rejected", r["reason"]
     assert r["reason"].startswith("budget_insufficient_for_extended_validation (after stage 1")
     assert len(r["validation"]["stages"]) == 1
+
+
+def test_adopted_trial_population_with_sanitize_does_not_leave_stale_caches(in_tmp, fresh_registry):
+    """Regression (v4 offset_scorer s1 B): after adopting a trial population, the Analyzer re-scores the previous
+    iteration's population (a different object); its cached none-counts must be invalidated too."""
+    register_inprocess_scorers("offset_scorer")
+    validation = dict(SEQ, seeds=[11])
+    orch = make_orchestrator("adopt_sanitize", task_id="offset_scorer", meta=meta_config("offset_scorer", validation=validation),
+                             max_iterations=3, ga={"pop_size": 16, "generations": 3})
+    orch.meta_controller.validator = ScriptedValidator([0.0, 0.5])   # MOCK: accept at stage 1
+    orch.meta_controller.set_judge(ScriptedJudge([decision("implementation", {
+        "objective_name": "quality_score", "action": "sanitize_outputs", "valid_range": [0.0, 1.0]})]))
+    original = orch.analyzer.analyze
+
+    async def spy(*args, **kwargs):
+        # replay what BasicAnalyzer._calculate_results does with the previous iteration's population
+        objectives = kwargs.get("current_objectives")
+        for population in (kwargs.get("current_population"), (kwargs.get("historical_info") or {}).get("last_population")):
+            if population is not None:
+                await population.evaluate(objectives)
+                for objective in objectives:
+                    population.get_regular_score_mean_and_std(objective.name)   # fills the cache like BasicAnalyzer
+                    population.find_best_candidate(objective)
+                    population.find_worst_candidate(objective)
+        return await original(*args, **kwargs)
+
+    orch.analyzer.analyze = spy
+    # make every candidate of iteration 1 fall into the buggy region so that sanitizing leaves no valid score
+    from scileo_agent.core.data_models import Candidate, Population
+    from modules.numeric_tasks.tasks import TASKS
+    task = TASKS["offset_scorer"]
+    pop = Population(candidates=[Candidate(representation=[0.5, 0.5, 0.5, 0.95, 0.5, 0.5, 0.5, 0.5]) for _ in range(16)])
+    result = asyncio.run(orch.run(high_level_goal=task.goal, context_information=task.context,
+                                  serializer_name="vector_serializer", initial_population=pop))
+    assert result.status == "completed", orch.result.error_message
+    record = _records(orch)[0]
+    assert record["outcome"] == "accepted" and record["validation"].get("adopted_population")

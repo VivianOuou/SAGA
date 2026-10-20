@@ -187,7 +187,7 @@ class MetaController:
         if not (self.state.objective_ops or self.state.implementation_patches):
             return objectives
         patched, notes = apply_state_to_objectives(objectives, self.state, get_scorer, get_scorer_metadata)
-        self._clear_stat_cache(self.orch.current_population, patched_objective_names(self.state))
+        self._clear_all_stat_caches(patched_objective_names(self.state))
         self.orch.knowledge_manager.store_objectives(patched, self.orch.current_iteration)
         self.orch.run_tracker.add_phase(
             iteration_number=self.orch.current_iteration,
@@ -206,6 +206,18 @@ class MetaController:
         logger.info(f"[MetaController] applied accepted state v{self.state.version} to objectives: "
                     f"{[o.name for o in patched]}" + (f" notes={notes}" if notes else ""))
         return patched
+
+    def _clear_all_stat_caches(self, names: List[str]) -> None:
+        """Drop cached statistics for patched objectives on the current population AND every population kept by
+        the knowledge manager (the Analyzer re-scores the previous iteration's population, which is a different
+        object than the current one once a trial population has been adopted)."""
+        populations = [self.orch.current_population]
+        populations.extend(getattr(self.orch.knowledge_manager, "populations_by_iteration", {}).values())
+        seen = set()
+        for population in populations:
+            if population is not None and id(population) not in seen:
+                seen.add(id(population))
+                self._clear_stat_cache(population, names)
 
     @staticmethod
     def _clear_stat_cache(population: Optional[Population], names: List[str]) -> None:
@@ -756,7 +768,7 @@ class MetaController:
                     self.orch.config.loop_config[name] = self.state.workflow_params[name]
         elif target in ("objective", "implementation"):
             # Re-applied after every scorer-creation phase; drop stale cached statistics now.
-            self._clear_stat_cache(self.orch.current_population, patched_objective_names(self.state))
+            self._clear_all_stat_caches(patched_objective_names(self.state))
 
     # ------------------------------------------------------------------ estimates & context
     def _estimate(self, target: Optional[str], include_judge: bool) -> Dict[str, float]:
