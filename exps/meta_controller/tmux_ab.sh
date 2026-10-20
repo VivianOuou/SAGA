@@ -8,5 +8,5 @@ LOG=${LOG:-/scratch/gautschi/ou57/logs/saga/ab-tmux-$(date +%Y%m%d%H%M%S).out}
 mkdir -p "$(dirname "$LOG")"
 tmux new-session -d -s saga-mc-ab "cd $SAGA_ROOT && export PATH=$SAGA_ENV/bin:\$PATH && \
   { [ -f llm_configs/.env.openai ] && source llm_configs/.env.openai || true; } && \
-  python exps/meta_controller/launch_ab.py --parallel \${AB_PARALLEL:-2} 2>&1 | tee $LOG"
+  python exps/meta_controller/launch_ab.py --config \${AB_CONFIG:-exps/meta_controller/ab_config.yaml} --parallel \${AB_PARALLEL:-2} 2>&1 | tee $LOG"
 echo "started tmux session saga-mc-ab, log: $LOG"

@@ -23,5 +23,5 @@ export PATH="$SAGA_ENV/bin:$PATH"
 if [ -f llm_configs/.env.openai ]; then source llm_configs/.env.openai; fi
 : "${OPENAI_API_KEY:?OPENAI_API_KEY is not set (see header)}"
 echo "host=$(hostname) start=$(date -Is) commit=$(git rev-parse --short HEAD)"
-python exps/meta_controller/launch_ab.py --parallel "${AB_PARALLEL:-4}"
+python exps/meta_controller/launch_ab.py --config "${AB_CONFIG:-exps/meta_controller/ab_config.yaml}" --parallel "${AB_PARALLEL:-4}"
 echo "end=$(date -Is)"

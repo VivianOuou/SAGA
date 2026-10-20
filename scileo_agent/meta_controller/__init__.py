@@ -7,7 +7,7 @@ See exps/meta_controller/README.md for the design, configuration and experiment 
 
 from .budget import BudgetTracker
 from .controller import DEFAULT_CONFIG, LOOP_PARAM_SPECS, MetaController, build_meta_components
-from .judge import BaseJudge, JudgeOutput, LLMJudge
+from .judge import BaseJudge, JudgeOutput, LLMJudge, RandomTargetJudge
 from .schema import FAILURE_LOCATIONS, TARGETS, Decision, parse_decision
 from .state import AcceptedState
 from .validators import (
@@ -30,6 +30,7 @@ __all__ = [
     "FAILURE_LOCATIONS",
     "JudgeOutput",
     "LLMJudge",
+    "RandomTargetJudge",
     "LOOP_PARAM_SPECS",
     "MetaController",
     "TARGETS",

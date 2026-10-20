@@ -86,7 +86,7 @@ def module_configs(task_id: str, planner_objectives: Dict[str, str], ga: Optiona
 
 def make_orchestrator(run_id: str, task_id: str = "spectral_signal", planner_objectives=None, meta: Optional[Dict] = None,
                       budget: Optional[Dict] = None, max_iterations: int = 3, ga=None, analyzer=None,
-                      random_candidate_ratio: float = 0.0) -> OptimizationOrchestrator:
+                      random_candidate_ratio: float = 0.0, loop_extra: Optional[Dict] = None) -> OptimizationOrchestrator:
     task = TASKS[task_id]
     planner_objectives = planner_objectives or dict(task.initial_objectives)
     loop = {"max_iterations": max_iterations, "run_scorers_in_docker": False, "random_candidate_ratio": random_candidate_ratio,
@@ -95,6 +95,7 @@ def make_orchestrator(run_id: str, task_id: str = "spectral_signal", planner_obj
         loop["meta_controller"] = meta
     if budget is not None:
         loop["budget"] = budget
+    loop.update(loop_extra or {})
     config = FrameworkConfig(loop_config=loop, modules=module_configs(task_id, planner_objectives, ga, analyzer))
     return OptimizationOrchestrator(config, run_name=run_id, run_id=run_id)
 

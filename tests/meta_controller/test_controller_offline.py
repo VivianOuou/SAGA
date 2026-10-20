@@ -338,3 +338,43 @@ def test_rejected_attempt_costs_are_kept_and_unknown_tokens_flagged(in_tmp, fres
     assert stats["planner"]["call_count"] == 2 + 2                # 2 real iterations + 2 trial plans (shared client)
     summary = json.loads((orch.output_dir / "meta_controller_summary.json").read_text())
     assert summary["outcomes"]["rejected"] == 1 and summary["acceptance_rate"] == 0.0
+
+
+# --------------------------------------------------------------------------- v2 additions
+def test_random_target_judge_runs_through_controller(in_tmp, fresh_registry):
+    register_inprocess_scorers("overflow_scorer")
+    orch = make_orchestrator("random_judge", task_id="overflow_scorer",
+                             meta=meta_config("overflow_scorer", judge={"type": "random", "seed": 3}, max_ops_per_change=1),
+                             max_iterations=6)
+    assert orch.meta_controller.judge.judge_type == "random_target_control"
+    asyncio.run(run(orch, "overflow_scorer"))
+    records = _records(orch)
+    assert all(r["judge"]["judge_type"] == "random_target_control" for r in records)
+    assert all(r["outcome"] in ("accepted", "rejected", "no_change", "skipped", "unsupported") for r in records), \
+        [(r["outcome"], r["reason"]) for r in records]
+    stats = json.loads((orch.output_dir / "api_usage_statistics.json").read_text())
+    assert stats["meta_controller"]["call_count"] == 0     # the control judge makes no LLM calls
+
+
+def test_max_ops_per_change_is_enforced(in_tmp, fresh_registry):
+    register_inprocess_scorers("spectral_signal")
+    orch = make_orchestrator("maxops", meta=meta_config(max_ops_per_change=1), max_iterations=2)
+    orch.meta_controller.set_judge(ScriptedJudge([decision("objective", {"ops": [
+        {"op": "set_weight", "name": "spectrum_match", "weight": 2.0}, {"op": "drop", "name": "smoothness"}]})]))
+    asyncio.run(run(orch))
+    record = _records(orch)[0]
+    assert record["outcome"] == "invalid_decision" and "at most 1" in record["reason"]
+
+
+def test_stop_on_analyzer_decision_flag_applies_to_all_arms(in_tmp, fresh_registry):
+    register_inprocess_scorers("spectral_signal")
+    orch_a = make_orchestrator("nostop_a", max_iterations=3, analyzer={"stop_at_iteration": 1},
+                               loop_extra={"stop_on_analyzer_decision": False})
+    result = asyncio.run(run(orch_a))
+    assert result.termination_reason == "max_iterations" and orch_a.current_iteration == 3
+    orch_b = make_orchestrator("nostop_b", meta=meta_config(), max_iterations=3, analyzer={"stop_at_iteration": 1},
+                               loop_extra={"stop_on_analyzer_decision": False})
+    judge = ScriptedJudge([no_change(), no_change()])
+    orch_b.meta_controller.set_judge(judge)
+    asyncio.run(run(orch_b))
+    assert judge.calls == 2 and [r["outcome"] for r in _records(orch_b)][:2] == ["no_change", "no_change"]

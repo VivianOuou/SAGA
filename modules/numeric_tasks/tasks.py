@@ -25,6 +25,12 @@ class NumericTask:
     initial_objectives: Dict[str, Optional[str]]
     validator: str
     design_note: str = ""
+    suite: str = "v1"
+    # Applied identically to every arm (task-defined starting configuration).
+    optimizer_overrides: Dict[str, float] = field(default_factory=dict)
+    loop_overrides: Dict[str, float] = field(default_factory=dict)
+    # Known by construction (v2): the intervention target that fixes the planted problem.
+    best_target: Optional[str] = None
 
 
 TASKS: Dict[str, NumericTask] = {
@@ -66,6 +72,43 @@ TASKS: Dict[str, NumericTask] = {
         design_note="Initial 'smoothness' scorer has a planted sign bug (values > 1 that grow with roughness).",
     ),
 }
+
+_V2_CONTEXT = "Candidates are JSON arrays of 8 floats in [0, 1]. The optimizer keeps values inside [0, 1]."
+
+TASKS.update({
+    "stagnant_search": NumericTask(
+        task_id="stagnant_search", dim=8, suite="v2",
+        goal="Design 8-dimensional parameter vectors (each parameter in [0, 1]) that maximize device performance.",
+        context=_V2_CONTEXT,
+        mcp_module="modules/numeric_tasks/scorer_mcp/stagnant_search_scorers_mcp",
+        initial_objectives={"performance": "maximize"},
+        validator="stagnant_search_truth",
+        optimizer_overrides={"mutation_sigma": 0.005, "mutation_prob": 0.05, "crossover_rate": 0.0},
+        best_target="optimization_workflow",
+        design_note="Scorers are correct; the optimizer starts misconfigured (almost no variation) and stagnates.",
+    ),
+    "overflow_scorer": NumericTask(
+        task_id="overflow_scorer", dim=8, suite="v2",
+        goal="Design 8-dimensional parameter vectors (each parameter in [0, 1]) that maximize the design quality.",
+        context=_V2_CONTEXT,
+        mcp_module="modules/numeric_tasks/scorer_mcp/overflow_scorer_scorers_mcp",
+        initial_objectives={"quality_score": "maximize"},
+        validator="overflow_scorer_truth",
+        best_target="implementation",
+        design_note="quality_score overflows (values >> 1) when any parameter > 0.95; no alternative scorer exists.",
+    ),
+    "noisy_search": NumericTask(
+        task_id="noisy_search", dim=8, suite="v2",
+        goal="Design 8-dimensional parameter vectors (each parameter in [0, 1]) that maximize device performance.",
+        context=_V2_CONTEXT,
+        mcp_module="modules/numeric_tasks/scorer_mcp/noisy_search_scorers_mcp",
+        initial_objectives={"performance": "maximize"},
+        validator="noisy_search_truth",
+        optimizer_overrides={"mutation_sigma": 0.5, "mutation_prob": 1.0},
+        best_target="optimization_workflow",
+        design_note="Scorers are correct; the optimizer starts misconfigured (huge mutations) and behaves like random search.",
+    ),
+})
 
 THRESHOLDS_FILE = Path(__file__).resolve().parents[2] / "exps" / "meta_controller" / "task_thresholds.json"
 

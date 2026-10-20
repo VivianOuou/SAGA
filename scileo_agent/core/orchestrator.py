@@ -313,7 +313,8 @@ class OptimizationOrchestrator:
                 scorer_manager = ScorerManager(run_in_docker=self.config.loop_config.get("run_scorers_in_docker", True))
                 scorer_manager.stop_all_mcp_servers()
 
-                if analysis_result["should_stop"]:
+                # (opt-in) stop_on_analyzer_decision=False: runs end on budget / max_iterations only, for all arms alike
+                if analysis_result["should_stop"] and self.config.loop_config.get("stop_on_analyzer_decision", True):
                     self.result.termination_reason = "early_stop"
                     self.logger.info(f"Terminating optimization after iteration {iteration}")
                     self.logger.info(f"Termination reasoning: {analysis_result['reasoning']}")

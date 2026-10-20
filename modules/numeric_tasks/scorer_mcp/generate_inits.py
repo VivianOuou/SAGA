@@ -7,7 +7,8 @@ import importlib
 import pprint
 from pathlib import Path
 
-MODULES = ["robust_design_scorers_mcp", "constrained_yield_scorers_mcp", "spectral_signal_scorers_mcp"]
+MODULES = ["robust_design_scorers_mcp", "constrained_yield_scorers_mcp", "spectral_signal_scorers_mcp",
+           "stagnant_search_scorers_mcp", "overflow_scorer_scorers_mcp", "noisy_search_scorers_mcp"]
 FILTERS = {"within_cost_budget"}
 
 

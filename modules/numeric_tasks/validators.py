@@ -141,7 +141,48 @@ class SpectralSignalValidator(NumericTaskValidator):
         return self._quality_once(np.clip(X[None, :, :] + noise, 0.0, 1.0), target).mean(axis=0)
 
 
-VALIDATOR_CLASSES = {cls.name: cls for cls in (RobustDesignValidator, ConstrainedYieldValidator, SpectralSignalValidator)}
+# ----------------------------------------------------------------------------- v2 tasks
+class _BumpValidator(NumericTaskValidator):
+    """Gaussian-bump quality under small actuation noise (std 0.02); written independently of the scorers."""
+
+    dim = 8
+    center = None
+    width = None
+    actuation_noise = 0.02
+    seed_offset = 0
+
+    def quality(self, X, split):
+        rng = np.random.default_rng(SPLIT_SEEDS[split] + self.seed_offset)
+        noise = rng.normal(0.0, self.actuation_noise, size=(SPLIT_DRAWS[split], 1, self.dim))
+        S = np.clip(X[None, :, :] + noise, 0.0, 1.0)
+        return np.exp(-np.sum((S - self.center) ** 2, axis=-1) / (2 * self.width ** 2)).mean(axis=0)
+
+
+class StagnantSearchValidator(_BumpValidator):
+    name = "stagnant_search_truth"
+    center = np.array([0.25, 0.72, 0.40, 0.63, 0.31, 0.55, 0.78, 0.46])
+    width = 0.22
+    seed_offset = 11
+
+
+class OverflowScorerValidator(_BumpValidator):
+    """True quality of the overflow task: the bump only (the scorer's overflow branch is a bug)."""
+
+    name = "overflow_scorer_truth"
+    center = np.array([0.45, 0.60, 0.35, 0.55, 0.50, 0.40, 0.65, 0.52])
+    width = 0.25
+    seed_offset = 12
+
+
+class NoisySearchValidator(_BumpValidator):
+    name = "noisy_search_truth"
+    center = np.array([0.62, 0.38, 0.70, 0.45, 0.58, 0.30, 0.52, 0.66])
+    width = 0.15
+    seed_offset = 13
+
+
+VALIDATOR_CLASSES = {cls.name: cls for cls in (RobustDesignValidator, ConstrainedYieldValidator, SpectralSignalValidator,
+                                               StagnantSearchValidator, OverflowScorerValidator, NoisySearchValidator)}
 
 
 def register_numeric_validators() -> None:

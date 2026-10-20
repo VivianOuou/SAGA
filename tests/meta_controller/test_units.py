@@ -143,3 +143,35 @@ def test_analyzer_accepts_missing_closing_reasoning_tag():
         analyzer.call_llm_with_prompt = lambda *a, _t=text, **k: {"content": _t}
         out = asyncio.run(analyzer._get_llm_analysis("goal", None, "status", "objectives", "results", ""))
         assert out["reasoning"] == expected and out["analysis_report"] == "R"
+
+
+def test_random_target_judge_proposals_are_schema_valid():
+    from collections import Counter
+    from modules.numeric_tasks.numeric_ga_optimizer import NumericGAOptimizer
+    from scileo_agent.meta_controller.controller import LOOP_PARAM_SPECS
+    from scileo_agent.meta_controller.judge import RandomTargetJudge
+
+    specs = NumericGAOptimizer("ga", {"dim": 8}).tunable_params()
+    specs.update({k: dict(v, current=0.0) for k, v in LOOP_PARAM_SPECS.items()})
+    ctx = _ctx()
+    ctx.update({
+        "objectives": [{"name": "quality_score", "type": "candidate-wise", "scorer": "quality_score",
+                        "description": "Quality score of the design in [0, 1]."},
+                       {"name": "parameter_mean", "type": "candidate-wise", "scorer": "parameter_mean", "description": "x"}],
+        "registered_scorers": [{"name": n, "type": "candidate-wise", "description": "d"} for n in ("quality_score", "parameter_mean", "parameter_spread")],
+        "tunable_params": specs,
+        "capabilities": {"allowed_targets": "objective, planning, implementation, optimization_workflow, no_change",
+                         "objective.add_from_registry types": "candidate-wise"},
+    })
+    judge = RandomTargetJudge(seed=0)
+    targets = Counter()
+    for _ in range(300):
+        out = asyncio.run(judge.decide(ctx))
+        d, change, err = parse_decision(out.raw)
+        assert err is None, (err, out.raw)
+        targets[d.intervention_target] += 1
+        if d.intervention_target == "optimization_workflow":
+            (name, value), = change.params.items()
+            assert specs[name]["min"] <= value <= specs[name]["max"]
+    assert set(targets) == {"objective", "planning", "implementation", "optimization_workflow", "no_change"}
+    assert min(targets.values()) > 30   # roughly uniform

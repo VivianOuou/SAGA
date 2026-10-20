@@ -65,6 +65,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     },
     "estimates": {"judge_tokens": 8000, "planner_call_tokens": 8000},
     "reserve_main_iteration": True,
+    # Optional cap on ops per proposal (objective ops / workflow params); None = schema limit (3).
+    "max_ops_per_change": None,
     "decision_log": "meta_controller_decisions.jsonl",
     "trial_root": None,
 }
@@ -269,7 +271,7 @@ class MetaController:
 
     async def _step_inner(self, record, costs, iteration, max_iterations, analysis_result, objectives,
                           high_level_goal, context_information) -> Tuple[str, str]:
-        if analysis_result.get("should_stop"):
+        if analysis_result.get("should_stop") and self.orch.config.loop_config.get("stop_on_analyzer_decision", True):
             return "skipped", "analyzer_should_stop (stop logic unchanged; no intervention attempted)"
         if iteration >= max_iterations:
             return "skipped", "final_iteration (no later iteration could use an accepted change)"
@@ -372,6 +374,11 @@ class MetaController:
         meta: Dict[str, Any] = {}
         current = {o.name: o for o in self._current_objectives}
         registered = set(list_scorers())
+
+        max_ops = self.cfg.get("max_ops_per_change")
+        n_ops = len(change.ops) if target == "objective" else len(change.params) if target == "optimization_workflow" else 1
+        if max_ops is not None and n_ops > max_ops:
+            return "invalid_decision", f"{n_ops} ops proposed; at most {max_ops} per change in this configuration", None, meta
 
         if target == "objective":
             allowed_types = self._allowed_objective_types()
@@ -703,6 +710,7 @@ class MetaController:
             "implementation.sanitize_outputs": "supported for candidate-wise objectives",
             "implementation.rebuild_scorer": rebuild_why,
             "optimization_workflow": "supported" if specs else "unsupported",
+            "max_ops_per_change": str(self.cfg.get("max_ops_per_change") or 3),
         }
         recent = []
         for r in self.records[-3:]:
@@ -767,6 +775,10 @@ class MetaController:
 
 def _build_judge(cfg: Dict[str, Any], orch) -> Optional[BaseJudge]:
     judge_cfg = cfg.get("judge") or {}
+    if judge_cfg.get("type") == "random":
+        from .judge import RandomTargetJudge
+        return RandomTargetJudge(seed=int(judge_cfg.get("seed", cfg.get("seed") or 0)),
+                                 max_ops=cfg.get("max_ops_per_change") or 1)
     if judge_cfg.get("type", "llm") != "llm":
         return None  # other judges are attached programmatically via MetaController.set_judge()
     planner_llm = orch.config.get_module_configs_by_type("planner")[0].llm_config

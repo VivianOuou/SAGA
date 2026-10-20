@@ -1,0 +1,183 @@
+{
+  "mode": "offline_mock",
+  "evidence_note": "MOCK planner/analyzer/judge: pipeline check only, not evidence",
+  "task": "stagnant_search",
+  "seed": 0,
+  "arm": "C",
+  "arm_definition": "C: controller enabled (random-target control judge, no LLM)",
+  "suite": "v2",
+  "best_target": "optimization_workflow",
+  "run_id": "ab-offline_mock-stagnant_search-s0-C-20261020134935",
+  "run_dir": "runs/ab-offline_mock-stagnant_search-s0-C-20261020134935",
+  "status": "completed",
+  "error": null,
+  "termination_reason": "budget_exhausted",
+  "iterations_completed": 9,
+  "models": "mock",
+  "success_threshold": 0.874,
+  "success": false,
+  "test_metric": 0.8713763319818637,
+  "test_details": {
+    "split": "test",
+    "top_k": 5,
+    "top_k_by_true_quality": 0.8713763319818637,
+    "population_mean": 0.7087783801775244,
+    "best": 0.8713763319818638,
+    "n_invalid": 0
+  },
+  "final_validation_metric_reference_only": 0.8757243451234038,
+  "llm_calls": 18,
+  "total_tokens": 4500,
+  "total_tokens_observed": 4500,
+  "cost_usd": 0.0,
+  "oracle_evals": 5218,
+  "wall_time_s": 46.3,
+  "budget": {
+    "caps": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "used": {
+      "llm_calls": 18,
+      "total_tokens": 4500,
+      "total_tokens_observed": 4500,
+      "calls_missing_usage": 0,
+      "cost_usd": 0.0,
+      "oracle_evals": 5218,
+      "wall_time_s": 46.272
+    },
+    "remaining": {
+      "max_llm_calls": 32,
+      "max_total_tokens": 495500,
+      "max_oracle_evals": -218,
+      "max_wall_time_s": 2953.728
+    }
+  },
+  "api_usage_total": {
+    "call_count": 18,
+    "total_tokens": 4500,
+    "input_tokens": 2250,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2250,
+    "cost": 0.0,
+    "by_model_name": {
+      "mock/planner": {
+        "call_count": 9,
+        "total_tokens": 1800,
+        "input_tokens": 900,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 900,
+        "cost": 0.0
+      },
+      "mock/analyzer": {
+        "call_count": 9,
+        "total_tokens": 2700,
+        "input_tokens": 1350,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1350,
+        "cost": 0.0
+      }
+    }
+  },
+  "meta_controller": {
+    "task_id": "stagnant_search",
+    "seed": 0,
+    "decisions": 9,
+    "outcomes": {
+      "accepted": 2,
+      "no_change": 1,
+      "skipped": 6
+    },
+    "by_target": {
+      "optimization_workflow": {
+        "accepted": 2
+      },
+      "no_change": {
+        "no_change": 1
+      }
+    },
+    "validated_candidates": 2,
+    "acceptance_rate": 1.0,
+    "accepted_state": {
+      "version": 2,
+      "planner_guidance": null,
+      "objective_ops": [],
+      "implementation_patches": {},
+      "workflow_params": {
+        "mutation_sigma": 0.4595
+      }
+    },
+    "controller_oracle_evals": {
+      "trials": 2320,
+      "validation": 256
+    },
+    "budget": {
+      "caps": {
+        "max_llm_calls": 50,
+        "max_total_tokens": 500000,
+        "max_oracle_evals": 5000,
+        "max_wall_time_s": 3000
+      },
+      "used": {
+        "llm_calls": 18,
+        "total_tokens": 4500,
+        "total_tokens_observed": 4500,
+        "calls_missing_usage": 0,
+        "cost_usd": 0.0,
+        "oracle_evals": 5218,
+        "wall_time_s": 46.272
+      },
+      "remaining": {
+        "max_llm_calls": 32,
+        "max_total_tokens": 495500,
+        "max_oracle_evals": -218,
+        "max_wall_time_s": 2953.728
+      }
+    }
+  },
+  "config": {
+    "loop": {
+      "max_iterations": 30,
+      "random_candidate_ratio": 0.0,
+      "max_objective_planning_retries": 3,
+      "stop_on_analyzer_decision": false
+    },
+    "budget": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "optimizer": {
+      "pop_size": 32,
+      "generations": 10
+    },
+    "meta_controller": {
+      "max_parse_retries": 1,
+      "max_ops_per_change": 1,
+      "validation": {
+        "n_seeds": 2,
+        "min_improvement": 0.02,
+        "trial_optimizer_overrides": {}
+      },
+      "estimates": {
+        "judge_tokens": 8000,
+        "planner_call_tokens": 8000
+      }
+    },
+    "timeout_s": 5400
+  },
+  "task_overrides": {
+    "optimizer": {
+      "mutation_sigma": 0.005,
+      "mutation_prob": 0.05,
+      "crossover_rate": 0.0
+    },
+    "loop": {}
+  }
+}

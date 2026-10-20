@@ -33,16 +33,18 @@ def main():
     parser.add_argument("--config", default=str(HERE / "ab_config.yaml"))
     parser.add_argument("--parallel", type=int, default=2)
     parser.add_argument("--offline-mock", action="store_true")
-    parser.add_argument("--results-dir", default=str(HERE / "results"))
+    parser.add_argument("--results-dir", default=None, help="default: results/<config results_subdir>")
     args = parser.parse_args()
     cfg = yaml.safe_load(open(args.config))
+    if args.results_dir is None:
+        args.results_dir = str(HERE / "results" / cfg.get("results_subdir", ""))
     mode = "offline_mock" if args.offline_mock else "real_llm"
     results_dir = Path(args.results_dir) / ("offline_mock" if args.offline_mock else "")
     results_dir.mkdir(parents=True, exist_ok=True)
     log_dir = results_dir / "logs"
     log_dir.mkdir(exist_ok=True)
 
-    cells = [(t, s, a) for t in cfg["tasks"] for s in cfg["seeds"] for a in ("A", "B")]
+    cells = [(t, s, a) for t in cfg["tasks"] for s in cfg["seeds"] for a in cfg.get("arms", ["A", "B"])]
     status_path = results_dir / "grid_status.json"
     status = {f"{t}__s{s}__{a}": {"state": "pending"} for t, s, a in cells}
 

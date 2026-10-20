@@ -16,5 +16,23 @@
     "random_initial_population_metric": 0.0173,
     "success_threshold": 0.853,
     "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "stagnant_search": {
+    "oracle_q_star_calibration_split": 0.9707,
+    "random_initial_population_metric": 0.0103,
+    "success_threshold": 0.874,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "overflow_scorer": {
+    "oracle_q_star_calibration_split": 0.9752,
+    "random_initial_population_metric": 0.0205,
+    "success_threshold": 0.878,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
+  },
+  "noisy_search": {
+    "oracle_q_star_calibration_split": 0.9327,
+    "random_initial_population_metric": 0.0006,
+    "success_threshold": 0.839,
+    "rule": "success iff final test-split metric (mean true quality of the 5 top-ranked candidates of the final population) >= 0.9 * q_star"
   }
 }

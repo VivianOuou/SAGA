@@ -185,3 +185,88 @@ class LLMJudge(BaseJudge):
                 {"role": "user", "content": f"Your output could not be parsed ({last_error}). Reply with the <decision> JSON object only."},
             ]
         return JudgeOutput(raw_text=text, error=f"judge_output_unparseable: {last_error}", attempts=self.max_parse_retries + 1)
+
+
+class RandomTargetJudge(BaseJudge):
+    """
+    Control judge (no LLM): picks an intervention target uniformly at random from the allowed targets
+    and a random valid, bounded change for it. Used to separate the value of *choosing* the target
+    from the value of the validation gate. Not a mock: it is a real experimental control.
+    """
+
+    judge_type = "random_target_control"
+    _RANGE = re.compile(r"in \[\s*(-?[0-9.]+)\s*,\s*(-?[0-9.]+)\s*\]")
+
+    def __init__(self, seed: int = 0, max_ops: int = 1):
+        import random as _random
+
+        self.seed = seed
+        self.max_ops = max(1, int(max_ops))
+        self.rng = _random.Random(seed)
+
+    def describe(self) -> Dict[str, Any]:
+        return {"judge_type": self.judge_type, "seed": self.seed, "max_ops": self.max_ops}
+
+    def _declared_range(self, description: str):
+        m = self._RANGE.search(description or "")
+        return [float(m.group(1)), float(m.group(2))] if m else [0.0, 1.0]
+
+    def _change(self, target: str, ctx: Dict[str, Any]):
+        rng = self.rng
+        objectives = [o for o in ctx["objectives"] if o.get("type") != "filter"]
+        names = {o["name"] for o in ctx["objectives"]}
+        allowed_types = [t.strip() for t in ctx["capabilities"].get("objective.add_from_registry types", "candidate-wise").split(",")]
+        addable = [s for s in ctx["registered_scorers"] if s["name"] not in names and s.get("type") in allowed_types]
+        if target == "objective":
+            kinds = ["set_weight"] + (["drop"] if len(objectives) > 1 else []) + (["add_from_registry"] if addable else [])
+            kind = rng.choice(kinds)
+            if kind == "set_weight":
+                op = {"op": "set_weight", "name": rng.choice(objectives)["name"], "weight": round(2 ** rng.uniform(-2, 2), 3)}
+            elif kind == "drop":
+                op = {"op": "drop", "name": rng.choice(objectives)["name"]}
+            else:
+                s = rng.choice(addable)
+                op = {"op": "add_from_registry", "name": s["name"], "weight": round(2 ** rng.uniform(-2, 2), 3)}
+                if s.get("type") != "filter":
+                    op["optimization_direction"] = rng.choice(["maximize", "minimize"])
+            return {"ops": [op]}
+        if target == "planning":
+            focus = rng.choice(objectives)["name"] if objectives else "the main objective"
+            other = rng.choice(ctx["registered_scorers"])["name"] if ctx["registered_scorers"] else focus
+            return {"guidance": f"In the next iterations prioritize '{focus}' and consider also using '{other}'.", "mode": "replace"}
+        if target == "implementation":
+            cand = [o for o in objectives if o.get("type") == "candidate-wise"]
+            if not cand:
+                return None
+            obj = rng.choice(cand)
+            others = [s["name"] for s in ctx["registered_scorers"] if s.get("type") == obj.get("type") and s["name"] != obj.get("scorer")]
+            actions = ["sanitize_outputs"] + (["rebind_scorer"] if others else [])
+            if rng.choice(actions) == "rebind_scorer":
+                return {"objective_name": obj["name"], "action": "rebind_scorer", "scorer_name": rng.choice(others)}
+            return {"objective_name": obj["name"], "action": "sanitize_outputs", "valid_range": self._declared_range(obj.get("description"))}
+        if target == "optimization_workflow":
+            specs = ctx["tunable_params"]
+            if not specs:
+                return None
+            name = rng.choice(sorted(specs))
+            spec = specs[name]
+            value = rng.uniform(spec["min"], spec["max"])
+            return {"params": {name: int(round(value)) if spec["type"] == "int" else round(value, 4)}}
+        return None
+
+    async def decide(self, context: Dict[str, Any]) -> JudgeOutput:
+        targets = [t.strip() for t in context["capabilities"]["allowed_targets"].split(",") if t.strip()]
+        target = self.rng.choice(targets)
+        change = None if target == "no_change" else self._change(target, context)
+        if target != "no_change" and change is None:
+            target = "no_change"
+        raw = {
+            "failure_location": "unknown",
+            "root_cause_hypothesis": "random-target control: no diagnosis is made",
+            "intervention_target": target,
+            "rationale": "random-target control (uniform over allowed targets, random valid bounded change)",
+            "proposed_change": change,
+            "expected_benefit": "none expected (control condition)",
+            "validation_plan": "standard fixed validation",
+        }
+        return JudgeOutput(raw=raw, raw_text=json.dumps(raw), attempts=1)

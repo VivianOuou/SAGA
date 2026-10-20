@@ -3,6 +3,7 @@ Run ONE arm of the numeric-task A/B pilot for the Meta-Controller.
 
     A = Meta-Controller disabled (original SAGA loop)                + budget caps
     B = Meta-Controller enabled with the plain LLM Judge              + the same budget caps
+    C = Meta-Controller enabled with the random-target control judge + the same budget caps (v2)
 
 Both arms share task, seed, initial population/objectives, modules, models, budget caps, trial
 quota and timeout. The Judge, candidate trials and independent validation of arm B are charged to
@@ -54,7 +55,8 @@ from modules.numeric_tasks.validators import get_numeric_validator, register_num
 
 DEFAULT_CONFIG = ROOT / "exps" / "meta_controller" / "ab_config.yaml"
 GRID_INDEX = {(t, s, a): i for i, (t, s, a) in enumerate(
-    (t, s, a) for t in ("robust_design", "constrained_yield", "spectral_signal") for s in range(10) for a in ("A", "B"))}
+    (t, s, a) for t in ("robust_design", "constrained_yield", "spectral_signal", "stagnant_search", "overflow_scorer",
+                        "noisy_search") for s in range(10) for a in ("A", "B", "C"))}
 
 # MOCK decisions used only with --offline-mock (one plausible proposal per task, then no_change).
 MOCK_DECISIONS = {
@@ -65,6 +67,12 @@ MOCK_DECISIONS = {
                                          failure_location="objective")],
     "spectral_signal": [mocks.decision("implementation", {"objective_name": "smoothness", "action": "rebind_scorer",
                                                           "scorer_name": "smoothness_v2"}, failure_location="implementation")],
+    "stagnant_search": [mocks.decision("optimization_workflow", {"params": {"mutation_sigma": 0.08}},
+                                       failure_location="optimization_workflow")],
+    "overflow_scorer": [mocks.decision("implementation", {"objective_name": "quality_score", "action": "sanitize_outputs",
+                                                          "valid_range": [0, 1]}, failure_location="implementation")],
+    "noisy_search": [mocks.decision("optimization_workflow", {"params": {"mutation_sigma": 0.05}},
+                                    failure_location="optimization_workflow")],
 }
 
 
@@ -103,7 +111,7 @@ def build_config(cfg, task, seed, arm, run_id, offline_mock):
         "scorer_creator": ModuleConfig(module_id="scorer_creator", module_type="scorer_creator", module_name="general_scorer_creator",
                                        config=creator_cfg, llm_config=creator_llm),
         "optimizer": ModuleConfig(module_id="optimizer", module_type="optimizer", module_name="numeric_ga_optimizer",
-                                  config=dict(cfg["optimizer"], dim=task.dim, seed=seed), llm_config=None),
+                                  config=dict(cfg["optimizer"], **task.optimizer_overrides, dim=task.dim, seed=seed), llm_config=None),
         "analyzer": analyzer_module,
         "knowledge_manager": ModuleConfig(module_id="knowledge_manager", module_type="knowledge_manager",
                                           module_name="basic_knowledge_manager", config={}, llm_config=None),
@@ -115,16 +123,19 @@ def build_config(cfg, task, seed, arm, run_id, offline_mock):
         "return_all_candidates": True,
         "run_scorers_in_docker": False,
         "budget": dict(cfg["budget"]),
+        "stop_on_analyzer_decision": cfg["loop"].get("stop_on_analyzer_decision", True),
     }
-    if arm == "B":
+    loop.update(task.loop_overrides)
+    if arm in ("B", "C"):
         mc = cfg["meta_controller"]
         loop["meta_controller"] = {
             "enabled": True,
             "task_id": task.task_id,
             "seed": seed,
-            "judge": {"type": "none"} if offline_mock else {
+            "judge": ({"type": "random", "seed": seed} if arm == "C" else {"type": "none"} if offline_mock else {
                 "type": "llm", "model_name": cfg["models"]["judge"], "models_file": cfg["models_file"],
-                "credentials_file": cfg["credentials_file"], "max_parse_retries": mc.get("max_parse_retries", 1)},
+                "credentials_file": cfg["credentials_file"], "max_parse_retries": mc.get("max_parse_retries", 1)}),
+            "max_ops_per_change": mc.get("max_ops_per_change"),
             "validator": task.validator,
             "validation": {
                 "seeds": [1000 * (seed + 1) + k for k in range(mc["validation"]["n_seeds"])],
@@ -148,7 +159,8 @@ async def run_arm(args, cfg):
 
     ScorerManager(run_in_docker=False).set_run_in_docker(False)
     # Give each grid cell its own port range so parallel runs never reach each other's scorer servers.
-    McpScorerManager(run_in_docker=False)._next_port = args.port_base or (20000 + 300 * GRID_INDEX.get((args.task, args.seed, args.arm), 0))
+    # Stay in 20000-31999: below the Linux ephemeral range (32768-65535 here) and below 65535.
+    McpScorerManager(run_in_docker=False)._next_port = args.port_base or (20000 + 150 * (GRID_INDEX.get((args.task, args.seed, args.arm), 0) % 80))
     if list_scorers():
         raise RuntimeError(f"unexpected pre-registered scorers: {list_scorers()}")
     register_mcp_module(task.mcp_module, serializer_name="vector_serializer")
@@ -206,7 +218,9 @@ async def run_arm(args, cfg):
         "evidence_note": ("REAL LLM calls on SYNTHETIC numeric tasks" if mode == "real_llm"
                           else "MOCK planner/analyzer/judge: pipeline check only, not evidence"),
         "task": args.task, "seed": args.seed, "arm": args.arm,
-        "arm_definition": "A: controller disabled" if args.arm == "A" else "B: controller enabled (plain LLM judge)",
+        "arm_definition": {"A": "A: controller disabled", "B": "B: controller enabled (plain LLM judge)",
+                           "C": "C: controller enabled (random-target control judge, no LLM)"}[args.arm],
+        "suite": task.suite, "best_target": task.best_target,
         "run_id": run_id, "run_dir": str(orch.run_dir),
         "status": status, "error": error,
         "termination_reason": orch.result.termination_reason,
@@ -227,6 +241,7 @@ async def run_arm(args, cfg):
         "api_usage_total": api_stats.get("total"),
         "meta_controller": controller_summary,
         "config": {k: cfg[k] for k in ("loop", "budget", "optimizer", "meta_controller", "timeout_s")},
+        "task_overrides": {"optimizer": task.optimizer_overrides, "loop": task.loop_overrides},
     }
     out = orch.output_dir / "ab_result.json"
     out.write_text(json.dumps(result, indent=2, default=str))
@@ -245,15 +260,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--task", required=True, choices=sorted(TASKS))
     parser.add_argument("--seed", type=int, required=True)
-    parser.add_argument("--arm", required=True, choices=["A", "B"])
+    parser.add_argument("--arm", required=True, choices=["A", "B", "C"])
     parser.add_argument("--config", default=str(DEFAULT_CONFIG))
     parser.add_argument("--offline-mock", action="store_true", help="MOCK planner/analyzer/judge (no API key); pipeline check only")
-    parser.add_argument("--results-dir", default=str(ROOT / "exps" / "meta_controller" / "results"))
+    parser.add_argument("--results-dir", default=None, help="default: exps/meta_controller/results[/<config results_subdir>]")
     parser.add_argument("--port-base", type=int, default=None)
     parser.add_argument("--log-level", default="INFO")
     args = parser.parse_args()
     with open(args.config) as f:
         cfg = yaml.safe_load(f)
+    if args.results_dir is None:
+        args.results_dir = str(ROOT / "exps" / "meta_controller" / "results" / cfg.get("results_subdir", ""))
     if args.offline_mock:
         args.results_dir = str(Path(args.results_dir) / "offline_mock")
     asyncio.run(run_arm(args, cfg))
