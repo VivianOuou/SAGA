@@ -156,6 +156,8 @@ def build_config(cfg, task, seed, arm, run_id, offline_mock):
                 "min_improvement": mc["validation"]["min_improvement"],
                 "trial_optimizer_overrides": mc["validation"]["trial_optimizer_overrides"],
                 "seed_key": "seed",
+                **{k: mc["validation"][k] for k in ("mode", "max_stages", "reject_margin", "adopt_candidate_population")
+                   if k in mc["validation"]},
             },
             "estimates": mc.get("estimates", {}),
         }

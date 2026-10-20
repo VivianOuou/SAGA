@@ -1,0 +1,890 @@
+{
+  "note": "OFFLINE, no LLM: mock planner/analyzer, real GA/controller/validators, in-process scorers",
+  "gates": {
+    "old": {
+      "mode": "single",
+      "min_improvement": 0.02
+    },
+    "new": {
+      "mode": "sequential",
+      "min_improvement": 0.02,
+      "max_stages": 3,
+      "reject_margin": -0.02,
+      "adopt_candidate_population": true
+    }
+  },
+  "probes": [
+    {
+      "condition": "initial",
+      "task": "stagnant_search",
+      "probe": "fix:mutation_sigma=0.08",
+      "true_effect_mean": 0.796,
+      "true_effect_per_seed": [
+        0.716,
+        0.897,
+        0.895,
+        0.597,
+        0.874
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "stagnant_search",
+      "probe": "random_candidate_ratio=0.5",
+      "true_effect_mean": 0.114,
+      "true_effect_per_seed": [
+        0.153,
+        0.319,
+        0.075,
+        -0.003,
+        0.027
+      ],
+      "class": "beneficial",
+      "old_accepted": 2,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1320.0,
+      "new_accepted": 3,
+      "new_n": 5,
+      "new_mean_stages": 2.0,
+      "new_mean_decision_evals": 2640.0
+    },
+    {
+      "condition": "initial",
+      "task": "stagnant_search",
+      "probe": "add parameter_spread max w5",
+      "true_effect_mean": -0.13,
+      "true_effect_per_seed": [
+        -0.2,
+        -0.063,
+        -0.056,
+        -0.252,
+        -0.077
+      ],
+      "class": "harmful",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1352.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 2.0,
+      "new_mean_decision_evals": 2640.0
+    },
+    {
+      "condition": "initial",
+      "task": "noisy_search",
+      "probe": "fix:mutation_sigma=0.05",
+      "true_effect_mean": 0.784,
+      "true_effect_per_seed": [
+        0.767,
+        0.797,
+        0.797,
+        0.779,
+        0.778
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "noisy_search",
+      "probe": "tournament_size=2",
+      "true_effect_mean": -0.002,
+      "true_effect_per_seed": [
+        -0.002,
+        0.001,
+        0.0,
+        -0.003,
+        -0.006
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "initial",
+      "task": "noisy_search",
+      "probe": "add distance_from_center min w5",
+      "true_effect_mean": -0.005,
+      "true_effect_per_seed": [
+        -0.004,
+        -0.008,
+        -0.002,
+        -0.004,
+        -0.005
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1352.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3928.0
+    },
+    {
+      "condition": "initial",
+      "task": "frozen_mutation",
+      "probe": "fix:mutation_prob=0.3",
+      "true_effect_mean": 0.624,
+      "true_effect_per_seed": [
+        0.635,
+        0.744,
+        0.554,
+        0.435,
+        0.751
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "frozen_mutation",
+      "probe": "mutation_sigma=0.3",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "initial",
+      "task": "frozen_mutation",
+      "probe": "add parameter_spread max w5",
+      "true_effect_mean": -0.019,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        -0.071,
+        0.0,
+        -0.024
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1352.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 2.2,
+      "new_mean_decision_evals": 2898.0
+    },
+    {
+      "condition": "initial",
+      "task": "overflow_scorer",
+      "probe": "fix:sanitize[0,1]",
+      "true_effect_mean": 0.965,
+      "true_effect_per_seed": [
+        0.964,
+        0.964,
+        0.963,
+        0.964,
+        0.969
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "overflow_scorer",
+      "probe": "sanitize[0,0.3]",
+      "true_effect_mean": 0.289,
+      "true_effect_per_seed": [
+        0.292,
+        0.286,
+        0.291,
+        0.286,
+        0.29
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "overflow_scorer",
+      "probe": "mutation_sigma=0.3",
+      "true_effect_mean": -0.001,
+      "true_effect_per_seed": [
+        0.0,
+        -0.003,
+        0.002,
+        -0.006,
+        0.003
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "initial",
+      "task": "underflow_cost",
+      "probe": "fix:sanitize[0,1]",
+      "true_effect_mean": 0.958,
+      "true_effect_per_seed": [
+        0.958,
+        0.96,
+        0.953,
+        0.96,
+        0.959
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "underflow_cost",
+      "probe": "sanitize[0.5,1]",
+      "true_effect_mean": 0.48,
+      "true_effect_per_seed": [
+        0.478,
+        0.481,
+        0.489,
+        0.471,
+        0.48
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "underflow_cost",
+      "probe": "add parameter_mean max w5",
+      "true_effect_mean": -0.001,
+      "true_effect_per_seed": [
+        -0.0,
+        -0.002,
+        -0.0,
+        -0.001,
+        -0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1352.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3928.0
+    },
+    {
+      "condition": "initial",
+      "task": "offset_scorer",
+      "probe": "fix:sanitize[0,1]",
+      "true_effect_mean": 0.953,
+      "true_effect_per_seed": [
+        0.954,
+        0.96,
+        0.938,
+        0.956,
+        0.957
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "offset_scorer",
+      "probe": "sanitize[0,0.3]",
+      "true_effect_mean": 0.292,
+      "true_effect_per_seed": [
+        0.292,
+        0.294,
+        0.29,
+        0.292,
+        0.295
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "initial",
+      "task": "offset_scorer",
+      "probe": "add parameter_spread min w1",
+      "true_effect_mean": -0.0,
+      "true_effect_per_seed": [
+        -0.0,
+        -0.0,
+        -0.0,
+        -0.0,
+        -0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1352.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3928.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "stagnant_search",
+      "probe": "fix:mutation_sigma=0.08",
+      "true_effect_mean": 0.75,
+      "true_effect_per_seed": [
+        0.631,
+        0.853,
+        0.846,
+        0.705,
+        0.715
+      ],
+      "class": "beneficial",
+      "old_accepted": 4,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.2,
+      "new_mean_decision_evals": 1546.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "stagnant_search",
+      "probe": "random_candidate_ratio=0.5",
+      "true_effect_mean": 0.023,
+      "true_effect_per_seed": [
+        -0.001,
+        0.039,
+        0.063,
+        0.004,
+        0.008
+      ],
+      "class": "neutral",
+      "old_accepted": 2,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1320.0,
+      "new_accepted": 3,
+      "new_n": 5,
+      "new_mean_stages": 2.2,
+      "new_mean_decision_evals": 2904.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "stagnant_search",
+      "probe": "add parameter_spread max w5",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "not_applicable",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 0.0,
+      "old_mean_decision_evals": 0.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 0.0,
+      "new_mean_decision_evals": 0.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "noisy_search",
+      "probe": "fix:mutation_sigma=0.05",
+      "true_effect_mean": -0.0,
+      "true_effect_per_seed": [
+        -0.0,
+        -0.0,
+        -0.0,
+        -0.0,
+        -0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 4,
+      "new_n": 5,
+      "new_mean_stages": 2.4,
+      "new_mean_decision_evals": 3091.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "noisy_search",
+      "probe": "tournament_size=2",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        -0.0,
+        -0.0,
+        0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "noisy_search",
+      "probe": "add distance_from_center min w5",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "not_applicable",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 0.0,
+      "old_mean_decision_evals": 0.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 0.0,
+      "new_mean_decision_evals": 0.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "frozen_mutation",
+      "probe": "fix:mutation_prob=0.3",
+      "true_effect_mean": 0.291,
+      "true_effect_per_seed": [
+        0.197,
+        0.216,
+        0.308,
+        0.341,
+        0.394
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "frozen_mutation",
+      "probe": "mutation_sigma=0.3",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "frozen_mutation",
+      "probe": "add parameter_spread max w5",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "not_applicable",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 0.0,
+      "old_mean_decision_evals": 0.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 0.0,
+      "new_mean_decision_evals": 0.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "overflow_scorer",
+      "probe": "fix:sanitize[0,1]",
+      "true_effect_mean": 0.195,
+      "true_effect_per_seed": [
+        0.052,
+        -0.0,
+        -0.0,
+        0.07,
+        0.853
+      ],
+      "class": "beneficial",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 2,
+      "new_n": 5,
+      "new_mean_stages": 2.6,
+      "new_mean_decision_evals": 3349.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "overflow_scorer",
+      "probe": "sanitize[0,0.3]",
+      "true_effect_mean": 0.076,
+      "true_effect_per_seed": [
+        0.052,
+        -0.0,
+        -0.0,
+        0.042,
+        0.288
+      ],
+      "class": "beneficial",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 2,
+      "new_n": 5,
+      "new_mean_stages": 2.6,
+      "new_mean_decision_evals": 3349.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "overflow_scorer",
+      "probe": "mutation_sigma=0.3",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "underflow_cost",
+      "probe": "fix:sanitize[0,1]",
+      "true_effect_mean": 0.955,
+      "true_effect_per_seed": [
+        0.954,
+        0.962,
+        0.94,
+        0.955,
+        0.961
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "underflow_cost",
+      "probe": "sanitize[0.5,1]",
+      "true_effect_mean": 0.481,
+      "true_effect_per_seed": [
+        0.484,
+        0.488,
+        0.472,
+        0.484,
+        0.478
+      ],
+      "class": "beneficial",
+      "old_accepted": 5,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 5,
+      "new_n": 5,
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "underflow_cost",
+      "probe": "add parameter_mean max w5",
+      "true_effect_mean": -0.0,
+      "true_effect_per_seed": [
+        -0.0,
+        -0.0,
+        -0.0,
+        -0.0,
+        -0.0
+      ],
+      "class": "neutral",
+      "old_accepted": 1,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1352.0,
+      "new_accepted": 1,
+      "new_n": 5,
+      "new_mean_stages": 2.6,
+      "new_mean_decision_evals": 3413.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "offset_scorer",
+      "probe": "fix:sanitize[0,1]",
+      "true_effect_mean": 0.002,
+      "true_effect_per_seed": [
+        0.002,
+        0.001,
+        0.006,
+        0.001,
+        0.003
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "offset_scorer",
+      "probe": "sanitize[0,0.3]",
+      "true_effect_mean": 0.002,
+      "true_effect_per_seed": [
+        0.002,
+        0.001,
+        0.006,
+        0.001,
+        0.003
+      ],
+      "class": "neutral",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 1.0,
+      "old_mean_decision_evals": 1288.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 3.0,
+      "new_mean_decision_evals": 3864.0
+    },
+    {
+      "condition": "planner_observed",
+      "task": "offset_scorer",
+      "probe": "add parameter_spread min w1",
+      "true_effect_mean": 0.0,
+      "true_effect_per_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "class": "not_applicable",
+      "old_accepted": 0,
+      "old_n": 5,
+      "old_mean_stages": 0.0,
+      "old_mean_decision_evals": 0.0,
+      "new_accepted": 0,
+      "new_n": 5,
+      "new_mean_stages": 0.0,
+      "new_mean_decision_evals": 0.0
+    }
+  ],
+  "aggregate": {
+    "initial|old:beneficial": {
+      "accepted": 47,
+      "n": 50
+    },
+    "initial|old:harmful": {
+      "accepted": 0,
+      "n": 5
+    },
+    "initial|old:neutral": {
+      "accepted": 0,
+      "n": 35
+    },
+    "initial|old:mean_decision_evals": 1308.0,
+    "initial|new:beneficial": {
+      "accepted": 48,
+      "n": 50
+    },
+    "initial|new:harmful": {
+      "accepted": 0,
+      "n": 5
+    },
+    "initial|new:neutral": {
+      "accepted": 0,
+      "n": 35
+    },
+    "initial|new:mean_decision_evals": 2397.0,
+    "planner_observed|old:beneficial": {
+      "accepted": 19,
+      "n": 30
+    },
+    "planner_observed|old:harmful": {
+      "accepted": 0,
+      "n": 0
+    },
+    "planner_observed|old:neutral": {
+      "accepted": 3,
+      "n": 40
+    },
+    "planner_observed|old:mean_decision_evals": 1295.0,
+    "planner_observed|new:beneficial": {
+      "accepted": 24,
+      "n": 30
+    },
+    "planner_observed|new:harmful": {
+      "accepted": 0,
+      "n": 0
+    },
+    "planner_observed|new:neutral": {
+      "accepted": 8,
+      "n": 40
+    },
+    "planner_observed|new:mean_decision_evals": 2917.0,
+    "all|old:beneficial": {
+      "accepted": 66,
+      "n": 80
+    },
+    "all|old:harmful": {
+      "accepted": 0,
+      "n": 5
+    },
+    "all|old:neutral": {
+      "accepted": 3,
+      "n": 75
+    },
+    "all|old:mean_decision_evals": 1302.0,
+    "all|new:beneficial": {
+      "accepted": 72,
+      "n": 80
+    },
+    "all|new:harmful": {
+      "accepted": 0,
+      "n": 5
+    },
+    "all|new:neutral": {
+      "accepted": 8,
+      "n": 75
+    },
+    "all|new:mean_decision_evals": 2624.0
+  }
+}

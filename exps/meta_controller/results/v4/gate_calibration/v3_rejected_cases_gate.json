@@ -1,0 +1,142 @@
+[
+ {
+  "case": "B s0 it1",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.5
+   }
+  },
+  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
+ },
+ {
+  "case": "B s1 it1",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.4
+   }
+  },
+  "old": "1/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [1, 2, 2, 2, 2], evals 2318)"
+ },
+ {
+  "case": "B s2 it1",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": 1.0
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.4
+   }
+  },
+  "old": "1/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [1, 2, 2, 2, 2], evals 2318)"
+ },
+ {
+  "case": "E s0 it1",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.6
+   },
+   "parameter_mean": {
+    "direction": "maximize",
+    "weight": 0.4
+   }
+  },
+  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [2, 2, 2, 3, 2], evals 2834)"
+ },
+ {
+  "case": "E s1 it1",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_mean": {
+    "direction": "maximize",
+    "weight": 0.6
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.4
+   }
+  },
+  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
+ },
+ {
+  "case": "F s0 it2",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_mean": {
+    "direction": "maximize",
+    "weight": 0.45
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.55
+   }
+  },
+  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
+ },
+ {
+  "case": "F s1 it2",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.6
+   },
+   "parameter_mean": {
+    "direction": "maximize",
+    "weight": 0.1
+   }
+  },
+  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
+ },
+ {
+  "case": "F s2 it2",
+  "objectives": {
+   "quality_score": {
+    "direction": "maximize",
+    "weight": null
+   },
+   "parameter_spread": {
+    "direction": "maximize",
+    "weight": 0.5
+   },
+   "parameter_mean": {
+    "direction": "maximize",
+    "weight": 0.2
+   }
+  },
+  "old": "1/5 (stages [1, 1, 1, 1, 1], evals 1288)",
+  "new": "5/5 (stages [1, 2, 2, 2, 2], evals 2318)"
+ }
+]

@@ -1,0 +1,62 @@
+# v4 study 2 (pre-registered in PREREG_v4.md): identical to ab_v3_config.yaml except the validation gate (sequential)
+#  - two NEW held-out tasks (never run with any LLM before): frozen_mutation (workflow), offset_scorer (implementation)
+#  - 2x2 judge ablation: framing (v1 / v2) x run diagnostics (off / on): B, E, F, D; plus A (native) and C (random)
+#  - the judge prompt states the configured op limit (fixes the "1-3 ops" vs max_ops_per_change=1 mismatch)
+#  - analyzer refusal detection only on short reports (fixes false positives); same for every arm
+
+models_file: llm_configs/models.yaml
+credentials_file: llm_configs/credentials.yaml
+models:
+  planner: openai/gpt-5-mini-2025-08-07
+  analyzer: openai/gpt-5-mini-2025-08-07
+  scorer_matching: openai/gpt-5-mini-2025-08-07
+  refusal_detection: openai/gpt-4.1-nano-2025-04-14
+  judge: openai/gpt-5-mini-2025-08-07
+
+results_subdir: v4
+tasks: [frozen_mutation, offset_scorer]
+seeds: [0, 1, 2]
+arms: [B, C, D]          # A is gate-independent: reused from v3 (same seeds)
+timeout_s: 5400
+
+loop:
+  max_iterations: 30
+  random_candidate_ratio: 0.0
+  max_objective_planning_retries: 3
+  stop_on_analyzer_decision: false
+
+budget:
+  max_llm_calls: 50
+  max_total_tokens: 500000
+  max_oracle_evals: 5000
+  max_wall_time_s: 3000
+
+optimizer:
+  pop_size: 32
+  generations: 10
+
+planner:
+  requires_objective_weights: true
+  support_filter: true
+  support_population_wise: false
+  max_objectives: 3
+  do_high_level_planning: false
+  use_context_information: all_iterations
+  max_llm_retries: 3
+
+analyzer_options:
+  refusal_detection_max_report_chars: 800
+
+meta_controller:
+  max_parse_retries: 1
+  max_ops_per_change: 1
+  max_ops_in_prompt: true
+  validation:
+    n_seeds: 2
+    min_improvement: 0.02
+    trial_optimizer_overrides: {}
+    mode: sequential
+    max_stages: 3
+    reject_margin: -0.02
+    adopt_candidate_population: true
+  estimates: {judge_tokens: 8000, planner_call_tokens: 8000}

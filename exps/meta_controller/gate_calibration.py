@@ -179,7 +179,8 @@ def _run_job(job):
             objectives = PLANNER_OBSERVED[task.task_id]
         else:
             objectives = {n: (d or "filter") for n, d in task.initial_objectives.items()}
-        ga = dict(dim=task.dim, pop_size=32, generations=10, seed=seed, **task.optimizer_overrides)
+        overrides = {} if job.get("healthy") else task.optimizer_overrides   # healthy: planted optimizer misconfiguration removed
+        ga = dict(dim=task.dim, pop_size=32, generations=10, seed=seed, **overrides)
         modules = {
             "planner": ModuleConfig(module_id="planner", module_type="planner", module_name="mock_rule_planner",
                                     config={"objectives": objectives, "support_filter": True}, llm_config=None),
