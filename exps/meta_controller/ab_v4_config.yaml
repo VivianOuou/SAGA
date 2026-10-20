@@ -57,6 +57,6 @@ meta_controller:
     trial_optimizer_overrides: {}
     mode: sequential
     max_stages: 3
-    reject_margin: -0.02
+    reject_margin: 0.0                     # amendment 2: extend only while the gain is positive
     adopt_candidate_population: true
   estimates: {judge_tokens: 8000, planner_call_tokens: 8000}

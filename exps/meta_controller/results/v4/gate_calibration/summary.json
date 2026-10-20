@@ -9,7 +9,7 @@
       "mode": "sequential",
       "min_improvement": 0.02,
       "max_stages": 3,
-      "reject_margin": -0.02,
+      "reject_margin": 0.0,
       "adopt_candidate_population": true
     }
   },
@@ -42,21 +42,21 @@
       "probe": "random_candidate_ratio=0.5",
       "true_effect_mean": 0.114,
       "true_effect_per_seed": [
-        0.153,
-        0.319,
-        0.075,
-        -0.003,
-        0.027
+        0.163,
+        0.316,
+        0.071,
+        -0.01,
+        0.028
       ],
       "class": "beneficial",
       "old_accepted": 2,
       "old_n": 5,
       "old_mean_stages": 1.0,
       "old_mean_decision_evals": 1320.0,
-      "new_accepted": 3,
+      "new_accepted": 2,
       "new_n": 5,
-      "new_mean_stages": 2.0,
-      "new_mean_decision_evals": 2640.0
+      "new_mean_stages": 1.6,
+      "new_mean_decision_evals": 2112.0
     },
     {
       "condition": "initial",
@@ -77,8 +77,8 @@
       "old_mean_decision_evals": 1352.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 2.0,
-      "new_mean_decision_evals": 2640.0
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1352.0
     },
     {
       "condition": "initial",
@@ -121,8 +121,8 @@
       "old_mean_decision_evals": 1288.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3864.0
+      "new_mean_stages": 1.2,
+      "new_mean_decision_evals": 1546.0
     },
     {
       "condition": "initial",
@@ -143,8 +143,8 @@
       "old_mean_decision_evals": 1352.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3928.0
+      "new_mean_stages": 1.6,
+      "new_mean_decision_evals": 2125.0
     },
     {
       "condition": "initial",
@@ -187,8 +187,8 @@
       "old_mean_decision_evals": 1288.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3864.0
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
     },
     {
       "condition": "initial",
@@ -209,8 +209,8 @@
       "old_mean_decision_evals": 1352.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 2.2,
-      "new_mean_decision_evals": 2898.0
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1352.0
     },
     {
       "condition": "initial",
@@ -275,8 +275,8 @@
       "old_mean_decision_evals": 1288.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3864.0
+      "new_mean_stages": 1.4,
+      "new_mean_decision_evals": 1803.0
     },
     {
       "condition": "initial",
@@ -341,8 +341,8 @@
       "old_mean_decision_evals": 1352.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3928.0
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1352.0
     },
     {
       "condition": "initial",
@@ -407,8 +407,8 @@
       "old_mean_decision_evals": 1352.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3928.0
+      "new_mean_stages": 2.8,
+      "new_mean_decision_evals": 3670.0
     },
     {
       "condition": "planner_observed",
@@ -436,13 +436,13 @@
       "condition": "planner_observed",
       "task": "stagnant_search",
       "probe": "random_candidate_ratio=0.5",
-      "true_effect_mean": 0.023,
+      "true_effect_mean": 0.03,
       "true_effect_per_seed": [
         -0.001,
-        0.039,
-        0.063,
-        0.004,
-        0.008
+        0.038,
+        0.061,
+        0.022,
+        0.028
       ],
       "class": "neutral",
       "old_accepted": 2,
@@ -451,8 +451,8 @@
       "old_mean_decision_evals": 1320.0,
       "new_accepted": 3,
       "new_n": 5,
-      "new_mean_stages": 2.2,
-      "new_mean_decision_evals": 2904.0
+      "new_mean_stages": 1.4,
+      "new_mean_decision_evals": 1848.0
     },
     {
       "condition": "planner_observed",
@@ -493,10 +493,10 @@
       "old_n": 5,
       "old_mean_stages": 1.0,
       "old_mean_decision_evals": 1288.0,
-      "new_accepted": 4,
+      "new_accepted": 3,
       "new_n": 5,
-      "new_mean_stages": 2.4,
-      "new_mean_decision_evals": 3091.0
+      "new_mean_stages": 1.6,
+      "new_mean_decision_evals": 2061.0
     },
     {
       "condition": "planner_observed",
@@ -517,8 +517,8 @@
       "old_mean_decision_evals": 1288.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3864.0
+      "new_mean_stages": 1.6,
+      "new_mean_decision_evals": 2061.0
     },
     {
       "condition": "planner_observed",
@@ -583,8 +583,8 @@
       "old_mean_decision_evals": 1288.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3864.0
+      "new_mean_stages": 1.0,
+      "new_mean_decision_evals": 1288.0
     },
     {
       "condition": "planner_observed",
@@ -671,8 +671,8 @@
       "old_mean_decision_evals": 1288.0,
       "new_accepted": 0,
       "new_n": 5,
-      "new_mean_stages": 3.0,
-      "new_mean_decision_evals": 3864.0
+      "new_mean_stages": 2.6,
+      "new_mean_decision_evals": 3349.0
     },
     {
       "condition": "planner_observed",
@@ -737,8 +737,8 @@
       "old_mean_decision_evals": 1352.0,
       "new_accepted": 1,
       "new_n": 5,
-      "new_mean_stages": 2.6,
-      "new_mean_decision_evals": 3413.0
+      "new_mean_stages": 1.4,
+      "new_mean_decision_evals": 1867.0
     },
     {
       "condition": "planner_observed",
@@ -822,7 +822,7 @@
     },
     "initial|old:mean_decision_evals": 1308.0,
     "initial|new:beneficial": {
-      "accepted": 48,
+      "accepted": 47,
       "n": 50
     },
     "initial|new:harmful": {
@@ -833,7 +833,7 @@
       "accepted": 0,
       "n": 35
     },
-    "initial|new:mean_decision_evals": 2397.0,
+    "initial|new:mean_decision_evals": 1566.0,
     "planner_observed|old:beneficial": {
       "accepted": 19,
       "n": 30
@@ -856,10 +856,10 @@
       "n": 0
     },
     "planner_observed|new:neutral": {
-      "accepted": 8,
+      "accepted": 7,
       "n": 40
     },
-    "planner_observed|new:mean_decision_evals": 2917.0,
+    "planner_observed|new:mean_decision_evals": 2308.0,
     "all|old:beneficial": {
       "accepted": 66,
       "n": 80
@@ -874,7 +874,7 @@
     },
     "all|old:mean_decision_evals": 1302.0,
     "all|new:beneficial": {
-      "accepted": 72,
+      "accepted": 71,
       "n": 80
     },
     "all|new:harmful": {
@@ -882,9 +882,9 @@
       "n": 5
     },
     "all|new:neutral": {
-      "accepted": 8,
+      "accepted": 7,
       "n": 75
     },
-    "all|new:mean_decision_evals": 2624.0
+    "all|new:mean_decision_evals": 1891.0
   }
 }

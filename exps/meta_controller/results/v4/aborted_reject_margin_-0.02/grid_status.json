@@ -1,0 +1,80 @@
+{
+  "mode": "real_llm",
+  "updated": "2026-10-20T18:58:25.334216",
+  "config": "exps/meta_controller/ab_v4_config.yaml",
+  "done": 3,
+  "failed": 0,
+  "total": 18,
+  "cells": {
+    "frozen_mutation__s0__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 171.6,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v4/logs/frozen_mutation__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v4/real_llm__frozen_mutation__s0__B.json"
+    },
+    "frozen_mutation__s0__C": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 157.9,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v4/logs/frozen_mutation__s0__C.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v4/real_llm__frozen_mutation__s0__C.json"
+    },
+    "frozen_mutation__s0__D": {
+      "state": "running",
+      "started": "2026-10-20T18:55:33.714959"
+    },
+    "frozen_mutation__s1__B": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 168.5,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v4/logs/frozen_mutation__s1__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/v4/real_llm__frozen_mutation__s1__B.json"
+    },
+    "frozen_mutation__s1__C": {
+      "state": "running",
+      "started": "2026-10-20T18:58:11.646118"
+    },
+    "frozen_mutation__s1__D": {
+      "state": "running",
+      "started": "2026-10-20T18:58:22.176643"
+    },
+    "frozen_mutation__s2__B": {
+      "state": "running",
+      "started": "2026-10-20T18:58:25.334210"
+    },
+    "frozen_mutation__s2__C": {
+      "state": "pending"
+    },
+    "frozen_mutation__s2__D": {
+      "state": "pending"
+    },
+    "offset_scorer__s0__B": {
+      "state": "pending"
+    },
+    "offset_scorer__s0__C": {
+      "state": "pending"
+    },
+    "offset_scorer__s0__D": {
+      "state": "pending"
+    },
+    "offset_scorer__s1__B": {
+      "state": "pending"
+    },
+    "offset_scorer__s1__C": {
+      "state": "pending"
+    },
+    "offset_scorer__s1__D": {
+      "state": "pending"
+    },
+    "offset_scorer__s2__B": {
+      "state": "pending"
+    },
+    "offset_scorer__s2__C": {
+      "state": "pending"
+    },
+    "offset_scorer__s2__D": {
+      "state": "pending"
+    }
+  }
+}

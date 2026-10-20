@@ -1,0 +1,180 @@
+{
+  "mode": "real_llm",
+  "evidence_note": "REAL LLM calls on SYNTHETIC numeric tasks",
+  "task": "frozen_mutation",
+  "seed": 0,
+  "arm": "B",
+  "arm_definition": "B: controller enabled (plain LLM judge)",
+  "suite": "v3_holdout",
+  "best_target": "optimization_workflow",
+  "run_id": "ab-real_llm-frozen_mutation-s0-B-20261020185540",
+  "run_dir": "runs/ab-real_llm-frozen_mutation-s0-B-20261020185540",
+  "status": "completed",
+  "error": null,
+  "termination_reason": "budget_exhausted",
+  "iterations_completed": 4,
+  "models": {
+    "planner": "openai/gpt-5-mini-2025-08-07",
+    "analyzer": "openai/gpt-5-mini-2025-08-07",
+    "scorer_matching": "openai/gpt-5-mini-2025-08-07",
+    "refusal_detection": "openai/gpt-4.1-nano-2025-04-14",
+    "judge": "openai/gpt-5-mini-2025-08-07"
+  },
+  "success_threshold": 0.797,
+  "success": false,
+  "test_metric": 0.04260520143533503,
+  "test_details": {
+    "split": "test",
+    "top_k": 5,
+    "top_k_by_true_quality": 0.04260520143533503,
+    "population_mean": 0.04260520143533503,
+    "best": 0.04260520143533503,
+    "n_invalid": 0
+  },
+  "final_validation_metric_reference_only": 0.041320837607518784,
+  "llm_calls": 9,
+  "total_tokens": 35075,
+  "total_tokens_observed": 35075,
+  "cost_usd": 0.031982,
+  "oracle_evals": 5088,
+  "wall_time_s": 164.5,
+  "budget": {
+    "caps": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "used": {
+      "llm_calls": 9,
+      "total_tokens": 35075,
+      "total_tokens_observed": 35075,
+      "calls_missing_usage": 0,
+      "cost_usd": 0.031982,
+      "oracle_evals": 5088,
+      "wall_time_s": 164.512
+    },
+    "remaining": {
+      "max_llm_calls": 41,
+      "max_total_tokens": 464925,
+      "max_oracle_evals": -88,
+      "max_wall_time_s": 2835.488
+    }
+  },
+  "api_usage_total": {
+    "call_count": 9,
+    "total_tokens": 35075,
+    "input_tokens": 19210,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "output_tokens": 13561,
+    "cost": 0.0319821,
+    "by_model_name": {
+      "openai/gpt-5-mini-2025-08-07": {
+        "call_count": 9,
+        "total_tokens": 35075,
+        "input_tokens": 19210,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2304,
+        "output_tokens": 13561,
+        "cost": 0.0319821
+      }
+    }
+  },
+  "meta_controller": {
+    "task_id": "frozen_mutation",
+    "seed": 0,
+    "decisions": 4,
+    "outcomes": {
+      "rejected": 1,
+      "skipped": 3
+    },
+    "by_target": {
+      "objective": {
+        "rejected": 1
+      }
+    },
+    "validated_candidates": 1,
+    "acceptance_rate": 0.0,
+    "accepted_state": {
+      "version": 0,
+      "planner_guidance": null,
+      "objective_ops": [],
+      "implementation_patches": {},
+      "workflow_params": {}
+    },
+    "controller_oracle_evals": {
+      "trials": 3480,
+      "validation": 384
+    },
+    "budget": {
+      "caps": {
+        "max_llm_calls": 50,
+        "max_total_tokens": 500000,
+        "max_oracle_evals": 5000,
+        "max_wall_time_s": 3000
+      },
+      "used": {
+        "llm_calls": 9,
+        "total_tokens": 35075,
+        "total_tokens_observed": 35075,
+        "calls_missing_usage": 0,
+        "cost_usd": 0.031982,
+        "oracle_evals": 5088,
+        "wall_time_s": 164.512
+      },
+      "remaining": {
+        "max_llm_calls": 41,
+        "max_total_tokens": 464925,
+        "max_oracle_evals": -88,
+        "max_wall_time_s": 2835.488
+      }
+    }
+  },
+  "config": {
+    "loop": {
+      "max_iterations": 30,
+      "random_candidate_ratio": 0.0,
+      "max_objective_planning_retries": 3,
+      "stop_on_analyzer_decision": false
+    },
+    "budget": {
+      "max_llm_calls": 50,
+      "max_total_tokens": 500000,
+      "max_oracle_evals": 5000,
+      "max_wall_time_s": 3000
+    },
+    "optimizer": {
+      "pop_size": 32,
+      "generations": 10
+    },
+    "meta_controller": {
+      "max_parse_retries": 1,
+      "max_ops_per_change": 1,
+      "max_ops_in_prompt": true,
+      "validation": {
+        "n_seeds": 2,
+        "min_improvement": 0.02,
+        "trial_optimizer_overrides": {},
+        "mode": "sequential",
+        "max_stages": 3,
+        "reject_margin": -0.02,
+        "adopt_candidate_population": true
+      },
+      "estimates": {
+        "judge_tokens": 8000,
+        "planner_call_tokens": 8000
+      }
+    },
+    "timeout_s": 5400,
+    "analyzer_options": {
+      "refusal_detection_max_report_chars": 800
+    }
+  },
+  "task_overrides": {
+    "optimizer": {
+      "mutation_prob": 0.0
+    },
+    "loop": {}
+  }
+}

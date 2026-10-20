@@ -36,7 +36,7 @@ sys.path.insert(0, str(ROOT))
 GT_ITERS = 8
 SEEDS = [0, 1, 2, 3, 4]
 OLD_GATE = {"mode": "single", "min_improvement": 0.02}
-NEW_GATE = {"mode": "sequential", "min_improvement": 0.02, "max_stages": 3, "reject_margin": -0.02,
+NEW_GATE = {"mode": "sequential", "min_improvement": 0.02, "max_stages": 3, "reject_margin": 0.0,
             "adopt_candidate_population": True}
 
 
@@ -166,10 +166,16 @@ def _run_job(job):
     from modules.numeric_tasks.tasks import TASKS, initial_population_vectors
     from modules.numeric_tasks.validators import get_numeric_validator, register_numeric_validators
 
+    import random
+
+    import numpy as np
+
     setup_logging(level="ERROR")
     register_numeric_validators()
     task = TASKS[job["task"]]
     seed = job["seed"]
+    random.seed(seed)       # the orchestrator's random replacement uses the global RNG (as in run_numeric_ab.py)
+    np.random.seed(seed)
     workdir = tempfile.mkdtemp(prefix="gatecal_", dir=job["tmp_root"])
     os.chdir(workdir)
     try:

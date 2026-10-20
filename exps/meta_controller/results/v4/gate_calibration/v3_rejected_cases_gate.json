@@ -1,142 +1,298 @@
-[
- {
-  "case": "B s0 it1",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.5
-   }
+{
+ "gates": {
+  "old": {
+   "mode": "single",
+   "min_improvement": 0.02
   },
-  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
+  "new": {
+   "mode": "sequential",
+   "min_improvement": 0.02,
+   "max_stages": 3,
+   "reject_margin": 0.0,
+   "adopt_candidate_population": true
+  }
  },
- {
-  "case": "B s1 it1",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
+ "rows": [
+  {
+   "case": "B s0 it1",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.5
+    }
    },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.4
-   }
+   "long_run_effect_mean": 0.914,
+   "old_accepted": 0,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2576
   },
-  "old": "1/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [1, 2, 2, 2, 2], evals 2318)"
+  {
+   "case": "B s1 it1",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.4
+    }
+   },
+   "long_run_effect_mean": 0.934,
+   "old_accepted": 1,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    1,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2318
+  },
+  {
+   "case": "B s2 it1",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": 1.0
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.4
+    }
+   },
+   "long_run_effect_mean": 0.934,
+   "old_accepted": 1,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    1,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2318
+  },
+  {
+   "case": "E s0 it1",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.6
+    },
+    "parameter_mean": {
+     "direction": "maximize",
+     "weight": 0.4
+    }
+   },
+   "long_run_effect_mean": 0.809,
+   "old_accepted": 0,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    2,
+    2,
+    2,
+    3,
+    2
+   ],
+   "new_mean_evals": 2834
+  },
+  {
+   "case": "E s1 it1",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_mean": {
+     "direction": "maximize",
+     "weight": 0.6
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.4
+    }
+   },
+   "long_run_effect_mean": 0.687,
+   "old_accepted": 0,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2576
+  },
+  {
+   "case": "F s0 it2",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_mean": {
+     "direction": "maximize",
+     "weight": 0.45
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.55
+    }
+   },
+   "long_run_effect_mean": 0.824,
+   "old_accepted": 0,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2576
+  },
+  {
+   "case": "F s1 it2",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.6
+    },
+    "parameter_mean": {
+     "direction": "maximize",
+     "weight": 0.1
+    }
+   },
+   "long_run_effect_mean": 0.87,
+   "old_accepted": 0,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2576
+  },
+  {
+   "case": "F s2 it2",
+   "objectives": {
+    "quality_score": {
+     "direction": "maximize",
+     "weight": null
+    },
+    "parameter_spread": {
+     "direction": "maximize",
+     "weight": 0.5
+    },
+    "parameter_mean": {
+     "direction": "maximize",
+     "weight": 0.2
+    }
+   },
+   "long_run_effect_mean": 0.889,
+   "old_accepted": 1,
+   "old_stages": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "old_mean_evals": 1288,
+   "new_accepted": 5,
+   "new_stages": [
+    1,
+    2,
+    2,
+    2,
+    2
+   ],
+   "new_mean_evals": 2318
+  }
+ ],
+ "totals": {
+  "old": 3,
+  "new": 40
  },
- {
-  "case": "B s2 it1",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": 1.0
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.4
-   }
-  },
-  "old": "1/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [1, 2, 2, 2, 2], evals 2318)"
- },
- {
-  "case": "E s0 it1",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.6
-   },
-   "parameter_mean": {
-    "direction": "maximize",
-    "weight": 0.4
-   }
-  },
-  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [2, 2, 2, 3, 2], evals 2834)"
- },
- {
-  "case": "E s1 it1",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
-   },
-   "parameter_mean": {
-    "direction": "maximize",
-    "weight": 0.6
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.4
-   }
-  },
-  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
- },
- {
-  "case": "F s0 it2",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
-   },
-   "parameter_mean": {
-    "direction": "maximize",
-    "weight": 0.45
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.55
-   }
-  },
-  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
- },
- {
-  "case": "F s1 it2",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.6
-   },
-   "parameter_mean": {
-    "direction": "maximize",
-    "weight": 0.1
-   }
-  },
-  "old": "0/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [2, 2, 2, 2, 2], evals 2576)"
- },
- {
-  "case": "F s2 it2",
-  "objectives": {
-   "quality_score": {
-    "direction": "maximize",
-    "weight": null
-   },
-   "parameter_spread": {
-    "direction": "maximize",
-    "weight": 0.5
-   },
-   "parameter_mean": {
-    "direction": "maximize",
-    "weight": 0.2
-   }
-  },
-  "old": "1/5 (stages [1, 1, 1, 1, 1], evals 1288)",
-  "new": "5/5 (stages [1, 2, 2, 2, 2], evals 2318)"
- }
-]
+ "n": 40
+}
