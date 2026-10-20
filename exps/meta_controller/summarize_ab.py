@@ -31,7 +31,7 @@ def main():
     args = parser.parse_args()
     results_dir = Path(args.results_dir)
     rows = {}
-    for f in sorted(results_dir.glob(f"{args.mode}__*__s*__[ABC].json")):
+    for f in sorted(results_dir.glob(f"{args.mode}__*__s*__[ABCD].json")):
         r = json.loads(f.read_text())
         rows[(r["task"], r["seed"], r["arm"])] = r
     arms = sorted({a for _, _, a in rows})
@@ -81,10 +81,11 @@ def main():
                 "wall_time_s": r["wall_time_s"], "best_target": best, "first_proposal_target": first,
                 "outcomes": mc.get("outcomes"), "acceptance_rate": mc.get("acceptance_rate"),
             })
-        for x, y in (("B", "A"), ("C", "A"), ("B", "C")):
+        for x, y in (("B", "A"), ("C", "A"), ("B", "C"), ("D", "A"), ("D", "B"), ("D", "C")):
             rx, ry = rows.get((task, seed, x)), rows.get((task, seed, y))
             if rx and ry and rx["test_metric"] is not None and ry["test_metric"] is not None:
-                diffs[f"{x}-{y}"].append({"task": task, "seed": seed, "diff": rx["test_metric"] - ry["test_metric"]})
+                diffs[f"{x}-{y}"].append({"task": task, "seed": seed, "suite": rx.get("suite"),
+                                          "diff": rx["test_metric"] - ry["test_metric"]})
 
     summary = {
         "mode": args.mode,
@@ -97,6 +98,10 @@ def main():
         "mean_paired_difference": {k: (sum(d["diff"] for d in v) / len(v)) for k, v in diffs.items() if v},
         "wins": {k: {"x_better": sum(d["diff"] > 0 for d in v), "y_better": sum(d["diff"] < 0 for d in v), "n": len(v)}
                  for k, v in diffs.items()},
+        "mean_paired_difference_by_suite": {
+            k: {suite: sum(d["diff"] for d in v if d["suite"] == suite) / max(1, sum(d["suite"] == suite for d in v))
+                for suite in sorted({d["suite"] for d in v})}
+            for k, v in diffs.items() if v},
         "target_stats": {a: dict(c) for a, c in target_stats.items()},
         "reject_or_failure_reasons": {f"{a}|{o}|{r}": n for (a, o, r), n in reasons.items()},
     }
@@ -122,6 +127,9 @@ def main():
     for k, v in summary["mean_paired_difference"].items():
         w = summary["wins"][k]
         lines.append(f"- {k}: mean {fmt(v)}; {w['x_better']} better / {w['y_better']} worse of {w['n']} pairs")
+    lines += ["", "By task suite (v2 = tasks seen while designing arm D; v2b_holdout = held-out):", ""]
+    for k, v in summary["mean_paired_difference_by_suite"].items():
+        lines.append(f"- {k}: " + ", ".join(f"{suite}: {fmt(val)}" for suite, val in v.items()))
     lines += ["", "## Controller target statistics", "", "```", json.dumps(summary["target_stats"], indent=1), "```"]
     (results_dir / "ab_summary.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

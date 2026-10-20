@@ -195,3 +195,24 @@ def test_planner_retry_feeds_back_the_error():
     assert len(seen[0]) == 2 and len(seen[1]) == 4
     assert "weight must be positive" in seen[1][-1]["content"]
     assert len(planner.message_history) == 2      # feedback is not persisted in the planner history
+
+
+def test_judge_prompt_v1_unchanged_and_v2_adds_diagnostics():
+    from scileo_agent.meta_controller.judge import JUDGE_SYSTEM_PROMPT, LLMJudge, render_judge_prompt
+
+    ctx = dict(_ctx(), diagnostics={"tunable_parameter_status": {"mutation_sigma": {"at_lower_bound": True}}})
+    assert "Run diagnostics" not in render_judge_prompt(ctx) and "Run diagnostics" in render_judge_prompt(ctx, "v2")
+    good = json.dumps(dict(decision("no_change", None, failure_location="none"),
+                           target_assessment={"objective": "fine", "optimization_workflow": "sigma at lower bound"}))
+    for version, expect_addendum in (("v1", False), ("v2", True)):
+        client = FakeLLMClient(model="mock/judge", replies=[f"<decision>{good}</decision>"])
+        judge = LLMJudge(model_name="m", client=client, prompt_version=version)
+        out = asyncio.run(judge.decide(ctx))
+        system = client.responses[0]["messages"][0]["content"]
+        assert (system == JUDGE_SYSTEM_PROMPT) is (not expect_addendum)
+        assert ("target_assessment" in system) is expect_addendum
+        assert judge.describe()["prompt_version"] == version
+        d, _, err = parse_decision(out.raw)
+        assert err is None and d.target_assessment["optimization_workflow"] == "sigma at lower bound"
+    d, _, err = parse_decision(dict(decision("no_change", None), target_assessment={"architecture": "x"}))
+    assert d is None and "unknown targets" in err

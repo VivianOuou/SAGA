@@ -108,6 +108,16 @@ TASKS.update({
         best_target="optimization_workflow",
         design_note="Scorers are correct; the optimizer starts misconfigured (huge mutations) and behaves like random search.",
     ),
+    "underflow_cost": NumericTask(
+        task_id="underflow_cost", dim=8, suite="v2b_holdout",
+        goal="Design 8-dimensional parameter vectors (each parameter in [0, 1]) that minimize the design cost.",
+        context=_V2_CONTEXT,
+        mcp_module="modules/numeric_tasks/scorer_mcp/underflow_cost_scorers_mcp",
+        initial_objectives={"design_cost": "minimize"},
+        validator="underflow_cost_truth",
+        best_target="implementation",
+        design_note="HELD-OUT. design_cost underflows (huge negative values) when any parameter < 0.05; no alternative scorer.",
+    ),
 })
 
 THRESHOLDS_FILE = Path(__file__).resolve().parents[2] / "exps" / "meta_controller" / "task_thresholds.json"

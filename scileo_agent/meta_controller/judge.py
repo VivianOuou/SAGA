@@ -72,6 +72,16 @@ Rules:
 Output: brief reasoning, then exactly one JSON object inside <decision>...</decision> with the keys failure_location, root_cause_hypothesis, intervention_target, rationale, proposed_change, expected_benefit, validation_plan, confidence."""
 
 
+JUDGE_SYSTEM_PROMPT_V2_ADDENDUM = """
+
+Important context for prompt version 2:
+- The Analyzer is instructed by design to recommend objective-level changes only (it may not suggest optimizer or implementation changes). Its recommendations are therefore NOT evidence that the problem lies in the objectives.
+- A "Run diagnostics" section is computed directly from the run state, independently of the Analyzer: objective score statistics (including values outside the declared range), best score per iteration, population diversity, tunable-parameter status (current value, default, at bounds) and optimizer-reported statistics. Use it as primary evidence.
+- Before choosing, assess every target in one sentence each, in a "target_assessment" object with the keys objective, planning, implementation, optimization_workflow, no_change. Then choose the single target most likely to fix the observed problem.
+
+Output keys for version 2: failure_location, root_cause_hypothesis, intervention_target, rationale, proposed_change, expected_benefit, validation_plan, confidence, target_assessment."""
+
+
 def _fmt_objectives(objectives: List[Dict[str, Any]]) -> str:
     lines = []
     for o in objectives:
@@ -82,7 +92,7 @@ def _fmt_objectives(objectives: List[Dict[str, Any]]) -> str:
     return "\n".join(lines) or "(none)"
 
 
-def render_judge_prompt(ctx: Dict[str, Any]) -> str:
+def render_judge_prompt(ctx: Dict[str, Any], prompt_version: str = "v1") -> str:
     sections = [
         f"# Goal\n{ctx['high_level_goal']}",
         f"# Iteration\nIteration {ctx['iteration']} of at most {ctx['max_iterations']} just finished. "
@@ -103,6 +113,9 @@ def render_judge_prompt(ctx: Dict[str, Any]) -> str:
         + ("\n".join(f"- {h}" for h in ctx["recent_decisions"]) or "(none yet)"),
         "# Remaining budget\n" + json.dumps(ctx["remaining_budget"]),
     ]
+    if prompt_version == "v2":
+        sections.insert(4, "# Run diagnostics (computed by the meta-controller, independent of the Analyzer)\n"
+                        + json.dumps(ctx.get("diagnostics", {}), indent=1))
     return "\n\n".join(sections)
 
 
@@ -137,7 +150,11 @@ class LLMJudge(BaseJudge):
         max_parse_retries: int = 1,
         call_args: Optional[Dict[str, Any]] = None,
         client=None,
+        prompt_version: str = "v1",
     ):
+        if prompt_version not in ("v1", "v2"):
+            raise ValueError(f"unknown judge prompt_version '{prompt_version}'")
+        self.prompt_version = prompt_version
         self.model_name = model_name
         self.max_parse_retries = max_parse_retries
         self.call_args = dict(call_args or {})
@@ -162,12 +179,14 @@ class LLMJudge(BaseJudge):
             "model": getattr(cfg, "model", None),
             "call_args": {k: v for k, v in self.call_args.items() if k in SAFE_CALL_ARGS},
             "max_parse_retries": self.max_parse_retries,
+            "prompt_version": self.prompt_version,
         }
 
     async def decide(self, context: Dict[str, Any]) -> JudgeOutput:
+        system = JUDGE_SYSTEM_PROMPT + (JUDGE_SYSTEM_PROMPT_V2_ADDENDUM if self.prompt_version == "v2" else "")
         messages = [
-            {"role": "system", "content": JUDGE_SYSTEM_PROMPT},
-            {"role": "user", "content": render_judge_prompt(context)},
+            {"role": "system", "content": system},
+            {"role": "user", "content": render_judge_prompt(context, self.prompt_version)},
         ]
         last_error = None
         text = None

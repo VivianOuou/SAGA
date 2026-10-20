@@ -41,10 +41,11 @@ class NumericGAOptimizer(OptimizerModule):
             setattr(self, name, cfg.get(name, default))
         self.set_tunable_params({name: getattr(self, name) for name in DEFAULTS})
         self.num_evaluations = 0
+        self.last_run_stats: Dict[str, Any] = {}
 
     # --------------------------------------------------------------- Meta-Controller hooks
     def tunable_params(self) -> Dict[str, Dict[str, Any]]:
-        return {name: dict(spec, current=getattr(self, name)) for name, spec in TUNABLE_PARAMS.items()}
+        return {name: dict(spec, current=getattr(self, name), default=DEFAULTS[name]) for name, spec in TUNABLE_PARAMS.items()}
 
     def set_tunable_params(self, params: Dict[str, Any]) -> None:
         for name, value in params.items():
@@ -111,6 +112,7 @@ class NumericGAOptimizer(OptimizerModule):
         order = np.argsort(-self._fitness(candidates, objectives), kind="stable")
         candidates = [candidates[i] for i in order[: self.pop_size]]
 
+        child_parent_dist = []  # diagnostics only; uses no randomness
         for _ in range(self.generations):
             fitness = self._fitness(candidates, objectives)
             n_elite = int(round(self.elite_fraction * self.pop_size))
@@ -126,9 +128,17 @@ class NumericGAOptimizer(OptimizerModule):
                     child = x1.copy()
                 mutate = self.rng.random(self.dim) < self.mutation_prob
                 child = np.clip(child + mutate * self.rng.normal(0.0, self.mutation_sigma, self.dim), 0.0, 1.0)
+                child_parent_dist.append(float(np.linalg.norm(child - x1)))
                 children.append(Candidate(representation=[round(float(v), 6) for v in child]))
             await self._evaluate(children, objectives)
             candidates = elites + children
 
         order = np.argsort(-self._fitness(candidates, objectives), kind="stable")
+        X = np.asarray([c.representation for c in candidates], dtype=float)
+        pairwise = np.sqrt(((X[:, None, :] - X[None, :, :]) ** 2).sum(-1))
+        self.last_run_stats = {
+            "generations": self.generations,
+            "mean_child_parent_distance": round(float(np.mean(child_parent_dist)), 5) if child_parent_dist else None,
+            "final_population_mean_pairwise_distance": round(float(pairwise.sum() / max(1, len(X) * (len(X) - 1))), 5),
+        }
         return Population(candidates=[candidates[i] for i in order])
