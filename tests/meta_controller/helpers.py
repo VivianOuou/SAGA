@@ -19,50 +19,11 @@ from modules.numeric_tasks import numeric_ga_optimizer, vector_serializer  # noq
 from modules.numeric_tasks.mocks import (  # noqa: F401
     FAKE_SECRET, FakeLLMClient, MockRulePlanner, MockStatsAnalyzer, ScriptedJudge, ScriptedValidator, decision, no_change,
 )
+from modules.numeric_tasks.inprocess import register_inprocess_scorers  # noqa: F401
 from modules.numeric_tasks.tasks import TASKS, initial_population_vectors
 from modules.numeric_tasks.validators import register_numeric_validators
 
 register_numeric_validators()
-
-
-def register_inprocess_scorers(task_id: str, extra: Optional[Dict[str, Any]] = None) -> List[str]:
-    """Register a task's proxy scorers in-process (bypasses MCP subprocesses; same caching semantics)."""
-    task = TASKS[task_id]
-    base = importlib.import_module(task.mcp_module.replace("/", ".") + ".base")
-    init = importlib.import_module(task.mcp_module.replace("/", "."))
-    instance = base.Scorer()
-    fns = {name: instance.scorers[name]["method"] for name in init.scorers}
-    types = {name: init.scorers[name]["type"] for name in init.scorers}
-    descriptions = {name: init.scorers[name]["description"] for name in init.scorers}
-    for name, (fn, typ, desc) in (extra or {}).items():
-        fns[name], types[name], descriptions[name] = fn, typ, desc
-    manager = ScorerManager(run_in_docker=False)
-    for name, fn in fns.items():
-        manager.register_scorer(
-            scorer_func=_make_cached_scorer(name, fn, types[name]),
-            name=name,
-            metadata={"description": descriptions[name], "mcp_module": f"inprocess_{task_id}"},
-            type=types[name],
-            is_mcp_scorer=True,
-            mcp_module_name=f"inprocess_{task_id}",
-        )
-    return sorted(fns)
-
-
-def _make_cached_scorer(name, fn, scorer_type):
-    async def wrapper(population, force_evaluation: bool = False, **kwargs):
-        candidates = population.candidates if isinstance(population, Population) else population
-        todo = [i for i, c in enumerate(candidates) if force_evaluation or name not in c.scores]
-        fresh = fn([json.dumps(candidates[i].representation) for i in todo]) if todo else []
-        if scorer_type == "filter":
-            fresh = [None if v is None else bool(v) for v in fresh]
-        result = [candidates[i].scores.get(name) for i in range(len(candidates))]
-        for i, v in zip(todo, fresh):
-            result[i] = v
-        return result
-
-    wrapper.calls = 0
-    return wrapper
 
 
 def module_configs(task_id: str, planner_objectives: Dict[str, str], ga: Optional[Dict[str, Any]] = None,

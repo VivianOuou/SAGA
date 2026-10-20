@@ -87,6 +87,18 @@ def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any
     return out
 
 
+def _add_costs(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
+    """Sum two cost deltas; an unknown (None) count stays unknown."""
+    out = dict(a)
+    for key, value in b.items():
+        mine = a.get(key)
+        if isinstance(value, (int, float)) and isinstance(mine, (int, float)):
+            out[key] = round(mine + value, 6) if isinstance(value, float) or isinstance(mine, float) else mine + value
+        elif value is None or mine is None:
+            out[key] = None
+    return out
+
+
 def _truncate(text: Optional[str], n: int) -> str:
     text = text or ""
     return text if len(text) <= n else text[: n - 15] + " ...[truncated]"
@@ -517,23 +529,29 @@ class MetaController:
         objectives, _ = apply_state_to_objectives(objectives, state, get_scorer, get_scorer_metadata)
         return objectives
 
-    async def _trial_optimize(self, objectives: List[Objective], state: AcceptedState, seed: int, high_level_goal: str) -> Population:
-        overrides = dict(self.validation_cfg.get("trial_optimizer_overrides") or {})
-        seed_key = self.validation_cfg.get("seed_key")
-        if seed_key:
-            overrides[seed_key] = seed
-        optimizer = self._new_module("optimizer", **overrides)
-        optimizer_params = {k: v for k, v in state.workflow_params.items() if k not in LOOP_PARAM_SPECS}
-        if optimizer_params:
-            optimizer.set_tunable_params(optimizer_params)
+    async def _trial_optimize(self, objectives: List[Objective], state: AcceptedState, seed: int, high_level_goal: str,
+                              optimizer=None, population: Optional[Population] = None, stage: int = 1):
+        """One trial iteration. Stage 1 starts a fresh optimizer from (a copy of) the current population;
+        later stages (sequential validation) continue the same optimizer and trial population."""
+        if optimizer is None:
+            overrides = dict(self.validation_cfg.get("trial_optimizer_overrides") or {})
+            seed_key = self.validation_cfg.get("seed_key")
+            if seed_key:
+                overrides[seed_key] = seed
+            optimizer = self._new_module("optimizer", **overrides)
+            optimizer_params = {k: v for k, v in state.workflow_params.items() if k not in LOOP_PARAM_SPECS}
+            if optimizer_params:
+                optimizer.set_tunable_params(optimizer_params)
+        if population is None:
+            population = copy.deepcopy(self.orch.current_population)
 
-        population = copy.deepcopy(self.orch.current_population)
         ratio = state.workflow_params.get("random_candidate_ratio", self.orch.config.loop_config.get("random_candidate_ratio", 0.0))
         if ratio > 0 and population is not None and population.size > 0:
             n_replace = int(population.size * ratio)
             if n_replace > 0:
                 randoms = await optimizer.create_random_candidates(n_replace)
-                indices = sorted(random.Random(seed).sample(range(population.size), n_replace))
+                rng = random.Random(seed if stage == 1 else seed * 1000 + stage)
+                indices = sorted(rng.sample(range(population.size), n_replace))
                 candidates = list(population.candidates)
                 for j, i in enumerate(indices):
                     candidates[i] = randoms[j]
@@ -544,7 +562,7 @@ class MetaController:
             result = await optimizer.process(current_population=population, objectives=objectives, high_level_goal=high_level_goal)
         finally:
             self.trial_evals += (getattr(optimizer, "num_evaluations", 0) or 0) - evals_before
-        return result
+        return result, optimizer
 
     def _validate_population(self, population: Population):
         result = self.validator.evaluate([c.representation for c in population.candidates], split=VALIDATION_SPLIT)
@@ -571,74 +589,145 @@ class MetaController:
         if scorer is None or get_scorer(info["versioned_name"]) is None:
             raise TrialError(f"scorer rebuild produced no registered scorer named '{info['versioned_name']}'")
 
+    @staticmethod
+    def _gate_decision(mode: str, delta: float, stage: int, max_stages: int, min_improvement: float, reject_margin: float) -> str:
+        """Fixed acceptance rule: 'accept' | 'reject' | 'continue' (continue only in sequential mode)."""
+        if delta > 0 and delta >= min_improvement:
+            return "accept"
+        if mode != "sequential" or stage >= max_stages or delta <= reject_margin:
+            return "reject"
+        return "continue"
+
+    def _stage_estimate(self) -> Dict[str, float]:
+        """Cost of one more validation stage (both sides, all seeds, plus re-validation)."""
+        est = {"llm_calls": 0.0, "total_tokens_observed": 0.0, "oracle_evals": 0.0}
+        optimizer = self.orch.optimizer
+        if hasattr(optimizer, "estimate_evaluations"):
+            per_trial = optimizer.estimate_evaluations(**(self.validation_cfg.get("trial_optimizer_overrides") or {}))
+            pop_size = self.orch.current_population.size if self.orch.current_population else 0
+            est["oracle_evals"] = 2 * len(self.validation_cfg["seeds"]) * (per_trial + pop_size)
+        return est
+
     async def _validate(self, iteration, target, candidate_state, meta, high_level_goal, context_information,
                         analysis_result, costs, record) -> Tuple[bool, str]:
         seeds = list(self.validation_cfg["seeds"])
+        mode = self.validation_cfg.get("mode", "single")
+        max_stages = int(self.validation_cfg.get("max_stages", 1)) if mode == "sequential" else 1
+        reject_margin = float(self.validation_cfg.get("reject_margin", 0.0))
+        min_improvement = float(self.validation_cfg["min_improvement"])
         use_planner = bool(meta.get("needs_planner"))
         trial_dir = self.trial_root / f"iter_{iteration}"
         registry_before = set(list_scorers())
         keep_scorers = set()
         py_state, np_state = random.getstate(), np.random.get_state()
         analysis_report = analysis_result["analysis_report"]
-        validation: Dict[str, Any] = {"seeds": seeds, "use_planner": use_planner}
+        validation: Dict[str, Any] = {"seeds": seeds, "use_planner": use_planner, "mode": mode, "max_stages": max_stages}
         record["validation"] = validation
         accept, reason = False, "not evaluated"
 
         try:
-            # ---- candidate execution (counted as "candidate")
+            # ---- stage 1: candidate execution (counted as "candidate")
             snap = self.budget.snapshot()
-            candidate_pops = []
+            cand_runs = []
             try:
                 if meta.get("rebuild"):
                     await self._rebuild_scorer(meta, trial_dir)
                     keep_scorers.add(meta["rebuild"]["versioned_name"])
-                objectives = await self._trial_objectives(candidate_state, use_planner, iteration, trial_dir,
-                                                          high_level_goal, context_information, analysis_report, seeds[0])
-                validation["candidate_objectives"] = [o.name for o in objectives]
+                cand_objectives = await self._trial_objectives(candidate_state, use_planner, iteration, trial_dir,
+                                                               high_level_goal, context_information, analysis_report, seeds[0])
+                validation["candidate_objectives"] = [o.name for o in cand_objectives]
                 for seed in seeds:
-                    candidate_pops.append(await self._trial_optimize(objectives, candidate_state, seed, high_level_goal))
+                    cand_runs.append(await self._trial_optimize(cand_objectives, candidate_state, seed, high_level_goal))
             except Exception as e:
                 return False, f"candidate_execution_failed: {type(e).__name__}: {e}"
             finally:
                 costs["candidate"] = BudgetTracker.delta(snap, self.budget.snapshot())
 
-            # ---- baseline execution + independent re-scoring of both sides (counted as "validation")
+            # ---- stage 1: baseline execution + independent re-scoring of both sides (counted as "validation")
             snap = self.budget.snapshot()
             try:
-                objectives = await self._trial_objectives(self.state, use_planner, iteration, trial_dir,
-                                                          high_level_goal, context_information, analysis_report, seeds[0])
-                validation["baseline_objectives"] = [o.name for o in objectives]
-                baseline_pops = [await self._trial_optimize(objectives, self.state, seed, high_level_goal) for seed in seeds]
-                base_results = [self._validate_population(p) for p in baseline_pops]
-                cand_results = [self._validate_population(p) for p in candidate_pops]
+                base_objectives = await self._trial_objectives(self.state, use_planner, iteration, trial_dir,
+                                                               high_level_goal, context_information, analysis_report, seeds[0])
+                validation["baseline_objectives"] = [o.name for o in base_objectives]
+                base_runs = [await self._trial_optimize(base_objectives, self.state, seed, high_level_goal) for seed in seeds]
+                base_results = [self._validate_population(p) for p, _ in base_runs]
+                cand_results = [self._validate_population(p) for p, _ in cand_runs]
             except Exception as e:
                 return False, f"validation_failed: {type(e).__name__}: {e}"
             finally:
                 costs["validation"] = BudgetTracker.delta(snap, self.budget.snapshot())
 
-            base_mean = float(np.mean([r.metric for r in base_results]))
-            cand_mean = float(np.mean([r.metric for r in cand_results]))
-            delta = cand_mean - base_mean if self.validator.higher_is_better else base_mean - cand_mean
-            min_improvement = float(self.validation_cfg["min_improvement"])
+            stages, stage = [], 1
+            while True:
+                base_mean = float(np.mean([r.metric for r in base_results]))
+                cand_mean = float(np.mean([r.metric for r in cand_results]))
+                delta = cand_mean - base_mean if self.validator.higher_is_better else base_mean - cand_mean
+                stages.append({"stage": stage, "baseline": [r.metric for r in base_results],
+                               "candidate": [r.metric for r in cand_results], "delta": delta})
+                decision = self._gate_decision(mode, delta, stage, max_stages, min_improvement, reject_margin)
+                violation = any(r.constraint_violation for r in cand_results)
+                exhausted, why = self.budget.exhausted()
+                if violation or exhausted or decision != "continue":
+                    break
+                ok, why_budget = self.budget.can_afford(self._stage_estimate())
+                if not ok:
+                    decision = "reject_budget"
+                    break
+                # ---- next stage: continue both sides by one iteration with the same seeds
+                stage += 1
+                snap = self.budget.snapshot()
+                try:
+                    cand_runs = [await self._trial_optimize(cand_objectives, candidate_state, seed, high_level_goal,
+                                                            optimizer=opt, population=pop, stage=stage)
+                                 for (pop, opt), seed in zip(cand_runs, seeds)]
+                except Exception as e:
+                    return False, f"candidate_execution_failed (stage {stage}): {type(e).__name__}: {e}"
+                finally:
+                    costs["candidate"] = _add_costs(costs["candidate"], BudgetTracker.delta(snap, self.budget.snapshot()))
+                snap = self.budget.snapshot()
+                try:
+                    base_runs = [await self._trial_optimize(base_objectives, self.state, seed, high_level_goal,
+                                                            optimizer=opt, population=pop, stage=stage)
+                                 for (pop, opt), seed in zip(base_runs, seeds)]
+                    base_results = [self._validate_population(p) for p, _ in base_runs]
+                    cand_results = [self._validate_population(p) for p, _ in cand_runs]
+                except Exception as e:
+                    return False, f"validation_failed (stage {stage}): {type(e).__name__}: {e}"
+                finally:
+                    costs["validation"] = _add_costs(costs["validation"], BudgetTracker.delta(snap, self.budget.snapshot()))
+
             validation.update({
-                "baseline": [r.metric for r in base_results],
-                "candidate": [r.metric for r in cand_results],
+                "baseline": stages[-1]["baseline"],
+                "candidate": stages[-1]["candidate"],
                 "baseline_mean": base_mean,
                 "candidate_mean": cand_mean,
                 "delta": delta,
                 "min_improvement": min_improvement,
-                "candidate_constraint_violation": any(r.constraint_violation for r in cand_results),
+                "candidate_constraint_violation": violation,
                 "details": {"baseline": [r.details for r in base_results], "candidate": [r.details for r in cand_results]},
             })
-            exhausted, why = self.budget.exhausted()
-            if validation["candidate_constraint_violation"]:
+            if mode == "sequential":
+                validation.update({"stages": stages, "stopped_at_stage": stage, "reject_margin": reject_margin})
+            stage_note = f" at stage {stage}" if mode == "sequential" else ""
+            if violation:
                 accept, reason = False, "candidate_violates_validator_constraints"
             elif exhausted:
                 accept, reason = False, f"budget_exceeded_during_validation: {why}"
-            elif delta > 0 and delta >= min_improvement:
-                accept, reason = True, f"validated improvement: delta={delta:.6g} (baseline {base_mean:.6g} -> candidate {cand_mean:.6g})"
+            elif decision == "accept":
+                accept, reason = True, f"validated improvement{stage_note}: delta={delta:.6g} (baseline {base_mean:.6g} -> candidate {cand_mean:.6g})"
+            elif decision == "reject_budget":
+                accept, reason = False, f"budget_insufficient_for_extended_validation (after stage {stage}, delta={delta:.6g}): {why_budget}"
+            elif mode == "sequential" and delta <= reject_margin:
+                accept, reason = False, f"clear_regression{stage_note}: delta={delta:.6g} (<= {reject_margin})"
             else:
-                accept, reason = False, f"no_improvement: delta={delta:.6g} (required > 0 and >= {min_improvement})"
+                accept, reason = False, f"no_improvement{stage_note}: delta={delta:.6g} (required > 0 and >= {min_improvement})"
+
+            if accept and self.validation_cfg.get("adopt_candidate_population", False):
+                metrics = [r.metric for r in cand_results]
+                best = int(np.argmax(metrics) if self.validator.higher_is_better else np.argmin(metrics))
+                self.orch.current_population = cand_runs[best][0]
+                validation["adopted_population"] = {"seed": seeds[best], "validation_metric": metrics[best],
+                                                    "trial_iterations": stage}
             return accept, reason
         finally:
             random.setstate(py_state)

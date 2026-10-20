@@ -396,3 +396,75 @@ def test_judge_context_has_analyzer_independent_diagnostics(in_tmp, fresh_regist
     assert diag["optimizer_reported_last_run"]["mean_child_parent_distance"] is not None
     assert {"per_dimension_std_mean", "mean_pairwise_distance"} <= set(diag["population_diversity"])
     assert diag["best_score_by_iteration_last6"]["quality_score"]
+
+
+# --------------------------------------------------------------------------- v4: sequential validation
+SEQ = {"seeds": [11], "min_improvement": 0.02, "trial_optimizer_overrides": {"generations": 3},
+       "mode": "sequential", "max_stages": 3, "reject_margin": -0.02, "adopt_candidate_population": True}
+RANDOM_FIX = decision("implementation", {"objective_name": "smoothness", "action": "rebind_scorer", "scorer_name": "smoothness_v2"})
+
+
+def _seq_run(name, metrics, budget=None, extra=None):
+    register_inprocess_scorers("spectral_signal")
+    validation = dict(SEQ, **(extra or {}))
+    orch = make_orchestrator(name, meta=meta_config(validation=validation), max_iterations=3, budget=budget)
+    orch.meta_controller.validator = ScriptedValidator(metrics)   # MOCK metrics, consumed baseline-then-candidate per stage
+    orch.meta_controller.set_judge(ScriptedJudge([RANDOM_FIX]))
+    return orch
+
+
+def test_sequential_validation_extends_ambiguous_then_accepts_and_adopts(in_tmp, fresh_registry):
+    orch = _seq_run("seq_accept", [0.10, 0.105, 0.10, 0.20])
+    adopted = {}
+    original_commit = orch.meta_controller._commit
+
+    def spy_commit(state, target):
+        adopted["pop"] = orch.current_population
+        return original_commit(state, target)
+
+    orch.meta_controller._commit = spy_commit
+    seen = []
+    original = orch.optimizer.optimize
+
+    async def spy(population, objectives, **kwargs):
+        seen.append(population)
+        return await original(population, objectives, **kwargs)
+
+    orch.optimizer.optimize = spy
+    asyncio.run(run(orch))
+    record = _records(orch)[0]
+    assert record["outcome"] == "accepted" and "at stage 2" in record["reason"]
+    v = record["validation"]
+    assert v["stopped_at_stage"] == 2 and [round(s["delta"], 3) for s in v["stages"]] == [0.005, 0.1]
+    assert v["adopted_population"]["trial_iterations"] == 2
+    km_pop_it1 = orch.knowledge_manager.get_population(1)
+    assert adopted["pop"] is not km_pop_it1 and seen[1] is adopted["pop"]   # iteration 2 starts from the adopted trial population
+    assert record["costs"]["candidate"]["oracle_evals"] > 0 and record["costs"]["validation"]["oracle_evals"] > 0
+
+
+def test_sequential_validation_stops_early_on_clear_regression(in_tmp, fresh_registry):
+    orch = _seq_run("seq_regress", [0.50, 0.40])
+    asyncio.run(run(orch))
+    record = _records(orch)[0]
+    assert record["outcome"] == "rejected" and record["reason"].startswith("clear_regression at stage 1")
+    assert record["validation"]["stopped_at_stage"] == 1 and "adopted_population" not in record["validation"]
+
+
+def test_sequential_validation_rejects_after_max_stages(in_tmp, fresh_registry):
+    orch = _seq_run("seq_max", [0.10, 0.105, 0.10, 0.11, 0.10, 0.11])
+    snaps = _spy_step(orch)
+    asyncio.run(run(orch))
+    before, after, record = snaps[0]
+    assert record["outcome"] == "rejected" and record["reason"].startswith("no_improvement at stage 3")
+    assert len(record["validation"]["stages"]) == 3
+    _assert_unchanged(before, after)
+
+
+def test_sequential_validation_respects_budget(in_tmp, fresh_registry):
+    # enough budget for stage 1 (reserve check uses one stage) but not for extending
+    orch = _seq_run("seq_budget", [0.10, 0.105], budget={"max_oracle_evals": 300})
+    asyncio.run(run(orch))
+    r = _records(orch)[0]
+    assert r["outcome"] == "rejected", r["reason"]
+    assert r["reason"].startswith("budget_insufficient_for_extended_validation (after stage 1")
+    assert len(r["validation"]["stages"]) == 1
