@@ -16,6 +16,7 @@ import argparse
 import json
 import subprocess
 import sys
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -45,7 +46,14 @@ def main():
     status_path = results_dir / "grid_status.json"
     status = {f"{t}__s{s}__{a}": {"state": "pending"} for t, s, a in cells}
 
-    def save():
+    lock = threading.Lock()
+
+    def set_state(key, value):
+        with lock:
+            status[key] = value
+            save()
+
+    def save():  # caller holds `lock` (or runs single-threaded)
         doc = {"mode": mode, "updated": datetime.now().isoformat(), "config": args.config,
                "done": sum(v["state"] == "done" for v in status.values()),
                "failed": sum(v["state"] == "failed" for v in status.values()),
@@ -59,11 +67,9 @@ def main():
         key = f"{task}__s{seed}__{arm}"
         result_file = results_dir / f"{mode}__{key}.json"
         if result_file.exists() and json.loads(result_file.read_text()).get("status") == "completed":
-            status[key] = {"state": "done", "skipped_existing": True, "result": str(result_file)}
-            save()
+            set_state(key, {"state": "done", "skipped_existing": True, "result": str(result_file)})
             return
-        status[key] = {"state": "running", "started": datetime.now().isoformat()}
-        save()
+        set_state(key, {"state": "running", "started": datetime.now().isoformat()})
         cmd = [sys.executable, str(HERE / "run_numeric_ab.py"), "--task", task, "--seed", str(seed), "--arm", arm,
                "--config", args.config, "--results-dir", str(Path(args.results_dir)), "--log-level", "INFO"]
         if args.offline_mock:
@@ -72,14 +78,19 @@ def main():
         with open(log_dir / f"{key}.log", "w") as log:
             proc = subprocess.run(cmd, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
         ok = proc.returncode == 0 and result_file.exists() and json.loads(result_file.read_text()).get("status") == "completed"
-        status[key] = {"state": "done" if ok else "failed", "returncode": proc.returncode,
-                       "seconds": round(time.time() - t0, 1), "log": str(log_dir / f"{key}.log"),
-                       "result": str(result_file) if result_file.exists() else None}
-        save()
+        set_state(key, {"state": "done" if ok else "failed", "returncode": proc.returncode,
+                        "seconds": round(time.time() - t0, 1), "log": str(log_dir / f"{key}.log"),
+                        "result": str(result_file) if result_file.exists() else None})
+
+    def run_cell_safe(cell):
+        try:
+            run_cell(cell)
+        except Exception as e:  # never lose a cell silently
+            set_state(f"{cell[0]}__s{cell[1]}__{cell[2]}", {"state": "failed", "error": f"{type(e).__name__}: {e}"})
 
     save()
     with ThreadPoolExecutor(max_workers=args.parallel) as pool:
-        list(pool.map(run_cell, cells))
+        list(pool.map(run_cell_safe, cells))
     subprocess.run([sys.executable, str(HERE / "summarize_ab.py"), "--results-dir", str(results_dir), "--mode", mode], cwd=ROOT)
     print(json.dumps({k: v["state"] for k, v in status.items()}, indent=1))
 
