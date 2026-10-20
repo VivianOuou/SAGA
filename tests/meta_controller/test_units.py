@@ -102,3 +102,44 @@ def _ctx():
         "accepted_state": {"version": 0}, "tunable_params": {}, "capabilities": {}, "recent_decisions": [],
         "remaining_budget": {},
     }
+
+
+def test_objective_ops_compose_with_accepted_ops():
+    from scileo_agent.core.data_models import Objective
+    from scileo_agent.meta_controller.schema import ObjectiveChange
+    from scileo_agent.meta_controller.state import AcceptedState, apply_state_to_objectives, merge_change
+
+    def scorer(*a, **k):
+        return []
+
+    registry = {"nominal": scorer, "center_distance": scorer, "smoothness": scorer}
+    meta = {n: {"type": "candidate-wise", "description": n} for n in registry}
+    raw = [Objective(name="nominal", description="n", optimization_direction="maximize", scorer=scorer),
+           Objective(name="smoothness", description="s", optimization_direction="maximize", scorer=scorer)]
+    state = AcceptedState()
+    for ops in ([{"op": "add_from_registry", "name": "center_distance", "optimization_direction": "minimize", "weight": 1.0},
+                 {"op": "drop", "name": "smoothness"}],
+                [{"op": "set_weight", "name": "center_distance", "weight": 2.5}],      # edits an accepted addition
+                [{"op": "add_from_registry", "name": "smoothness", "optimization_direction": "maximize"}]):  # undoes a drop
+        state = merge_change(state, "objective", ObjectiveChange.model_validate({"ops": ops}))
+        objectives, notes = apply_state_to_objectives(raw, state, registry.get, meta.get)
+        assert notes == [], notes
+    by_name = {o.name: o for o in objectives}
+    assert set(by_name) == {"nominal", "center_distance", "smoothness"}
+    assert by_name["center_distance"].weight == 2.5
+
+
+def test_analyzer_accepts_missing_closing_reasoning_tag():
+    """Original BasicAnalyzer parser: gpt-5-mini often omits </reasoning> at the very end (observed in real runs)."""
+    from modules.shared.analyzer.basic_analyzer.basic_analyzer import BasicAnalyzer
+
+    analyzer = BasicAnalyzer.__new__(BasicAnalyzer)
+    analyzer.max_llm_retries = 0
+    analyzer.enable_refusal_detection = False
+    for text, expected in [
+        ("<report>R</report>\n<should_stop>false</should_stop>\n<reasoning>keep going", "keep going"),
+        ("<report>R</report>\n<should_stop>true</should_stop>\n<reasoning>done</reasoning>", "done"),
+    ]:
+        analyzer.call_llm_with_prompt = lambda *a, _t=text, **k: {"content": _t}
+        out = asyncio.run(analyzer._get_llm_analysis("goal", None, "status", "objectives", "results", ""))
+        assert out["reasoning"] == expected and out["analysis_report"] == "R"

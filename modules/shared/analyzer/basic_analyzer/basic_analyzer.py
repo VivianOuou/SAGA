@@ -603,7 +603,8 @@ The following context information is provided by human scientists to help inform
                 if should_stop_value is None:
                     raise ValueError(f"Invalid should_stop value: '{should_stop_text}'. Must be 'true' or 'false'")
 
-                reasoning_match = re.search(r'<reasoning>(.*?)</reasoning>', response_text, re.DOTALL | re.IGNORECASE)
+                # Some models (e.g. gpt-5-mini) end the response without the closing tag; accept that at end of text
+                reasoning_match = re.search(r'<reasoning>(.*?)(?:</reasoning>|\Z)', response_text, re.DOTALL | re.IGNORECASE)
                 if not reasoning_match:
                     raise ValueError("No <reasoning>...</reasoning> tags found in the response")
 

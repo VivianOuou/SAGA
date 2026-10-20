@@ -17,6 +17,7 @@ from ..core.data_models import Objective
 
 
 MAX_TOTAL_GUIDANCE_CHARS = 2500
+MAX_OBJECTIVE_OPS = 15
 
 
 @dataclass
@@ -38,8 +39,10 @@ def merge_change(state: AcceptedState, target: str, change) -> AcceptedState:
     """Return a NEW state = state + change (the input state is not modified)."""
     new = copy.deepcopy(state)
     if target == "objective":
-        names = {op.name for op in change.ops}
-        new.objective_ops = [op for op in new.objective_ops if op["name"] not in names]
+        # Ops are proposed against the objective set the Judge sees (accepted ops already applied),
+        # so they are appended and applied in order after the accepted ones.
+        if len(new.objective_ops) + len(change.ops) > MAX_OBJECTIVE_OPS:
+            raise ValueError(f"accepted objective ops would exceed {MAX_OBJECTIVE_OPS}")
         new.objective_ops.extend(op.model_dump(exclude_none=True) for op in change.ops)
     elif target == "planning":
         if change.mode == "append" and new.planner_guidance:

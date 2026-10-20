@@ -1,0 +1,56 @@
+{
+  "mode": "real_llm",
+  "updated": "2026-10-20T12:31:14.684826",
+  "config": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/ab_config.yaml",
+  "done": 1,
+  "failed": 1,
+  "total": 12,
+  "cells": {
+    "robust_design__s0__A": {
+      "state": "done",
+      "returncode": 0,
+      "seconds": 817.0,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/robust_design__s0__A.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__robust_design__s0__A.json"
+    },
+    "robust_design__s0__B": {
+      "state": "failed",
+      "returncode": 0,
+      "seconds": 988.3,
+      "log": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/logs/robust_design__s0__B.log",
+      "result": "/scratch/gautschi/ou57/SAGA/exps/meta_controller/results/real_llm__robust_design__s0__B.json"
+    },
+    "robust_design__s1__A": {
+      "state": "running",
+      "started": "2026-10-20T12:28:23.450174"
+    },
+    "robust_design__s1__B": {
+      "state": "running",
+      "started": "2026-10-20T12:31:14.684820"
+    },
+    "constrained_yield__s0__A": {
+      "state": "pending"
+    },
+    "constrained_yield__s0__B": {
+      "state": "pending"
+    },
+    "constrained_yield__s1__A": {
+      "state": "pending"
+    },
+    "constrained_yield__s1__B": {
+      "state": "pending"
+    },
+    "spectral_signal__s0__A": {
+      "state": "pending"
+    },
+    "spectral_signal__s0__B": {
+      "state": "pending"
+    },
+    "spectral_signal__s1__A": {
+      "state": "pending"
+    },
+    "spectral_signal__s1__B": {
+      "state": "pending"
+    }
+  }
+}

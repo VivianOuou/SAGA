@@ -388,7 +388,10 @@ class MetaController:
                         return "unsupported", f"objective type '{scorer_type}' is not supported by the planner/optimizer configuration", None, meta
                     if scorer_type != "filter" and op.optimization_direction is None:
                         return "invalid_decision", f"add_from_registry('{op.name}') requires optimization_direction", None, meta
-            candidate = merge_change(self.state, target, change)
+            try:
+                candidate = merge_change(self.state, target, change)
+            except ValueError as e:
+                return "invalid_decision", str(e), None, meta
             before, old_notes = apply_state_to_objectives(self._raw_objectives, self.state, get_scorer, get_scorer_metadata)
             after, notes = apply_state_to_objectives(self._raw_objectives, candidate, get_scorer, get_scorer_metadata)
             new_notes = [n for n in notes if n not in old_notes]
