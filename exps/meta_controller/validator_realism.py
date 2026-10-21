@@ -139,7 +139,7 @@ def _run_e2e(job):
         mc = orch.meta_controller
         sim = None
         if job["arm"] != "A":
-            mc.validator = make_realism_validator(task.task_id, job["variant"], seed=seed)
+            mc.validator = make_realism_validator(task.task_id, job["variant"], seed=job.get("noise_seed", seed))
             if job["arm"] == "SIM":
                 sim = mocks.SimulatedJudge(job["fix"], job["wrong"], seed=seed)
                 sim.controller = mc
@@ -214,7 +214,16 @@ def gt_jobs(tmp_root, tasks, seeds):
     return jobs
 
 
-def e2e_jobs(tmp_root, tasks, seeds, classes, configs):
+def noise_seed(condition, task, seed, stream):
+    """'shared' (pre-registered run): the noise stream depends on the seed only, so it is identical across tasks and
+    configs. 'independent' (amendment 3 robustness check): one stream per (task, condition, seed)."""
+    if stream == "shared":
+        return seed
+    import zlib
+    return zlib.crc32(f"{task}|{condition}|{seed}".encode()) % 1_000_000
+
+
+def e2e_jobs(tmp_root, tasks, seeds, classes, configs, stream="shared"):
     jobs = []
     for condition in CONDITIONS:
         for task in tasks:
@@ -223,7 +232,7 @@ def e2e_jobs(tmp_root, tasks, seeds, classes, configs):
                 for arm, variant, cost, gate, budget in configs:
                     jobs.append({"arm": arm, "variant": variant, "cost": cost, "gate": gate, "budget": budget,
                                  "condition": condition, "task": task, "seed": seed, "tmp_root": tmp_root,
-                                 "fix": fix, "wrong": wrong})
+                                 "fix": fix, "wrong": wrong, "noise_seed": noise_seed(condition, task, seed, stream)})
     return jobs
 
 
@@ -251,6 +260,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--smoke", action="store_true", help="offset_scorer, seed 0, initial condition only")
+    parser.add_argument("--variants", default=",".join(VARIANTS), help="validator variants to run (A always runs)")
+    parser.add_argument("--noise-stream", choices=("shared", "independent"), default="shared")
     parser.add_argument("--out", default=str(ROOT / "exps" / "meta_controller" / "results" / "v5" / "validator_realism"))
     args = parser.parse_args()
     out = Path(args.out + ("_smoke" if args.smoke else ""))
@@ -261,7 +272,9 @@ def main():
     classes = v4_classes()
     t0 = time.time()
     gt = _pool_run(run_gt, gt_jobs(tmp_root, tasks, seeds), out / "gt_runs.jsonl", args.workers)
-    runs = _pool_run(run_e2e, e2e_jobs(tmp_root, tasks, seeds, classes, all_configs()), out / "runs.jsonl", args.workers)
+    variants = set(args.variants.split(","))
+    configs = [c for c in all_configs() if c[0] == "A" or c[1] in variants]
+    runs = _pool_run(run_e2e, e2e_jobs(tmp_root, tasks, seeds, classes, configs, args.noise_stream), out / "runs.jsonl", args.workers)
     shutil.rmtree(tmp_root, ignore_errors=True)
     print(f"total {time.time() - t0:.0f}s", flush=True)
     summarize(gt, runs, classes, out)

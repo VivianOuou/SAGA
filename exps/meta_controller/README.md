@@ -3,7 +3,7 @@
 在 SAGA 的 Analyzer 之后，用普通 LLM Judge 提议**一个**有界干预；候选在隔离环境中执行，由**预先固定、
 与干预目标分离**的验证器比较"当前已接受状态"和"候选"，然后 accept 或 reject。默认关闭。
 
-本文档只描述机制和复现方式。真实 A/B 的结果与解读见 `results/RESULTS.md`（汇总表 `results/ab_summary.md`）。用 MOCK 组件得到的
+本文档只描述机制和复现方式。真实 A/B 的结果与解读见 `results/RESULTS.md`（汇总表 `results/ab_summary.md`），后续各轮见 `results/v2/RESULTS_v2.md`、`results/v3/RESULTS_v3.md`、`results/v4/RESULTS_v4.md`；验证器现实性的离线研究（v5，模拟判断器，不调用 LLM）见 `results/v5/RESULTS_v5.md`。用 MOCK 组件得到的
 结果放在 `results/offline_mock/`，只能证明流程能跑通，不能证明真实 LLM Judge 提升了 SAGA。
 
 ## 1. 插入位置与默认关闭
