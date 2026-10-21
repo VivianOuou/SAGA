@@ -240,12 +240,19 @@ def get_numeric_validator(name: str) -> Optional[NumericTaskValidator]:
 # ----------------------------------------------------------------------------- v5: imperfect validators
 # Realism variants for the accept/reject gate (PREREG_v5.md). They only serve the validation split, so
 # final reporting always goes through the exact validator above (get_numeric_validator(...).evaluate(split="test")).
+# For offline diagnosis each result also carries details["exact_validation_metric"]: what the exact validator says
+# about the same population on the same split. The controller never reads it (it only compares `metric`).
 REALISM_VARIANTS = ("oracle", "noisy", "biased", "proxy")
 
 
 def _validation_only(split: str) -> None:
     if split != "validation":
         raise ValueError(f"imperfect validators serve the validation split only (got '{split}')")
+
+
+def _with_exact(result: ValidationResult, exact: NumericTaskValidator, representations, split) -> ValidationResult:
+    result.details["exact_validation_metric"] = exact.evaluate(representations, split).metric
+    return result
 
 
 def make_realism_validator(task_id: str, variant: str, seed: int = 0, noise_sd: float = 0.1, bias: float = 0.1):
@@ -284,6 +291,9 @@ def _make_noisy(cls, seed: int, noise_sd: float):
             q[valid] += self.rng.normal(0.0, noise_sd, size=int(valid.sum()))
             return q, valid
 
+        def evaluate(self, representations, split="validation"):
+            return _with_exact(super().evaluate(representations, split), cls(), representations, split)
+
         def describe(self):
             return {**super().describe(), "variant": "noisy", "noise_sd": noise_sd, "noise_seed": 4004 + seed}
 
@@ -301,6 +311,9 @@ def _make_biased(cls, bias: float):
         def candidate_quality(self, representations, split):
             _validation_only(split)
             return super().candidate_quality(representations, split)
+
+        def evaluate(self, representations, split="validation"):
+            return _with_exact(super().evaluate(representations, split), cls(), representations, split)
 
         def describe(self):
             return {**super().describe(), "variant": "biased", "center_shift_norm": bias}
@@ -325,6 +338,7 @@ class ProxyScorerValidator(BaseValidator):
         self.fn = base.Scorer().scorers[self.objective]["method"]
         self.name = f"{task.validator}__proxy_{self.objective}"
         self.top_k = top_k
+        self.exact = VALIDATOR_CLASSES[task.validator](top_k=top_k)
 
     def evaluate(self, representations, split="validation"):
         _validation_only(split)
@@ -332,9 +346,10 @@ class ProxyScorerValidator(BaseValidator):
         v = np.array([np.nan if x is None else self.sign * float(x) for x in raw], dtype=float)
         top = v[: self.top_k]
         metric = float(np.nanmean(top)) if np.isfinite(top).any() else 0.0
-        return ValidationResult(metric=metric, n_evals=len(representations),
-                                details={"split": split, "top_k": self.top_k, "proxy_objective": self.objective,
-                                         "n_invalid": int(np.isnan(v).sum())})
+        result = ValidationResult(metric=metric, n_evals=len(representations),
+                                  details={"split": split, "top_k": self.top_k, "proxy_objective": self.objective,
+                                           "n_invalid": int(np.isnan(v).sum())})
+        return _with_exact(result, self.exact, representations, split)
 
     def describe(self):
         return {"name": self.name, "higher_is_better": True, "variant": "proxy", "objective": self.objective,

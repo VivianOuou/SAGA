@@ -536,7 +536,8 @@ def test_imperfect_validators_never_serve_the_test_split():
     assert make_realism_validator("offset_scorer", "oracle").evaluate(reps).metric == exact
     for variant in ("noisy", "biased", "proxy"):
         v = make_realism_validator("offset_scorer", variant, seed=3)
-        assert v.evaluate(reps).metric != exact
+        result = v.evaluate(reps)
+        assert result.metric != exact and result.details["exact_validation_metric"] == exact   # diagnostic shadow only
         with pytest.raises(ValueError):
             v.evaluate(reps, split="test")
     a, b = (make_realism_validator("offset_scorer", "noisy", seed=3) for _ in range(2))

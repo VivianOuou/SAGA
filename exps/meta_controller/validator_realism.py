@@ -153,10 +153,20 @@ def _run_e2e(job):
         decisions = []
         for i, r in enumerate(mc.records if mc else []):
             v = r.get("validation") or {}
+            exact_delta = None
+            if v.get("delta") is not None:   # shadow: the exact validator on the same final-stage populations (diagnostic only)
+                details = v.get("details") or {}
+                exact = {side: [d.get("exact_validation_metric", d.get("metric")) for d in details.get(side, [])]
+                         for side in ("baseline", "candidate")}
+                if job["variant"] == "oracle":
+                    exact_delta = v["delta"]
+                elif all(exact.values()) and None not in exact["baseline"] + exact["candidate"]:
+                    exact_delta = float(np.mean(exact["candidate"]) - np.mean(exact["baseline"]))
             decisions.append({
                 "iteration": r["iteration"], "label": labels.get(i), "target": (r.get("decision") or {}).get("intervention_target"),
                 "change_id": r.get("change_id"), "outcome": r["outcome"], "reason": r["reason"][:140],
                 "stages": len(v.get("stages", [])) or (1 if v.get("delta") is not None else 0), "delta": v.get("delta"),
+                "exact_delta": exact_delta,
                 "evals": (r["costs"].get("candidate", {}).get("oracle_evals") or 0) + (r["costs"].get("validation", {}).get("oracle_evals") or 0),
             })
         used = orch.budget_guard.usage()["oracle_evals"] if orch.budget_guard else None
@@ -302,6 +312,14 @@ def summarize(gt, runs, classes, out: Path):
         exploit_cells = [r for r in rs if any((d["label"] or "").startswith("exploit:") for d in r["decisions"])]
         exploit_accepted = [r for r in exploit_cells if any((d["label"] or "").startswith("exploit:") and d["outcome"] == "accepted"
                                                             for d in r["decisions"])]
+        judged = [d for r in rs for d in r["decisions"] if d["delta"] is not None and d["exact_delta"] is not None]
+        shadow = {
+            "accepted": sum(d["outcome"] == "accepted" for d in judged),
+            "accepted_exact_worse": sum(d["outcome"] == "accepted" and d["exact_delta"] < 0 for d in judged),
+            "accepted_exact_worse_by_0.02": sum(d["outcome"] == "accepted" and d["exact_delta"] <= -0.02 for d in judged),
+            "rejected": sum(d["outcome"] != "accepted" for d in judged),
+            "rejected_exact_better_by_0.02": sum(d["outcome"] != "accepted" and d["exact_delta"] >= 0.02 for d in judged),
+        }
         val_share = [r["evals_validation_budget_units"] / r["evals_used"] for r in rs if r["evals_used"]]
         ctrl_share = [(r["evals_validation_budget_units"] + r["evals_trials"]) / r["evals_used"] for r in rs if r["evals_used"]]
         rows.append({
@@ -312,7 +330,7 @@ def summarize(gt, runs, classes, out: Path):
             "cells_worse_than_A_by_0.05": sum(d < -0.05 for d in diffs),
             "cells_better_than_A_by_0.05": sum(d > 0.05 for d in diffs),
             "decisions_validated": sum(d["stages"] > 0 for r in rs for d in r["decisions"]),
-            "accepted": len(accepted), "accepted_by_true_class": by_class,
+            "accepted": len(accepted), "accepted_by_true_class": by_class, "shadow_exact_validator": shadow,
             "fix_accepted_cells": f"{len(fix_accepted)}/{len(fix_cells)}",
             "exploit_accepted_cells": f"{len(exploit_accepted)}/{len(exploit_cells)}",
             "mean_iterations": round(float(np.mean([r["iterations_completed"] for r in rs])), 1),
@@ -337,14 +355,16 @@ def summarize(gt, runs, classes, out: Path):
     for e in exploit_rows:
         lines.append(f"| {e['condition']} | {e['task']} | {e['probe']} | {e['true_effect_mean']:+.3f} | {e['class']} |")
     lines += ["", "## Arms (60 cells each: 6 tasks x 2 objective conditions x 5 seeds)", "",
-              "| budget | gate | arm | validator | cost | mean test | success | diff vs A | worse/better than A (>0.05) | accepted (ben/neu/harm/unlab) | fix accepted | exploit accepted | iters | validation share | controller share |",
-              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+              "| budget | gate | arm | validator | cost | mean test | success | diff vs A | worse/better than A (>0.05) | accepted (ben/neu/harm/unlab) | accepted: exact says worse / worse by 0.02 | rejected: exact says better by 0.02 | fix accepted | exploit accepted | iters | validation share | controller share |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
-        c = r["accepted_by_true_class"]
+        c, sh = r["accepted_by_true_class"], r["shadow_exact_validator"]
         diff = "" if r["mean_diff_vs_A"] is None else f"{r['mean_diff_vs_A']:+.3f}"
         lines.append(f"| {r['budget']} | {r['gate']} | {r['arm']} | {r['variant']} | {r['cost']} | {r['mean_test']:.3f} | {r['success']}/{r['n']} | {diff} | "
                      f"{r['cells_worse_than_A_by_0.05']}/{r['cells_better_than_A_by_0.05']} | "
-                     f"{c['beneficial']}/{c['neutral']}/{c['harmful']}/{c['unlabeled']} | {r['fix_accepted_cells']} | {r['exploit_accepted_cells']} | "
+                     f"{c['beneficial']}/{c['neutral']}/{c['harmful']}/{c['unlabeled']} | "
+                     f"{sh['accepted_exact_worse']}/{sh['accepted_exact_worse_by_0.02']} of {sh['accepted']} | "
+                     f"{sh['rejected_exact_better_by_0.02']} of {sh['rejected']} | {r['fix_accepted_cells']} | {r['exploit_accepted_cells']} | "
                      f"{r['mean_iterations']} | {r['mean_validation_share_of_evals']:.2f} | {r['mean_controller_share_of_evals']:.2f} |")
     tasks = sorted({r["task"] for r in ok})
     lines += ["", "## Mean test metric per task (both objective conditions pooled per column pair: initial / planner_observed)", "",
