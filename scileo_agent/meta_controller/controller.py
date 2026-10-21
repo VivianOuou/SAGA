@@ -63,6 +63,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "min_improvement": 0.0,
         "trial_optimizer_overrides": {},
         "seed_key": "seed",
+        # Budget price of one validator evaluation in oracle-eval units (e.g. 10 = a lab assay costs 10 proxy evals).
+        "cost_multiplier": 1.0,
     },
     "estimates": {"judge_tokens": 8000, "planner_call_tokens": 8000},
     "reserve_main_iteration": True,
@@ -155,7 +157,8 @@ class MetaController:
         self.state = AcceptedState()
         self.extra_clients: List[Any] = []
         self.trial_evals = 0
-        self.validation_evals = 0
+        self.validation_evals = 0           # budget units (raw evaluations x cost_multiplier)
+        self.validation_evals_raw = 0
         self.records: List[Dict[str, Any]] = []
         self.log = DecisionLog(Path(orchestrator.output_dir) / config["decision_log"])
         self.trial_root = Path(config["trial_root"] or (Path(orchestrator.run_dir) / "meta_controller" / "trials"))
@@ -578,8 +581,12 @@ class MetaController:
 
     def _validate_population(self, population: Population):
         result = self.validator.evaluate([c.representation for c in population.candidates], split=VALIDATION_SPLIT)
-        self.validation_evals += int(result.n_evals)
+        self.validation_evals_raw += int(result.n_evals)
+        self.validation_evals += int(round(result.n_evals * self._validation_cost_multiplier()))
         return result
+
+    def _validation_cost_multiplier(self) -> float:
+        return float(self.validation_cfg.get("cost_multiplier", 1.0))
 
     async def _rebuild_scorer(self, meta: Dict[str, Any], trial_dir: Path) -> None:
         info = meta["rebuild"]
@@ -617,7 +624,7 @@ class MetaController:
         if hasattr(optimizer, "estimate_evaluations"):
             per_trial = optimizer.estimate_evaluations(**(self.validation_cfg.get("trial_optimizer_overrides") or {}))
             pop_size = self.orch.current_population.size if self.orch.current_population else 0
-            est["oracle_evals"] = 2 * len(self.validation_cfg["seeds"]) * (per_trial + pop_size)
+            est["oracle_evals"] = 2 * len(self.validation_cfg["seeds"]) * (per_trial + pop_size * self._validation_cost_multiplier())
         return est
 
     async def _validate(self, iteration, target, candidate_state, meta, high_level_goal, context_information,
@@ -787,7 +794,7 @@ class MetaController:
         if hasattr(optimizer, "estimate_evaluations"):
             per_trial = optimizer.estimate_evaluations(**overrides)
             pop_size = self.orch.current_population.size if self.orch.current_population else 0
-            est["oracle_evals"] += 2 * n_seeds * (per_trial + pop_size)
+            est["oracle_evals"] += 2 * n_seeds * (per_trial + pop_size * self._validation_cost_multiplier())
         if self.cfg.get("reserve_main_iteration", True) and self._main_iteration_costs:
             last = self._main_iteration_costs[-1]
             est["llm_calls"] += last["llm_calls"]
@@ -941,7 +948,9 @@ class MetaController:
             "validated_candidates": attempted,
             "acceptance_rate": (outcomes.get("accepted", 0) / attempted) if attempted else None,
             "accepted_state": self.state.to_dict(),
-            "controller_oracle_evals": {"trials": self.trial_evals, "validation": self.validation_evals},
+            "controller_oracle_evals": {"trials": self.trial_evals, "validation": self.validation_evals,
+                                        "validation_raw": self.validation_evals_raw,
+                                        "validation_cost_multiplier": self._validation_cost_multiplier()},
             "budget": self.budget.report() if self.budget else None,
         }
 

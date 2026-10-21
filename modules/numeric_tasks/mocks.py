@@ -90,6 +90,65 @@ class ScriptedJudge(BaseJudge):
         return JudgeOutput(raw=item, raw_text=json.dumps(item), attempts=1)
 
 
+class SimulatedJudge(BaseJudge):
+    """
+    SIMULATED judge (MOCK, no LLM) for the offline validator-realism study (PREREG_v5.md).
+
+    Menu = one designated fix plus wrong / bug-exploiting changes, each (target, change). Per call:
+      fix not yet accepted -> the fix with probability p_fix, otherwise a uniformly chosen wrong change
+      fix accepted         -> no_change with probability p_no_change_after_fix, otherwise a wrong change
+    Wrong changes that were already accepted are not proposed again. Its proposal distribution is an
+    assumption of the study, not a model of any real LLM judge.
+    """
+
+    judge_type = "simulated_mock"
+
+    def __init__(self, fix, wrong: Dict[str, Any], seed: int = 0, p_fix: float = 0.6, p_no_change_after_fix: float = 0.5,
+                 client: Optional[FakeLLMClient] = None):
+        import random as _random
+
+        self.fix_label, self.fix = fix
+        self.wrong = dict(wrong)
+        self.p_fix = p_fix
+        self.p_no_change_after_fix = p_no_change_after_fix
+        self.rng = _random.Random(7007 + seed)
+        self.client = client or FakeLLMClient(model="mock/simulated-judge", tokens_per_call=50)
+        self.controller = None          # set by the harness; used only to read outcomes of earlier proposals
+        self.proposals: List[Dict[str, Any]] = []   # {"label", "record_index"}
+
+    @property
+    def llm_clients(self):
+        return [self.client]
+
+    def describe(self):
+        return {"judge_type": self.judge_type, "model_name": "mock/simulated-judge", "p_fix": self.p_fix,
+                "p_no_change_after_fix": self.p_no_change_after_fix, "note": "MOCK - simulated proposal distribution"}
+
+    def _accepted_labels(self):
+        records = self.controller.records if self.controller is not None else []
+        return {p["label"] for p in self.proposals
+                if p["record_index"] < len(records) and records[p["record_index"]]["outcome"] == "accepted"}
+
+    def _pick(self):
+        accepted = self._accepted_labels()
+        wrong = [label for label in self.wrong if label not in accepted]
+        if self.fix_label not in accepted:
+            if self.rng.random() < self.p_fix or not wrong:
+                return self.fix_label, self.fix
+        elif self.rng.random() < self.p_no_change_after_fix or not wrong:
+            return "no_change", ("no_change", None)
+        label = self.rng.choice(wrong)
+        return label, self.wrong[label]
+
+    async def decide(self, context):
+        label, (target, change) = self._pick()
+        index = len(self.controller.records) if self.controller is not None else -1
+        self.proposals.append({"label": label, "record_index": index, "iteration": context.get("iteration")})
+        self.client.record([{"role": "user", "content": "judge"}], "simulated")
+        raw = decision(target, change)
+        return JudgeOutput(raw=raw, raw_text=json.dumps(raw), attempts=1)
+
+
 class ScriptedValidator:
     """MOCK validator: returns scripted metrics in call order (baseline seeds first, then candidate seeds)."""
 

@@ -49,13 +49,17 @@ class NumericTaskValidator(BaseValidator):
     def quality(self, X: np.ndarray, split: str) -> np.ndarray:
         raise NotImplementedError
 
-    def evaluate(self, representations: List[Any], split: str = "validation") -> ValidationResult:
-        if split not in SPLIT_SEEDS:
-            raise ValueError(f"unknown split '{split}'")
+    def candidate_quality(self, representations: List[Any], split: str):
         X, valid = _parse_vectors(representations, self.dim)
         q = np.zeros(len(representations))
         if valid.any():
             q[valid] = self.quality(X[valid], split)
+        return q, valid
+
+    def evaluate(self, representations: List[Any], split: str = "validation") -> ValidationResult:
+        if split not in SPLIT_SEEDS:
+            raise ValueError(f"unknown split '{split}'")
+        q, valid = self.candidate_quality(representations, split)
         top_system = q[: self.top_k]
         top_oracle = np.sort(q)[::-1][: self.top_k]
         return ValidationResult(
@@ -231,3 +235,107 @@ def register_numeric_validators() -> None:
 def get_numeric_validator(name: str) -> Optional[NumericTaskValidator]:
     cls = VALIDATOR_CLASSES.get(name)
     return cls() if cls else None
+
+
+# ----------------------------------------------------------------------------- v5: imperfect validators
+# Realism variants for the accept/reject gate (PREREG_v5.md). They only serve the validation split, so
+# final reporting always goes through the exact validator above (get_numeric_validator(...).evaluate(split="test")).
+REALISM_VARIANTS = ("oracle", "noisy", "biased", "proxy")
+
+
+def _validation_only(split: str) -> None:
+    if split != "validation":
+        raise ValueError(f"imperfect validators serve the validation split only (got '{split}')")
+
+
+def make_realism_validator(task_id: str, variant: str, seed: int = 0, noise_sd: float = 0.1, bias: float = 0.1):
+    """
+    oracle - the exact task validator
+    noisy  - exact quality + independent Gaussian measurement noise per candidate and call (sd noise_sd)
+    biased - a mis-specified model: the optimum is moved by `bias` along a fixed random unit direction
+    proxy  - the task's initial objective scorer itself (sign-flipped if minimized), incl. any planted bug
+    """
+    from .tasks import TASKS
+
+    task = TASKS[task_id]
+    cls = VALIDATOR_CLASSES[task.validator]
+    if variant == "oracle":
+        return cls()
+    if variant == "noisy":
+        return _make_noisy(cls, seed, noise_sd)
+    if variant == "biased":
+        return _make_biased(cls, bias)
+    if variant == "proxy":
+        return ProxyScorerValidator(task_id)
+    raise ValueError(f"unknown validator variant '{variant}' (expected one of {REALISM_VARIANTS})")
+
+
+def _make_noisy(cls, seed: int, noise_sd: float):
+    class NoisyValidator(cls):
+        name = f"{cls.name}__noisy{noise_sd:g}"
+
+        def __init__(self):
+            super().__init__()
+            self.rng = np.random.default_rng(4004 + seed)
+
+        def candidate_quality(self, representations, split):
+            _validation_only(split)
+            q, valid = super().candidate_quality(representations, split)
+            q[valid] += self.rng.normal(0.0, noise_sd, size=int(valid.sum()))
+            return q, valid
+
+        def describe(self):
+            return {**super().describe(), "variant": "noisy", "noise_sd": noise_sd, "noise_seed": 4004 + seed}
+
+    return NoisyValidator()
+
+
+def _make_biased(cls, bias: float):
+    direction = np.random.default_rng(5005).normal(size=cls.dim)
+    shift = bias * direction / np.linalg.norm(direction)
+
+    class BiasedValidator(cls):
+        name = f"{cls.name}__biased{bias:g}"
+        center = cls.center + shift
+
+        def candidate_quality(self, representations, split):
+            _validation_only(split)
+            return super().candidate_quality(representations, split)
+
+        def describe(self):
+            return {**super().describe(), "variant": "biased", "center_shift_norm": bias}
+
+    return BiasedValidator()
+
+
+class ProxyScorerValidator(BaseValidator):
+    """The task's initial (primary) objective scorer used as the validator: no independent evaluation exists."""
+
+    higher_is_better = True
+
+    def __init__(self, task_id: str, top_k: int = TOP_K):
+        import importlib
+
+        from .tasks import TASKS
+
+        task = TASKS[task_id]
+        (self.objective, direction), = [(n, d) for n, d in task.initial_objectives.items() if d][:1]
+        self.sign = -1.0 if direction == "minimize" else 1.0
+        base = importlib.import_module(task.mcp_module.replace("/", ".") + ".base")
+        self.fn = base.Scorer().scorers[self.objective]["method"]
+        self.name = f"{task.validator}__proxy_{self.objective}"
+        self.top_k = top_k
+
+    def evaluate(self, representations, split="validation"):
+        _validation_only(split)
+        raw = self.fn([json.dumps(r) if not isinstance(r, str) else r for r in representations])
+        v = np.array([np.nan if x is None else self.sign * float(x) for x in raw], dtype=float)
+        top = v[: self.top_k]
+        metric = float(np.nanmean(top)) if np.isfinite(top).any() else 0.0
+        return ValidationResult(metric=metric, n_evals=len(representations),
+                                details={"split": split, "top_k": self.top_k, "proxy_objective": self.objective,
+                                         "n_invalid": int(np.isnan(v).sum())})
+
+    def describe(self):
+        return {"name": self.name, "higher_is_better": True, "variant": "proxy", "objective": self.objective,
+                "sign": self.sign, "top_k": self.top_k}

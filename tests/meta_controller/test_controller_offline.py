@@ -505,3 +505,61 @@ def test_adopted_trial_population_with_sanitize_does_not_leave_stale_caches(in_t
     assert result.status == "completed", orch.result.error_message
     record = _records(orch)[0]
     assert record["outcome"] == "accepted" and record["validation"].get("adopted_population")
+
+
+# --------------------------------------------------------------------------- v5: validation cost, imperfect validators, simulated judge
+def test_validation_cost_multiplier_charges_budget_and_estimates(in_tmp, fresh_registry):
+    from scileo_agent.core.registry.scorer_registry import reset_scorer_manager
+
+    runs = {}
+    for mult in (1.0, 10.0):
+        reset_scorer_manager()
+        orch = _seq_run(f"cost_{int(mult)}", [0.50, 0.40], extra={"cost_multiplier": mult})   # MOCK: rejected at stage 1
+        stage_estimate = orch.meta_controller._stage_estimate
+        asyncio.run(run(orch))
+        mc = orch.meta_controller
+        runs[mult] = (mc.validation_evals, mc.validation_evals_raw, stage_estimate()["oracle_evals"], mc.trial_evals,
+                      _records(orch)[0]["costs"]["validation"]["oracle_evals"])
+    (v1, raw1, est1, trials1, rec1), (v10, raw10, est10, trials10, rec10) = runs[1.0], runs[10.0]
+    assert raw1 == raw10 > 0 and v1 == raw1 and v10 == 10 * raw10
+    assert trials1 == trials10                                  # only validator evaluations are re-priced
+    assert rec10 - rec1 == 9 * raw10                            # the decision record carries the priced cost
+    assert est10 > est1
+
+
+def test_imperfect_validators_never_serve_the_test_split():
+    from modules.numeric_tasks.tasks import TASKS, initial_population_vectors
+    from modules.numeric_tasks.validators import get_numeric_validator, make_realism_validator
+
+    reps = initial_population_vectors(8, 16, 0)
+    exact = get_numeric_validator(TASKS["offset_scorer"].validator).evaluate(reps).metric
+    assert make_realism_validator("offset_scorer", "oracle").evaluate(reps).metric == exact
+    for variant in ("noisy", "biased", "proxy"):
+        v = make_realism_validator("offset_scorer", variant, seed=3)
+        assert v.evaluate(reps).metric != exact
+        with pytest.raises(ValueError):
+            v.evaluate(reps, split="test")
+    a, b = (make_realism_validator("offset_scorer", "noisy", seed=3) for _ in range(2))
+    assert [a.evaluate(reps).metric for _ in range(3)] == [b.evaluate(reps).metric for _ in range(3)]   # seeded
+    bug = [[0.5, 0.5, 0.5, 0.95, 0.5, 0.5, 0.5, 0.5]] * 5   # inside the planted offset-bug region
+    proxy = make_realism_validator("offset_scorer", "proxy")
+    assert proxy.evaluate(bug).metric > 1.0 > get_numeric_validator(TASKS["offset_scorer"].validator).evaluate(bug).metric
+
+
+def test_simulated_judge_stops_proposing_the_fix_once_accepted():
+    from types import SimpleNamespace
+
+    from modules.numeric_tasks.mocks import SimulatedJudge
+
+    fix = ("fix:x", ("optimization_workflow", {"params": {"mutation_prob": 0.3}}))
+    wrong = {"w1": ("optimization_workflow", {"params": {"mutation_sigma": 0.3}})}
+    judge = SimulatedJudge(fix, wrong, seed=0, p_fix=1.0, p_no_change_after_fix=1.0)
+    judge.controller = SimpleNamespace(records=[])
+    first = asyncio.run(judge.decide({"iteration": 1}))
+    assert first.raw["intervention_target"] == "optimization_workflow" and judge.proposals[0]["label"] == "fix:x"
+    judge.controller.records.append({"outcome": "rejected"})
+    asyncio.run(judge.decide({"iteration": 2}))
+    assert judge.proposals[1]["label"] == "fix:x"            # rejected -> proposed again
+    judge.controller.records.append({"outcome": "accepted"})
+    third = asyncio.run(judge.decide({"iteration": 3}))
+    assert third.raw["intervention_target"] == "no_change"
